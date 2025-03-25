@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional, List, Union
 
 from fairscape_models.fairscape_base import IdentifierValue, DATASET_TYPE
