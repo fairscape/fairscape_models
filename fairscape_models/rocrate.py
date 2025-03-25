@@ -1,0 +1,278 @@
+import urllib.parse
+from pydantic import (
+    Field,
+    BaseModel,
+)
+from typing import (
+    Optional, 
+    Union, 
+    Dict, 
+    List, 
+    Literal
+)
+
+from fairscape_models.fairscape_base import IdentifierValue
+from fairscape_models.schema import Schema
+from fairscape_models.biochem_entity import BioChemEntity
+from fairscape_models.medical_condition import MedicalCondition
+from fairscape_models.computation import Computation
+from fairscape_models.dataset import Dataset
+from fairscape_models.software import Software
+
+
+class ROCrateMetadataFileElem(BaseModel):
+    """Metadata Element of an ROCrate cooresponding to the `ro-crate-metadata.json` file itself
+
+    Example
+
+        ```
+        {
+            "@id": "ro-crate-metadata.json",
+            "@type": "CreativeWork",
+            "conformsTo": {
+                "@id": "https://w3id.org/ro/crate/1.2-DRAFT"
+            },
+            "about": {
+                "@id": "https://fairscape.net/ark:59852/rocrate-2.cm4ai_chromatin_mda-mb-468_untreated_apmsembed_initialrun0.1alpha"
+            }
+        }
+        ```
+    """
+    guid: str = Field(alias="@id")
+    metadataType: Literal["CreativeWork"] = Field(alias="@type")
+    conformsTo: IdentifierValue
+    about: IdentifierValue
+
+
+class ROCrateMetadataElem(BaseModel):
+    """Metadata Element of ROCrate that represents the crate as a whole
+
+    Example
+        ```
+        {
+            '@id': 'https://fairscape.net/ark:59852/rocrate-2.cm4ai_chromatin_mda-mb-468_untreated_imageembedfold1_initialrun0.1alpha',
+            '@type': ['Dataset', 'https://w3id.org/EVI#ROCrate'],
+            'name': 'Initial integration run',
+            'description': 'Ideker Lab CM4AI 0.1 alpha MDA-MB-468 untreated chromatin Initial integration run IF Image Embedding IF microscopy images embedding fold1',
+            'keywords': ['Ideker Lab', 'fold1'],
+            'isPartOf': [
+                {'@id': 'ark:/Ideker_Lab'}, 
+                {'@id': 'ark:/Ideker_Lab/CM4AI'}
+                ],
+            'version': '0.5alpha',
+            'license': 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en',
+            'associatedPublication': 'Clark T, Schaffer L, Obernier K, Al Manir S, Churas CP, Dailamy A, Doctor Y, Forget A, Hansen JN, Hu M, Lenkiewicz J, Levinson MA, Marquez C, Mohan J, Nourreddine S, Niestroy J, Pratt D, Qian G, Thaker S, Belisle-Pipon J-C, Brandt C, Chen J, Ding Y, Fodeh S, Krogan N, Lundberg E, Mali P, Payne-Foster P, Ratcliffe S, Ravitsky V, Sali A, Schulz W, Ideker T. Cell Maps for Artificial Intelligence: AI-Ready Maps of Human Cell Architecture from Disease-Relevant Cell Lines. BioRXiv 2024.',
+            'author': ['Test']
+            'conditionsOfAccess': 'This dataset was created by investigators and staff of the Cell Maps for Artificial Intelligence project (CM4AI - https://cm4ai.org), a Data Generation Project of the NIH Bridge2AI program, and is copyright (c) 2024 by The Regents of the University of California and, for cellular imaging data, by The Board of Trustees of the Leland Stanford Junior University. It is licensed for reuse under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC-BY-NC-SA 4.0) license, whose terms are summarized here: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en.  Proper attribution credit as required by the license includes citation of the copyright holders and of the attribution parties, which includes citation of the following article: Clark T, Schaffer L, Obernier K, Al Manir S, Churas CP, Dailamy A, Doctor Y, Forget A, Hansen JN, Hu M, Lenkiewicz J, Levinson MA, Marquez C, Mohan J, Nourreddine S, Niestroy J, Pratt D, Qian G, Thaker S, Belisle-Pipon J-C, Brandt C, Chen J, Ding Y, Fodeh S, Krogan N, Lundberg E, Mali P, Payne-Foster P, Ratcliffe S, Ravitsky V, Sali A, Schulz W, Ideker T. Cell Maps for Artificial Intelligence: AI-Ready Maps of Human Cell Architecture from Disease-Relevant Cell Lines. BioRXiv 2024.”',
+            'copyrightNotice': 'Copyright (c) 2024 by The Regents of the University of California',
+            'hasPart': [
+                {'@id': 'https://fairscape.net/ark:59852/software-cellmaps_image_embedding-N2ux5jg'},
+                {'@id': 'https://fairscape.net/ark:59852/dataset-cellmaps_image_embedding-output-file-N2ux5jg'},
+                {'@id': 'https://fairscape.net/ark:59852/dataset-Densenet-model-file-N2ux5jg'},
+                {'@id': 'https://fairscape.net/ark:59852/computation-IF-Image-Embedding-N2ux5jg'}
+            ]
+        }
+        ```
+    """ 
+    guid: str = Field(alias="@id")
+    metadataType: List[str] = Field(alias="@type")
+    name: str
+    description: str
+    keywords: List[str]
+    isPartOf: List[IdentifierValue]
+    version: str
+    dataLicense: Optional[str] = Field(alias="license")
+    associatedPublication: Optional[str]
+    author: Union[str, List[str]]
+    conditionsOfAccess: Optional[str]
+    copyrightNotice: Optional[str]
+    hasPart: List[IdentifierValue]
+    
+class ROCrateDistribution(BaseModel):
+    extractedROCrateBucket: Optional[str] = Field(default=None)
+    archivedROCrateBucket: Optional[str] = Field(default=None)
+    extractedObjectPath: Optional[List[str]] = Field(default=[])
+    archivedObjectPath: Optional[str] = Field(default=None)
+
+    
+
+class ROCrateV1_2(BaseModel):
+    context: Optional[Dict] = Field(alias="@context")
+    metadataGraph: List[Union[
+        Dataset,
+        Software,
+        Computation,
+        ROCrateMetadataElem,
+        ROCrateMetadataFileElem,
+        Schema,
+        BioChemEntity,
+        MedicalCondition
+    ]] = Field(alias="@graph")
+
+
+    def cleanIdentifiers(self):
+        """ Clean metadata guid property from full urls to ark:{NAAN}/{postfix} 
+        """
+
+        def cleanGUID(metadata):
+            """ Clean metadata guid property from full urls to ark:{NAAN}/{postfix} 
+            """
+            if "http" in metadata.guid:
+                metadata.guid = urllib.parse.urlparse(metadata.guid).path.lstrip('/')
+ 
+        #clean ROCrate metadata identifier
+        rocrateMetadata = self.getCrateMetadata()
+        cleanGUID(rocrateMetadata)
+        
+        # clean identifiers and evi properties
+        for elem in self.getEVIElements():
+            if "ark:" in elem.guid:  # Only clean if contains "ark:"
+                cleanGUID(elem)
+                
+            if isinstance(elem, Dataset):
+                # usedByComputation
+                for usedByComputation in elem.usedByComputation:
+                    if "ark:" in usedByComputation.guid:
+                        cleanGUID(usedByComputation)
+                        
+                # generatedBy
+                for generatedBy in elem.generatedBy:
+                    if "ark:" in generatedBy.guid:
+                        cleanGUID(generatedBy)
+                        
+            if isinstance(elem, Software):
+                for usedByElem in elem.usedByComputation:
+                    if "ark:" in usedByElem.guid:
+                        cleanGUID(usedByElem)
+                        
+            if isinstance(elem, Computation):
+                # elem.usedDataset
+                for usedDataset in elem.usedDataset:
+                    if "ark:" in usedDataset.guid:
+                        cleanGUID(usedDataset)
+                        
+                # elem.generated
+                for generated in elem.generated:
+                    if "ark:" in generated.guid:
+                        cleanGUID(generated)
+                        
+                # elem.usedSoftware
+                for usedSoftware in elem.usedSoftware:
+                    if "ark:" in usedSoftware.guid:
+                        cleanGUID(usedSoftware)
+
+    def getCrateMetadata(self)-> ROCrateMetadataElem:
+        """ Filter the Metadata Graph for the Metadata Element Describing the Toplevel ROCrate
+
+        :param self
+        :return: The RO Crate Metadata Elem describing the toplevel ROCrate
+        :rtype fairscape_mds.models.rocrate.ROCrateMetadataElem
+        """
+        filterResults = list(filter(
+            lambda x: isinstance(x, ROCrateMetadataElem),
+            self.metadataGraph
+        ))
+
+        # TODO support for nested crates 
+        # must find the ROCrateMetadataElem with '@id' == 'ro-crate-metadata.json'
+        if len(filterResults) != 1:
+            # TODO more detailed exception
+            raise Exception
+        else:
+            return filterResults[0]
+
+    def getSchemas(self) -> List[Schema]:
+        # TODO filter schemas
+        filterResults = list(filter(
+            lambda x: isinstance(x, Schema), 
+            self.metadataGraph
+        ))
+
+        return filterResults
+
+    def getDatasets(self) -> List[Dataset]:
+        """ Filter the Metadata Graph for Dataset Elements
+
+        :param self
+        :return: All dataset metadata records within the ROCrate
+        :rtype List[fairscape_mds.models.rocrate.Dataset]
+        """
+        filterResults = list(filter(
+            lambda x: isinstance(x, Dataset), 
+            self.metadataGraph
+        ))
+
+        return filterResults
+
+
+    def getSoftware(self) -> List[Software]:
+        """ Filter the Metadata Graph for Software Elements
+
+        :param self
+        :return: All Software metadata records within the ROCrate
+        :rtype List[fairscape_mds.models.rocrate.Software]
+        """
+        filterResults = list(filter(
+            lambda x: isinstance(x, Software), 
+            self.metadataGraph
+        ))
+
+        return filterResults
+
+
+    def getComputations(self) -> List[Computation]:
+        """ Filter the Metadata Graph for Computation Elements
+
+        :param self
+        :return: All Computation metadata records within the ROCrate
+        :rtype List[fairscape_mds.models.rocrate.Computation]
+        """
+        filterResults = list(filter(
+            lambda x: isinstance(x, Computation), 
+            self.metadataGraph
+        ))
+
+        return filterResults
+
+
+    def getBioChemEntities(self) -> List[BioChemEntity]:
+        """ Filter the Metadata Graph for BioChemEntity Elements
+
+        :param self
+        :return: All BioChemEntity metadata records within the ROCrate
+        :rtype List[fairscape_mds.models.rocrate.BioChemEntity]
+        """
+        filterResults = list(filter(
+            lambda x: isinstance(x, BioChemEntity), 
+            self.metadataGraph
+        ))
+
+        return filterResults
+
+
+    def getMedicalConditions(self) -> List[MedicalCondition]:
+        """ Filter the Metadata Graph for MedicalCondition Elements
+
+        :param self
+        :return: All MedicalCondition metadata records within the ROCrate
+        :rtype List[fairscape_mds.models.rocrate.MedicalCondition]
+        """
+        filterResults = list(filter(
+            lambda x: isinstance(x, MedicalCondition), 
+            self.metadataGraph
+        ))
+
+        return filterResults
+
+
+    def getEVIElements(self) -> List[Union[
+        Computation, 
+        Dataset, 
+        Software, 
+        Schema,
+        BioChemEntity,
+        MedicalCondition
+        ]]:
+        """ Query the metadata graph for elements which require minting identifiers
+        """
+        return self.getDatasets() + self.getSoftware() + self.getComputations() + self.getSchemas()
