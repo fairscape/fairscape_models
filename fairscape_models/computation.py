@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional, List, Union
 
 from fairscape_models.fairscape_base import IdentifierValue, COMPUTATION_TYPE
@@ -17,3 +17,5 @@ class Computation(BaseModel):
     usedSoftware: Optional[List[IdentifierValue]] = Field(default=[])
     usedDataset: Optional[List[IdentifierValue]] = Field(default=[])
     generated: Optional[List[IdentifierValue]] = Field(default=[])
+    
+    model_config = ConfigDict(extra="allow")

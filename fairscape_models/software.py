@@ -18,3 +18,4 @@ class Software(BaseModel):
     usedByComputation: Optional[List[IdentifierValue]] = Field(default=[])
     contentUrl: Optional[str] = Field(default=None)
 
+    model_config = ConfigDict(extra="allow")

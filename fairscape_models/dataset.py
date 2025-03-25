@@ -21,3 +21,5 @@ class Dataset(BaseModel):
     derivedFrom: Optional[List[IdentifierValue]] = Field(default=[])
     usedByComputation: Optional[List[IdentifierValue]] = Field(default=[])
     contentUrl: Optional[Union[str, List[str]]] = Field(default=None)
+
+    model_config = ConfigDict(extra="allow")
