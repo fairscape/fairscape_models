@@ -1,15 +1,7 @@
 import urllib.parse
-from pydantic import (
-    Field,
-    BaseModel,
-)
-from typing import (
-    Optional, 
-    Union, 
-    Dict, 
-    List, 
-    Literal
-)
+from typing import Any, Dict, List, Literal, Optional, Union
+from pydantic import BaseModel, Field, ConfigDict, model_validator
+
 
 from fairscape_models.fairscape_base import IdentifierValue
 from fairscape_models.schema import Schema
@@ -19,6 +11,12 @@ from fairscape_models.computation import Computation
 from fairscape_models.dataset import Dataset
 from fairscape_models.software import Software
 
+class GenericMetadataElem(BaseModel):
+    """Generic Metadata Element of an ROCrate"""
+    guid: str = Field(alias="@id")
+    metadataType: Union[str, List[str]] = Field(alias="@type")
+    
+    model_config = ConfigDict(extra="allow")
 
 class ROCrateMetadataFileElem(BaseModel):
     """Metadata Element of an ROCrate cooresponding to the `ro-crate-metadata.json` file itself
@@ -88,6 +86,8 @@ class ROCrateMetadataElem(BaseModel):
     copyrightNotice: Optional[str]
     hasPart: List[IdentifierValue]
     
+    model_config = ConfigDict(extra="allow")
+    
 class ROCrateDistribution(BaseModel):
     extractedROCrateBucket: Optional[str] = Field(default=None)
     archivedROCrateBucket: Optional[str] = Field(default=None)
@@ -108,7 +108,62 @@ class ROCrateV1_2(BaseModel):
         BioChemEntity,
         MedicalCondition
     ]] = Field(alias="@graph")
-
+    
+    @model_validator(mode="before")
+    @classmethod
+    def validate_metadata_graph(cls, values: Dict[str, Any]) -> Dict[str, Any]:
+        if "@graph" not in values:
+            return values
+        
+        type_map = {
+            "Dataset": Dataset,
+            "Software": Software,
+            "Computation": Computation,
+            "CreativeWork": ROCrateMetadataFileElem,
+            "Schema": Schema,
+            "BioChemEntity": BioChemEntity,
+            "MedicalCondition": MedicalCondition,
+            "ROCrate": ROCrateMetadataElem
+        }
+        
+        def normalize_type(type_str):
+            if "#" in type_str:
+                return type_str.split("#")[-1]
+            if ":" in type_str:
+                return type_str.split(":")[-1]
+            return type_str
+        
+        new_graph = []
+        for item in values["@graph"]:
+            if not isinstance(item, dict):
+                new_graph.append(item)
+                continue
+                
+            if "@type" not in item:
+                raise ValueError("Metadata element must have @type field")
+                
+            item_type = item["@type"]
+            
+            if isinstance(item_type, list):
+                normalized_types = [normalize_type(t) for t in item_type]
+                if "ROCrate" in normalized_types or "Dataset" in normalized_types:
+                    new_graph.append(ROCrateMetadataElem.model_validate(item))
+                    continue
+            
+            elif isinstance(item_type, str):
+                normalized_type = normalize_type(item_type)
+                model_class = type_map.get(normalized_type)
+                if model_class:
+                    try:
+                        new_graph.append(model_class.model_validate(item))
+                        continue
+                    except Exception:
+                        pass
+            
+            new_graph.append(GenericMetadataElem.model_validate(item))
+        
+        values["@graph"] = new_graph
+        return values
 
     def cleanIdentifiers(self):
         """ Clean metadata guid property from full urls to ark:{NAAN}/{postfix} 
