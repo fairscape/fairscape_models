@@ -72,6 +72,8 @@ class ROCrateMetadataElem(BaseModel):
         }
         ```
     """ 
+    model_config = ConfigDict(extra="allow")
+    
     guid: str = Field(alias="@id")
     metadataType: List[str] = Field(alias="@type")
     name: str
@@ -79,14 +81,15 @@ class ROCrateMetadataElem(BaseModel):
     keywords: List[str]
     isPartOf: List[IdentifierValue]
     version: str
-    dataLicense: Optional[str] = Field(alias="license")
-    associatedPublication: Optional[str]
-    author: Union[str, List[str]]
-    conditionsOfAccess: Optional[str]
-    copyrightNotice: Optional[str]
     hasPart: List[IdentifierValue]
+    author: Union[str, List[str]]
+    dataLicense: Optional[str] = Field(alias="license")
+    associatedPublication: Optional[str] =  Field(default="")
+    conditionsOfAccess: Optional[str] =  Field(default="")
+    copyrightNotice: Optional[str] =  Field(default="")
+
     
-    model_config = ConfigDict(extra="allow")
+    
     
 class ROCrateDistribution(BaseModel):
     extractedROCrateBucket: Optional[str] = Field(default=None)
