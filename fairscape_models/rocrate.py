@@ -84,7 +84,7 @@ class ROCrateMetadataElem(BaseModel):
     hasPart: List[IdentifierValue]
     author: Union[str, List[str]]
     dataLicense: Optional[str] = Field(alias="license")
-    associatedPublication: Optional[str] =  Field(default="")
+    associatedPublication: Union[str, List[str]] =  Field(default="")
     conditionsOfAccess: Optional[str] =  Field(default="")
     copyrightNotice: Optional[str] =  Field(default="")
 
@@ -109,7 +109,8 @@ class ROCrateV1_2(BaseModel):
         ROCrateMetadataFileElem,
         Schema,
         BioChemEntity,
-        MedicalCondition
+        MedicalCondition,
+        GenericMetadataElem
     ]] = Field(alias="@graph")
     
     @model_validator(mode="before")
