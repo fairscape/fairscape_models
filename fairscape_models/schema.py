@@ -6,7 +6,6 @@ from typing import (
         Union
 )
 from pydantic import (
-    Extra, 
     BaseModel,
     Field,
     validator
@@ -26,7 +25,7 @@ class Item(BaseModel):
     type: str = Field(...)
     _validate_type = validator('type', allow_reuse=True)(validate_type)
 
-class Property(BaseModel, extra = Extra.allow):
+class Property(BaseModel, extra = 'allow'):
     description: str = Field(...)
     index: Union[str, int] = Field(...)
     type: str = Field(...)
@@ -57,7 +56,7 @@ class Property(BaseModel, extra = Extra.allow):
                 raise ValueError("Pattern must be a valid regular expression")
         return value
 
-class Schema(FairscapeEVIBaseModel, extra=Extra.allow):
+class Schema(FairscapeEVIBaseModel, extra='allow'):
     context: Dict[str, str] = Field( 
         default= {"@vocab": "https://schema.org/", "evi": "https://w3id.org/EVI#"},
         alias="@context" 
