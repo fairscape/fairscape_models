@@ -25,7 +25,7 @@ class Item(BaseModel):
     type: str = Field(...)
     _validate_type = validator('type', allow_reuse=True)(validate_type)
 
-class Property(BaseModel, extra = 'allow'):
+class Property(BaseModel):
     description: str = Field(...)
     index: Union[str, int] = Field(...)
     type: str = Field(...)
@@ -35,6 +35,8 @@ class Property(BaseModel, extra = 'allow'):
     min_items: Optional[int] = Field(default = None, alias = 'min-items')
     max_items: Optional[int] = Field(default = None, alias = 'max-items')
     unique_items: Optional[bool] = Field(default = None, alias = 'unique-items')
+
+    model_config = ConfigDict(extra='allow')
 
     @validator('index')
     def validate_index(cls, value):
@@ -56,7 +58,7 @@ class Property(BaseModel, extra = 'allow'):
                 raise ValueError("Pattern must be a valid regular expression")
         return value
 
-class Schema(FairscapeEVIBaseModel, extra='allow'):
+class Schema(FairscapeEVIBaseModel):
     context: Dict[str, str] = Field( 
         default= {"@vocab": "https://schema.org/", "evi": "https://w3id.org/EVI#"},
         alias="@context" 
@@ -69,6 +71,8 @@ class Schema(FairscapeEVIBaseModel, extra='allow'):
     separator: Optional[str] = Field(default=",")
     header: Optional[bool] = Field(default=True)
     examples: Optional[List[Dict]] = []  
+
+    model_config = ConfigDict(extra='allow')
 
     def create(self, MongoCollection: pymongo.collection.Collection) -> OperationStatus:
         return super().create(MongoCollection)

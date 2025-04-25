@@ -10,7 +10,6 @@ class Sample(BaseModel):
     description: str = Field(min_length=10)
     keywords: List[str] = Field(...)
     contentUrl: Optional[Union[str, List[str]]] = Field(default=None)
-    cellLineReference: Optional[IdentifierValue] = Field(default=None)
+    cellLineReference: Optional[IdentifierValue] = Field(default=None) 
 
-    
-    model_config = ConfigDict(extra="allow")
+    model_config = ConfigDict(extra='allow')
