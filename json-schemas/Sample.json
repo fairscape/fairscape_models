@@ -1,0 +1,104 @@
+{
+  "$defs": {
+    "IdentifierValue": {
+      "properties": {
+        "@id": {
+          "title": "@Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "@id"
+      ],
+      "title": "IdentifierValue",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "properties": {
+    "@id": {
+      "title": "@Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "@type": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": "https://w3id.org/EVI#Sample",
+      "title": "@Type"
+    },
+    "author": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      ],
+      "title": "Author"
+    },
+    "description": {
+      "minLength": 10,
+      "title": "Description",
+      "type": "string"
+    },
+    "keywords": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Keywords",
+      "type": "array"
+    },
+    "contentUrl": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Contenturl"
+    },
+    "cellLineReference": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/IdentifierValue"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "@id",
+    "name",
+    "author",
+    "description",
+    "keywords"
+  ],
+  "title": "Sample",
+  "type": "object"
+}

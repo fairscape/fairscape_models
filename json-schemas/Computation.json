@@ -1,0 +1,161 @@
+{
+  "$defs": {
+    "IdentifierValue": {
+      "properties": {
+        "@id": {
+          "title": "@Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "@id"
+      ],
+      "title": "IdentifierValue",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "properties": {
+    "@id": {
+      "title": "@Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "metadataType": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": "https://w3id.org/EVI#Computation",
+      "title": "Metadatatype"
+    },
+    "additionalType": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": "Computation",
+      "title": "Additionaltype"
+    },
+    "runBy": {
+      "title": "Runby",
+      "type": "string"
+    },
+    "description": {
+      "minLength": 10,
+      "title": "Description",
+      "type": "string"
+    },
+    "dateCreated": {
+      "title": "Datecreated",
+      "type": "string"
+    },
+    "associatedPublication": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Associatedpublication"
+    },
+    "additionalDocumentation": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Additionaldocumentation"
+    },
+    "command": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Command"
+    },
+    "usedSoftware": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Usedsoftware"
+    },
+    "usedDataset": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Useddataset"
+    },
+    "generated": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Generated"
+    }
+  },
+  "required": [
+    "@id",
+    "name",
+    "runBy",
+    "description",
+    "dateCreated"
+  ],
+  "title": "Computation",
+  "type": "object"
+}

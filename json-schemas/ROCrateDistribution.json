@@ -1,0 +1,57 @@
+{
+  "properties": {
+    "extractedROCrateBucket": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Extractedrocratebucket"
+    },
+    "archivedROCrateBucket": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Archivedrocratebucket"
+    },
+    "extractedObjectPath": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Extractedobjectpath"
+    },
+    "archivedObjectPath": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Archivedobjectpath"
+    }
+  },
+  "title": "ROCrateDistribution",
+  "type": "object"
+}

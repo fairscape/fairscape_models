@@ -1,0 +1,23 @@
+{
+  "properties": {
+    "@type": {
+      "default": "PropertyValue",
+      "title": "@Type",
+      "type": "string"
+    },
+    "value": {
+      "title": "Value",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    }
+  },
+  "required": [
+    "value",
+    "name"
+  ],
+  "title": "IdentifierPropertyValue",
+  "type": "object"
+}

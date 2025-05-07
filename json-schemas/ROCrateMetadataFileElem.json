@@ -1,0 +1,42 @@
+{
+  "$defs": {
+    "IdentifierValue": {
+      "properties": {
+        "@id": {
+          "title": "@Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "@id"
+      ],
+      "title": "IdentifierValue",
+      "type": "object"
+    }
+  },
+  "description": "Metadata Element of an ROCrate cooresponding to the `ro-crate-metadata.json` file itself\n\nExample\n\n    ```\n    {\n        \"@id\": \"ro-crate-metadata.json\",\n        \"@type\": \"CreativeWork\",\n        \"conformsTo\": {\n            \"@id\": \"https://w3id.org/ro/crate/1.2-DRAFT\"\n        },\n        \"about\": {\n            \"@id\": \"https://fairscape.net/ark:59852/rocrate-2.cm4ai_chromatin_mda-mb-468_untreated_apmsembed_initialrun0.1alpha\"\n        }\n    }\n    ```",
+  "properties": {
+    "@id": {
+      "title": "@Id",
+      "type": "string"
+    },
+    "@type": {
+      "const": "CreativeWork",
+      "title": "@Type"
+    },
+    "conformsTo": {
+      "$ref": "#/$defs/IdentifierValue"
+    },
+    "about": {
+      "$ref": "#/$defs/IdentifierValue"
+    }
+  },
+  "required": [
+    "@id",
+    "@type",
+    "conformsTo",
+    "about"
+  ],
+  "title": "ROCrateMetadataFileElem",
+  "type": "object"
+}

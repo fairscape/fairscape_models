@@ -1,0 +1,30 @@
+{
+  "additionalProperties": true,
+  "description": "Generic Metadata Element of an ROCrate",
+  "properties": {
+    "@id": {
+      "title": "@Id",
+      "type": "string"
+    },
+    "@type": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      ],
+      "title": "@Type"
+    }
+  },
+  "required": [
+    "@id",
+    "@type"
+  ],
+  "title": "GenericMetadataElem",
+  "type": "object"
+}

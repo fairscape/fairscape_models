@@ -1,0 +1,42 @@
+{
+  "$defs": {
+    "ClassType": {
+      "enum": [
+        "Dataset",
+        "Software",
+        "Computation",
+        "Schema",
+        "EvidenceGraph",
+        "ROCrate"
+      ],
+      "title": "ClassType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "properties": {
+    "@id": {
+      "title": "guid",
+      "type": "string"
+    },
+    "@type": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ClassType"
+        }
+      ],
+      "title": "metadataType"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    }
+  },
+  "required": [
+    "@id",
+    "@type",
+    "name"
+  ],
+  "title": "Identifier",
+  "type": "object"
+}

@@ -1,0 +1,1180 @@
+{
+  "$defs": {
+    "BioChemEntity": {
+      "description": "Pydantic model for the Schema.org BioChemEntity datatype\n\nThis class can apply to Protiens, Genes, Chemical Entities, or Biological Samples",
+      "properties": {
+        "@id": {
+          "title": "@Id",
+          "type": "string"
+        },
+        "@type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "BioChemEntity",
+          "title": "@Type"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "identifier": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/IdentifierPropertyValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Identifier"
+        },
+        "associatedDisease": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/IdentifierValue"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "usedBy": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/IdentifierValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Usedby"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        }
+      },
+      "required": [
+        "@id",
+        "name"
+      ],
+      "title": "BioChemEntity",
+      "type": "object"
+    },
+    "Computation": {
+      "additionalProperties": true,
+      "properties": {
+        "@id": {
+          "title": "@Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "metadataType": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "https://w3id.org/EVI#Computation",
+          "title": "Metadatatype"
+        },
+        "additionalType": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "Computation",
+          "title": "Additionaltype"
+        },
+        "runBy": {
+          "title": "Runby",
+          "type": "string"
+        },
+        "description": {
+          "minLength": 10,
+          "title": "Description",
+          "type": "string"
+        },
+        "dateCreated": {
+          "title": "Datecreated",
+          "type": "string"
+        },
+        "associatedPublication": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Associatedpublication"
+        },
+        "additionalDocumentation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Additionaldocumentation"
+        },
+        "command": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Command"
+        },
+        "usedSoftware": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/IdentifierValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Usedsoftware"
+        },
+        "usedDataset": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/IdentifierValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Useddataset"
+        },
+        "generated": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/IdentifierValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Generated"
+        }
+      },
+      "required": [
+        "@id",
+        "name",
+        "runBy",
+        "description",
+        "dateCreated"
+      ],
+      "title": "Computation",
+      "type": "object"
+    },
+    "Dataset": {
+      "additionalProperties": true,
+      "properties": {
+        "@id": {
+          "title": "@Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "metadataType": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "https://w3id.org/EVI#Dataset",
+          "title": "Metadatatype"
+        },
+        "additionalType": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "Dataset",
+          "title": "Additionaltype"
+        },
+        "author": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          ],
+          "title": "Author"
+        },
+        "datePublished": {
+          "title": "Datepublished",
+          "type": "string"
+        },
+        "version": {
+          "default": "0.1.0",
+          "title": "Version",
+          "type": "string"
+        },
+        "description": {
+          "minLength": 10,
+          "title": "Description",
+          "type": "string"
+        },
+        "keywords": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Keywords",
+          "type": "array"
+        },
+        "associatedPublication": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Associatedpublication"
+        },
+        "additionalDocumentation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Additionaldocumentation"
+        },
+        "format": {
+          "title": "Format",
+          "type": "string"
+        },
+        "evi:Schema": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/IdentifierValue"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "generatedBy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/IdentifierValue"
+            },
+            {
+              "items": {
+                "$ref": "#/$defs/IdentifierValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Generatedby"
+        },
+        "derivedFrom": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/IdentifierValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Derivedfrom"
+        },
+        "usedByComputation": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/IdentifierValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Usedbycomputation"
+        },
+        "contentUrl": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Contenturl"
+        }
+      },
+      "required": [
+        "@id",
+        "name",
+        "author",
+        "datePublished",
+        "description",
+        "keywords",
+        "format"
+      ],
+      "title": "Dataset",
+      "type": "object"
+    },
+    "GenericMetadataElem": {
+      "additionalProperties": true,
+      "description": "Generic Metadata Element of an ROCrate",
+      "properties": {
+        "@id": {
+          "title": "@Id",
+          "type": "string"
+        },
+        "@type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          ],
+          "title": "@Type"
+        }
+      },
+      "required": [
+        "@id",
+        "@type"
+      ],
+      "title": "GenericMetadataElem",
+      "type": "object"
+    },
+    "IdentifierPropertyValue": {
+      "properties": {
+        "@type": {
+          "default": "PropertyValue",
+          "title": "@Type",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "value",
+        "name"
+      ],
+      "title": "IdentifierPropertyValue",
+      "type": "object"
+    },
+    "IdentifierValue": {
+      "properties": {
+        "@id": {
+          "title": "@Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "@id"
+      ],
+      "title": "IdentifierValue",
+      "type": "object"
+    },
+    "Item": {
+      "properties": {
+        "type": {
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "Item",
+      "type": "object"
+    },
+    "MedicalCondition": {
+      "description": "Pydantic model for the Schema.org MedicalCondition datatype\n\nThis class represents any condition of the human body that affects the normal functioning of a person, whether physically or mentally. Includes diseases, injuries, disabilities, disorders, syndromes, etc.",
+      "properties": {
+        "@id": {
+          "title": "@Id",
+          "type": "string"
+        },
+        "@type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "MedicalCondition",
+          "title": "@Type"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "identifier": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/IdentifierPropertyValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Identifier"
+        },
+        "drug": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/IdentifierValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Drug"
+        },
+        "usedBy": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/IdentifierValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Usedby"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        }
+      },
+      "required": [
+        "@id",
+        "name",
+        "description"
+      ],
+      "title": "MedicalCondition",
+      "type": "object"
+    },
+    "Property": {
+      "additionalProperties": true,
+      "properties": {
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "index": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ],
+          "title": "Index"
+        },
+        "type": {
+          "title": "Type",
+          "type": "string"
+        },
+        "value-url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value-Url"
+        },
+        "pattern": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pattern"
+        },
+        "items": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Item"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "min-items": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min-Items"
+        },
+        "max-items": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max-Items"
+        },
+        "unique-items": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unique-Items"
+        }
+      },
+      "required": [
+        "description",
+        "index",
+        "type"
+      ],
+      "title": "Property",
+      "type": "object"
+    },
+    "ROCrateMetadataElem": {
+      "additionalProperties": true,
+      "description": "Metadata Element of ROCrate that represents the crate as a whole\n\nExample\n    ```\n    {\n        '@id': 'https://fairscape.net/ark:59852/rocrate-2.cm4ai_chromatin_mda-mb-468_untreated_imageembedfold1_initialrun0.1alpha',\n        '@type': ['Dataset', 'https://w3id.org/EVI#ROCrate'],\n        'name': 'Initial integration run',\n        'description': 'Ideker Lab CM4AI 0.1 alpha MDA-MB-468 untreated chromatin Initial integration run IF Image Embedding IF microscopy images embedding fold1',\n        'keywords': ['Ideker Lab', 'fold1'],\n        'isPartOf': [\n            {'@id': 'ark:/Ideker_Lab'}, \n            {'@id': 'ark:/Ideker_Lab/CM4AI'}\n            ],\n        'version': '0.5alpha',\n        'license': 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en',\n        'associatedPublication': 'Clark T, Schaffer L, Obernier K, Al Manir S, Churas CP, Dailamy A, Doctor Y, Forget A, Hansen JN, Hu M, Lenkiewicz J, Levinson MA, Marquez C, Mohan J, Nourreddine S, Niestroy J, Pratt D, Qian G, Thaker S, Belisle-Pipon J-C, Brandt C, Chen J, Ding Y, Fodeh S, Krogan N, Lundberg E, Mali P, Payne-Foster P, Ratcliffe S, Ravitsky V, Sali A, Schulz W, Ideker T. Cell Maps for Artificial Intelligence: AI-Ready Maps of Human Cell Architecture from Disease-Relevant Cell Lines. BioRXiv 2024.',\n        'author': ['Test']\n        'conditionsOfAccess': 'This dataset was created by investigators and staff of the Cell Maps for Artificial Intelligence project (CM4AI - https://cm4ai.org), a Data Generation Project of the NIH Bridge2AI program, and is copyright (c) 2024 by The Regents of the University of California and, for cellular imaging data, by The Board of Trustees of the Leland Stanford Junior University. It is licensed for reuse under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC-BY-NC-SA 4.0) license, whose terms are summarized here: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en.  Proper attribution credit as required by the license includes citation of the copyright holders and of the attribution parties, which includes citation of the following article: Clark T, Schaffer L, Obernier K, Al Manir S, Churas CP, Dailamy A, Doctor Y, Forget A, Hansen JN, Hu M, Lenkiewicz J, Levinson MA, Marquez C, Mohan J, Nourreddine S, Niestroy J, Pratt D, Qian G, Thaker S, Belisle-Pipon J-C, Brandt C, Chen J, Ding Y, Fodeh S, Krogan N, Lundberg E, Mali P, Payne-Foster P, Ratcliffe S, Ravitsky V, Sali A, Schulz W, Ideker T. Cell Maps for Artificial Intelligence: AI-Ready Maps of Human Cell Architecture from Disease-Relevant Cell Lines. BioRXiv 2024.\u201d',\n        'copyrightNotice': 'Copyright (c) 2024 by The Regents of the University of California',\n        'hasPart': [\n            {'@id': 'https://fairscape.net/ark:59852/software-cellmaps_image_embedding-N2ux5jg'},\n            {'@id': 'https://fairscape.net/ark:59852/dataset-cellmaps_image_embedding-output-file-N2ux5jg'},\n            {'@id': 'https://fairscape.net/ark:59852/dataset-Densenet-model-file-N2ux5jg'},\n            {'@id': 'https://fairscape.net/ark:59852/computation-IF-Image-Embedding-N2ux5jg'}\n        ]\n    }\n    ```",
+      "properties": {
+        "@id": {
+          "title": "@Id",
+          "type": "string"
+        },
+        "@type": {
+          "items": {
+            "type": "string"
+          },
+          "title": "@Type",
+          "type": "array"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "keywords": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Keywords",
+          "type": "array"
+        },
+        "isPartOf": {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "title": "Ispartof",
+          "type": "array"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        },
+        "hasPart": {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "title": "Haspart",
+          "type": "array"
+        },
+        "author": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          ],
+          "title": "Author"
+        },
+        "license": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "License"
+        },
+        "associatedPublication": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          ],
+          "default": "",
+          "title": "Associatedpublication"
+        },
+        "conditionsOfAccess": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "",
+          "title": "Conditionsofaccess"
+        },
+        "copyrightNotice": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "",
+          "title": "Copyrightnotice"
+        }
+      },
+      "required": [
+        "@id",
+        "@type",
+        "name",
+        "description",
+        "keywords",
+        "isPartOf",
+        "version",
+        "hasPart",
+        "author",
+        "license"
+      ],
+      "title": "ROCrateMetadataElem",
+      "type": "object"
+    },
+    "ROCrateMetadataFileElem": {
+      "description": "Metadata Element of an ROCrate cooresponding to the `ro-crate-metadata.json` file itself\n\nExample\n\n    ```\n    {\n        \"@id\": \"ro-crate-metadata.json\",\n        \"@type\": \"CreativeWork\",\n        \"conformsTo\": {\n            \"@id\": \"https://w3id.org/ro/crate/1.2-DRAFT\"\n        },\n        \"about\": {\n            \"@id\": \"https://fairscape.net/ark:59852/rocrate-2.cm4ai_chromatin_mda-mb-468_untreated_apmsembed_initialrun0.1alpha\"\n        }\n    }\n    ```",
+      "properties": {
+        "@id": {
+          "title": "@Id",
+          "type": "string"
+        },
+        "@type": {
+          "const": "CreativeWork",
+          "title": "@Type"
+        },
+        "conformsTo": {
+          "$ref": "#/$defs/IdentifierValue"
+        },
+        "about": {
+          "$ref": "#/$defs/IdentifierValue"
+        }
+      },
+      "required": [
+        "@id",
+        "@type",
+        "conformsTo",
+        "about"
+      ],
+      "title": "ROCrateMetadataFileElem",
+      "type": "object"
+    },
+    "Schema": {
+      "additionalProperties": true,
+      "properties": {
+        "@id": {
+          "title": "guid",
+          "type": "string"
+        },
+        "@type": {
+          "default": "evi:Schema",
+          "title": "@Type",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "@context": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {
+            "@vocab": "https://schema.org/",
+            "evi": "https://w3id.org/EVI#"
+          },
+          "title": "@Context",
+          "type": "object"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "format": "uri",
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Url"
+        },
+        "description": {
+          "minLength": 5,
+          "title": "Description",
+          "type": "string"
+        },
+        "license": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "https://creativecommons.org/licenses/by/4.0/",
+          "title": "License"
+        },
+        "keywords": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Keywords",
+          "type": "array"
+        },
+        "published": {
+          "default": true,
+          "title": "Published",
+          "type": "boolean"
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/Property"
+          },
+          "title": "Properties"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "object",
+          "title": "Type"
+        },
+        "additionalProperties": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": true,
+          "title": "Additionalproperties"
+        },
+        "required": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Required"
+        },
+        "separator": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": ",",
+          "title": "Separator"
+        },
+        "header": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": true,
+          "title": "Header"
+        },
+        "examples": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "object"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Examples"
+        }
+      },
+      "required": [
+        "@id",
+        "name",
+        "description",
+        "properties"
+      ],
+      "title": "Schema",
+      "type": "object"
+    },
+    "Software": {
+      "additionalProperties": true,
+      "properties": {
+        "@id": {
+          "title": "@Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "metadataType": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "https://w3id.org/EVI#Software",
+          "title": "Metadatatype"
+        },
+        "additionalType": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "Software",
+          "title": "Additionaltype"
+        },
+        "author": {
+          "minLength": 4,
+          "title": "Author",
+          "type": "string"
+        },
+        "dateModified": {
+          "title": "Datemodified",
+          "type": "string"
+        },
+        "version": {
+          "default": "0.1.0",
+          "title": "Version",
+          "type": "string"
+        },
+        "description": {
+          "minLength": 10,
+          "title": "Description",
+          "type": "string"
+        },
+        "associatedPublication": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Associatedpublication"
+        },
+        "additionalDocumentation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Additionaldocumentation"
+        },
+        "format": {
+          "title": "fileFormat",
+          "type": "string"
+        },
+        "usedByComputation": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/IdentifierValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Usedbycomputation"
+        },
+        "contentUrl": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Contenturl"
+        }
+      },
+      "required": [
+        "@id",
+        "name",
+        "author",
+        "dateModified",
+        "description",
+        "format"
+      ],
+      "title": "Software",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "@context": {
+      "anyOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "@Context"
+    },
+    "@graph": {
+      "items": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/Dataset"
+          },
+          {
+            "$ref": "#/$defs/Software"
+          },
+          {
+            "$ref": "#/$defs/Computation"
+          },
+          {
+            "$ref": "#/$defs/ROCrateMetadataElem"
+          },
+          {
+            "$ref": "#/$defs/ROCrateMetadataFileElem"
+          },
+          {
+            "$ref": "#/$defs/Schema"
+          },
+          {
+            "$ref": "#/$defs/BioChemEntity"
+          },
+          {
+            "$ref": "#/$defs/MedicalCondition"
+          },
+          {
+            "$ref": "#/$defs/GenericMetadataElem"
+          }
+        ]
+      },
+      "title": "@Graph",
+      "type": "array"
+    }
+  },
+  "required": [
+    "@context",
+    "@graph"
+  ],
+  "title": "ROCrateV1_2",
+  "type": "object"
+}

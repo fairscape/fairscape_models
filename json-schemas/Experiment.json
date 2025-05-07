@@ -1,0 +1,166 @@
+{
+  "$defs": {
+    "IdentifierValue": {
+      "properties": {
+        "@id": {
+          "title": "@Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "@id"
+      ],
+      "title": "IdentifierValue",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "properties": {
+    "@id": {
+      "title": "@Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "@type": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": "https://w3id.org/EVI#Experiment",
+      "title": "@Type"
+    },
+    "experimentType": {
+      "title": "Experimenttype",
+      "type": "string"
+    },
+    "runBy": {
+      "title": "Runby",
+      "type": "string"
+    },
+    "description": {
+      "minLength": 10,
+      "title": "Description",
+      "type": "string"
+    },
+    "datePerformed": {
+      "title": "Dateperformed",
+      "type": "string"
+    },
+    "associatedPublication": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Associatedpublication"
+    },
+    "protocol": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Protocol"
+    },
+    "usedInstrument": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Usedinstrument"
+    },
+    "usedSample": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Usedsample"
+    },
+    "usedTreatment": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Usedtreatment"
+    },
+    "usedStain": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Usedstain"
+    },
+    "generated": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Generated"
+    }
+  },
+  "required": [
+    "@id",
+    "name",
+    "experimentType",
+    "runBy",
+    "description",
+    "datePerformed"
+  ],
+  "title": "Experiment",
+  "type": "object"
+}

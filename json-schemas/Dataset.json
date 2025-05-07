@@ -1,0 +1,203 @@
+{
+  "$defs": {
+    "IdentifierValue": {
+      "properties": {
+        "@id": {
+          "title": "@Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "@id"
+      ],
+      "title": "IdentifierValue",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "properties": {
+    "@id": {
+      "title": "@Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "metadataType": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": "https://w3id.org/EVI#Dataset",
+      "title": "Metadatatype"
+    },
+    "additionalType": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": "Dataset",
+      "title": "Additionaltype"
+    },
+    "author": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      ],
+      "title": "Author"
+    },
+    "datePublished": {
+      "title": "Datepublished",
+      "type": "string"
+    },
+    "version": {
+      "default": "0.1.0",
+      "title": "Version",
+      "type": "string"
+    },
+    "description": {
+      "minLength": 10,
+      "title": "Description",
+      "type": "string"
+    },
+    "keywords": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Keywords",
+      "type": "array"
+    },
+    "associatedPublication": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Associatedpublication"
+    },
+    "additionalDocumentation": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Additionaldocumentation"
+    },
+    "format": {
+      "title": "Format",
+      "type": "string"
+    },
+    "evi:Schema": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/IdentifierValue"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "generatedBy": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/IdentifierValue"
+        },
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Generatedby"
+    },
+    "derivedFrom": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Derivedfrom"
+    },
+    "usedByComputation": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Usedbycomputation"
+    },
+    "contentUrl": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Contenturl"
+    }
+  },
+  "required": [
+    "@id",
+    "name",
+    "author",
+    "datePublished",
+    "description",
+    "keywords",
+    "format"
+  ],
+  "title": "Dataset",
+  "type": "object"
+}

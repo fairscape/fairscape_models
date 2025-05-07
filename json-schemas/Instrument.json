@@ -1,0 +1,114 @@
+{
+  "$defs": {
+    "IdentifierValue": {
+      "properties": {
+        "@id": {
+          "title": "@Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "@id"
+      ],
+      "title": "IdentifierValue",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "properties": {
+    "@id": {
+      "title": "@Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "@type": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": "https://w3id.org/EVI#Instrument",
+      "title": "@Type"
+    },
+    "manufacturer": {
+      "minLength": 4,
+      "title": "Manufacturer",
+      "type": "string"
+    },
+    "model": {
+      "title": "Model",
+      "type": "string"
+    },
+    "description": {
+      "minLength": 10,
+      "title": "Description",
+      "type": "string"
+    },
+    "associatedPublication": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Associatedpublication"
+    },
+    "additionalDocumentation": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Additionaldocumentation"
+    },
+    "usedByExperiment": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Usedbyexperiment"
+    },
+    "contentUrl": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Contenturl"
+    }
+  },
+  "required": [
+    "@id",
+    "name",
+    "manufacturer",
+    "model",
+    "description"
+  ],
+  "title": "Instrument",
+  "type": "object"
+}

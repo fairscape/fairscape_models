@@ -1,0 +1,125 @@
+{
+  "$defs": {
+    "ClassType": {
+      "enum": [
+        "Dataset",
+        "Software",
+        "Computation",
+        "Schema",
+        "EvidenceGraph",
+        "ROCrate"
+      ],
+      "title": "ClassType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "properties": {
+    "@id": {
+      "title": "guid",
+      "type": "string"
+    },
+    "@type": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ClassType"
+        }
+      ],
+      "title": "metadataType"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "@context": {
+      "anyOf": [
+        {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": {
+        "@vocab": "https://schema.org/",
+        "evi": "https://w3id.org/EVI#",
+        "usedSoftware": {
+          "@id": "https://w3id.org/EVI#",
+          "@type": "@id"
+        },
+        "usedDataset": {
+          "@id": "https://w3id.org/EVI#",
+          "@type": "@id"
+        },
+        "generatedBy": {
+          "@id": "https://w3id.org/EVI#generated",
+          "@type": "@id"
+        },
+        "generated": {
+          "@id": "https://w3id.org/EVI#generatedBy",
+          "@type": "@id"
+        },
+        "hasDistribution": {
+          "@id": "https://w3id.org/EVI#hasDistribution",
+          "@type": "@id"
+        }
+      },
+      "title": "context"
+    },
+    "url": {
+      "anyOf": [
+        {
+          "format": "uri",
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Url"
+    },
+    "description": {
+      "minLength": 5,
+      "title": "Description",
+      "type": "string"
+    },
+    "license": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": "https://creativecommons.org/licenses/by/4.0/",
+      "title": "License"
+    },
+    "keywords": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Keywords",
+      "type": "array"
+    },
+    "published": {
+      "default": true,
+      "title": "Published",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "@id",
+    "@type",
+    "name",
+    "description"
+  ],
+  "title": "FairscapeEVIBaseModel",
+  "type": "object"
+}

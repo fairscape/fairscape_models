@@ -1,0 +1,119 @@
+{
+  "$defs": {
+    "IdentifierPropertyValue": {
+      "properties": {
+        "@type": {
+          "default": "PropertyValue",
+          "title": "@Type",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "value",
+        "name"
+      ],
+      "title": "IdentifierPropertyValue",
+      "type": "object"
+    },
+    "IdentifierValue": {
+      "properties": {
+        "@id": {
+          "title": "@Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "@id"
+      ],
+      "title": "IdentifierValue",
+      "type": "object"
+    }
+  },
+  "description": "Pydantic model for the Schema.org MedicalCondition datatype\n\nThis class represents any condition of the human body that affects the normal functioning of a person, whether physically or mentally. Includes diseases, injuries, disabilities, disorders, syndromes, etc.",
+  "properties": {
+    "@id": {
+      "title": "@Id",
+      "type": "string"
+    },
+    "@type": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": "MedicalCondition",
+      "title": "@Type"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "identifier": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierPropertyValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Identifier"
+    },
+    "drug": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Drug"
+    },
+    "usedBy": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Usedby"
+    },
+    "description": {
+      "title": "Description",
+      "type": "string"
+    }
+  },
+  "required": [
+    "@id",
+    "name",
+    "description"
+  ],
+  "title": "MedicalCondition",
+  "type": "object"
+}

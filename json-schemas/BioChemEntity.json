@@ -1,0 +1,122 @@
+{
+  "$defs": {
+    "IdentifierPropertyValue": {
+      "properties": {
+        "@type": {
+          "default": "PropertyValue",
+          "title": "@Type",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "value",
+        "name"
+      ],
+      "title": "IdentifierPropertyValue",
+      "type": "object"
+    },
+    "IdentifierValue": {
+      "properties": {
+        "@id": {
+          "title": "@Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "@id"
+      ],
+      "title": "IdentifierValue",
+      "type": "object"
+    }
+  },
+  "description": "Pydantic model for the Schema.org BioChemEntity datatype\n\nThis class can apply to Protiens, Genes, Chemical Entities, or Biological Samples",
+  "properties": {
+    "@id": {
+      "title": "@Id",
+      "type": "string"
+    },
+    "@type": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": "BioChemEntity",
+      "title": "@Type"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "identifier": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierPropertyValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Identifier"
+    },
+    "associatedDisease": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/IdentifierValue"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "usedBy": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Usedby"
+    },
+    "description": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Description"
+    }
+  },
+  "required": [
+    "@id",
+    "name"
+  ],
+  "title": "BioChemEntity",
+  "type": "object"
+}
