@@ -1,3 +1,27 @@
 [build-system]
 requires = ["setuptools>=42", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "fairscape-models"
+version = "1.0.2"
+description = "Fairscape pydantic models"
+readme = "README.md"
+authors = [
+    {name = "Justin Niestroy", email = "jniestroy@gmail.com"}
+]
+license = {text = "MIT"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "pydantic",
+    "pymongo",
+    "typing",
+]
+requires-python = ">=3.8"
+
+[project.urls]
+"Homepage" = "https://github.com/fairscape/fairscape-models"

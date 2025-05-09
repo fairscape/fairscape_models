@@ -7,9 +7,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "@id"
-      ],
+      "required": ["@id"],
       "title": "IdentifierValue",
       "type": "object"
     }
@@ -26,7 +24,8 @@
         "type": "string"
       },
       "title": "@Type",
-      "type": "array"
+      "type": "array",
+      "default": ["Dataset", "https://w3id.org/EVI#ROCrate"]
     },
     "name": {
       "title": "Name",
@@ -48,7 +47,8 @@
         "$ref": "#/$defs/IdentifierValue"
       },
       "title": "Ispartof",
-      "type": "array"
+      "type": "array",
+      "default": []
     },
     "version": {
       "title": "Version",
@@ -59,7 +59,8 @@
         "$ref": "#/$defs/IdentifierValue"
       },
       "title": "Haspart",
-      "type": "array"
+      "type": "array",
+      "default": []
     },
     "author": {
       "anyOf": [

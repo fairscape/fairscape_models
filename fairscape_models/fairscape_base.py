@@ -9,8 +9,7 @@ from typing import (
     List,
     Optional,
     Dict,
-    Union,
-    Annotated
+    Union
 )
 from typing_extensions import Annotated
 import pymongo

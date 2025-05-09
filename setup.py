@@ -2,13 +2,13 @@ from setuptools import setup, find_packages
 
 setup(
     name="fairscape-models",
-    version="0.1.0",
+    version="1.0.1",
     packages=find_packages(),
     install_requires=[
         "pydantic",
         "pymongo"
     ],
-    python_requires=">=3.7",
+    python_requires=">=3.8",
     description="Fairscape metadata models",
     author="Justin Niestroy",
     author_email="jniestroy@gmail.com",

@@ -7,9 +7,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "@id"
-      ],
+      "required": ["@id"],
       "title": "IdentifierValue",
       "type": "object"
     }
@@ -22,7 +20,8 @@
     },
     "@type": {
       "const": "CreativeWork",
-      "title": "@Type"
+      "title": "@Type",
+      "default": "CreativeWork"
     },
     "conformsTo": {
       "$ref": "#/$defs/IdentifierValue"
@@ -31,12 +30,7 @@
       "$ref": "#/$defs/IdentifierValue"
     }
   },
-  "required": [
-    "@id",
-    "@type",
-    "conformsTo",
-    "about"
-  ],
+  "required": ["@id", "@type", "conformsTo", "about"],
   "title": "ROCrateMetadataFileElem",
   "type": "object"
 }

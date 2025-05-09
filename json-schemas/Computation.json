@@ -7,9 +7,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "@id"
-      ],
+      "required": ["@id"],
       "title": "IdentifierValue",
       "type": "object"
     }
@@ -24,7 +22,7 @@
       "title": "Name",
       "type": "string"
     },
-    "metadataType": {
+    "@type": {
       "anyOf": [
         {
           "type": "string"
@@ -149,13 +147,7 @@
       "title": "Generated"
     }
   },
-  "required": [
-    "@id",
-    "name",
-    "runBy",
-    "description",
-    "dateCreated"
-  ],
+  "required": ["@id", "name", "runBy", "description", "dateCreated"],
   "title": "Computation",
   "type": "object"
 }
