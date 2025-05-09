@@ -18,3 +18,4 @@ sdist/
 var/
 wheels/
 .DS_Store
+**/node_modules/
