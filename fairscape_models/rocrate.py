@@ -234,7 +234,7 @@ class ROCrateV1_2(BaseModel):
 
         # TODO support for nested crates 
         # must find the ROCrateMetadataElem with '@id' == 'ro-crate-metadata.json'
-        if len(filterResults) != 1:
+        if len(filterResults) == 0:
             # TODO more detailed exception
             raise Exception
         else:
