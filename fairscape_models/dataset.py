@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, AliasChoices
 from typing import Optional, List, Union
 
 from fairscape_models.fairscape_base import IdentifierValue, DATASET_TYPE
@@ -16,7 +16,11 @@ class Dataset(BaseModel):
     associatedPublication: Optional[str] = Field(default=None)
     additionalDocumentation: Optional[str] = Field(default=None)
     fileFormat: str = Field(alias="format")
-    dataSchema: Optional[IdentifierValue] = Field(alias="evi:Schema", default=None)
+    dataSchema: Optional[IdentifierValue] = Field(
+        validation_alias=AliasChoices('evi:Schema', 'EVI:Schema', 'schema','evi:schema'),
+        serialization_alias='evi:Schema',
+        default=None
+    )
     generatedBy: Optional[Union[IdentifierValue, List[IdentifierValue]]] = Field(default=[])
     derivedFrom: Optional[List[IdentifierValue]] = Field(default=[])
     usedByComputation: Optional[List[IdentifierValue]] = Field(default=[])
