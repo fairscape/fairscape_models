@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, ConfigDict, AliasChoices
+from pydantic import BaseModel, Field, ConfigDict, AliasChoices, field_validator
 from typing import Optional, List, Union
 
 from fairscape_models.fairscape_base import IdentifierValue, DATASET_TYPE
@@ -27,3 +27,10 @@ class Dataset(BaseModel):
     contentUrl: Optional[Union[str, List[str]]] = Field(default=None)
 
     model_config = ConfigDict(extra="allow")
+    
+    @field_validator('dataSchema', mode='before')
+    @classmethod
+    def validate_data_schema(cls, v):
+        if v == '' or v is None:
+            return None
+        return v
