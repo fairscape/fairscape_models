@@ -15,7 +15,7 @@ from fairscape_models.fairscape_base import *
 from fairscape_models.utilities import OperationStatus
 
 def validate_type(value):
-    valid_types = {'integer', 'number', 'string', 'array','boolean'}
+    valid_types = {'integer', 'number', 'string', 'array','boolean', 'object'}
     if value is not None:
         if value not in valid_types:
             raise ValueError(f"Type must be one of {valid_types}")
@@ -35,6 +35,8 @@ class Property(BaseModel):
     min_items: Optional[int] = Field(default = None, alias = 'min-items')
     max_items: Optional[int] = Field(default = None, alias = 'max-items')
     unique_items: Optional[bool] = Field(default = None, alias = 'unique-items')
+
+    properties: Optional[Dict[str, 'Property']] = Field(default=None)
 
     model_config = ConfigDict(extra='allow')
 
