@@ -8,7 +8,7 @@ from typing import (
 from pydantic import (
     BaseModel,
     Field,
-    validator
+    field_validator
     )
 import re
 from fairscape_models.fairscape_base import *
@@ -23,7 +23,7 @@ def validate_type(value):
 
 class Item(BaseModel):
     type: str = Field(...)
-    _validate_type = validator('type', allow_reuse=True)(validate_type)
+    _validate_type = field_validator('type', allow_reuse=True)(validate_type)
 
 class Property(BaseModel):
     description: str = Field(...)
@@ -40,7 +40,7 @@ class Property(BaseModel):
 
     model_config = ConfigDict(extra='allow')
 
-    @validator('index')
+    @field_validator('index')
     def validate_index(cls, value):
         if isinstance(value, str):
             # Allow something like int::int for index. Raise error if else
@@ -49,9 +49,9 @@ class Property(BaseModel):
                 raise ValueError("Index must match the pattern 'int::int'")
         return value
 
-    _validate_type = validator('type', allow_reuse=True)(validate_type)
+    _validate_type = field_validator('type', allow_reuse=True)(validate_type)
 
-    @validator('pattern')
+    @field_validator('pattern')
     def validate_pattern(cls, value):
         if value is not None:
             try:
