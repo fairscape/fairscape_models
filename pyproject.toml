@@ -20,6 +20,7 @@ dependencies = [
     "pydantic",
     "pymongo",
     "typing",
+    "mongomock"
 ]
 requires-python = ">=3.8"
 
