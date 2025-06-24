@@ -43,11 +43,11 @@ defaultContext = {
         "@type": "@id"
     },
     "generatedBy": {
-        "@id": "https://w3id.org/EVI#generated",
+        "@id": "https://w3id.org/EVI#generatedBy",
         "@type": "@id"
     },
     "generated": {
-        "@id": "https://w3id.org/EVI#generatedBy",
+        "@id": "https://w3id.org/EVI#generated",
         "@type": "@id"
     },
     "hasDistribution": {
