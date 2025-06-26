@@ -84,9 +84,9 @@ class ROCrateMetadataElem(BaseModel):
     hasPart: List[IdentifierValue]
     author: Union[str, List[str]]
     dataLicense: Optional[str] = Field(alias="license")
-    associatedPublication: Union[str, List[str]] =  Field(default="")
-    conditionsOfAccess: Optional[str] =  Field(default="")
-    copyrightNotice: Optional[str] =  Field(default="")
+    associatedPublication: Optional[Union[str, List[str]]] =  Field(default=None)
+    conditionsOfAccess: Optional[str] =  Field(default=None)
+    copyrightNotice: Optional[str] =  Field(default=None)
 
     
     
