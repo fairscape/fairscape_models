@@ -1,0 +1,51 @@
+.wy-nav-content {
+  max-width: none;
+}
+
+.wy-table-responsive table td,
+.wy-table-responsive table th {
+  white-space: normal !important;
+  word-wrap: break-word;
+  word-break: break-word;
+  vertical-align: top;
+}
+
+.wy-table-responsive table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.wy-table-responsive table th:nth-child(1),
+.wy-table-responsive table td:nth-child(1) {
+  width: 25%;
+}
+
+.wy-table-responsive table th:nth-child(2),
+.wy-table-responsive table td:nth-child(2) {
+  width: 20%;
+}
+
+.wy-table-responsive table th:nth-child(3),
+.wy-table-responsive table td:nth-child(3) {
+  width: 45%;
+}
+
+.wy-table-responsive table th:nth-child(4),
+.wy-table-responsive table td:nth-child(4) {
+  width: 10%;
+  text-align: center;
+}
+
+.wy-table-responsive {
+  overflow: visible;
+}
+
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+code {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}

@@ -1,0 +1,76 @@
+# Project Information
+site_name: FAIRSCAPE Models
+site_description: Pydantic models for creating and validating FAIRSCAPE and RO-Crate metadata.
+site_url: https://fairscape.github.io/fairscape-models/
+
+# Repository
+repo_name: fairscape/fairscape-models
+repo_url: https://github.com/fairscape/fairscape-models
+
+# Copyright
+copyright: Copyright © 2024 The FAIRSCAPE-Models Project Contributors
+
+# Page tree
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Models:
+    - RO-Crate Models:
+      - ROCrateV1_2: models/rocrate.md
+      - ROCrateMetadataElem: models/rocrate_metadata_elem.md
+      - ROCrateMetadataFileElem: models/rocrate_metadata_file_elem.md
+    - Core EVI Models:
+      - Dataset: models/dataset.md
+      - Software: models/software.md
+      - Computation: models/computation.md
+      - Experiment: models/experiment.md
+      - Schema: models/schema.md
+    - Supporting Entity Models:
+      - Instrument: models/instrument.md
+      - Sample: models/sample.md
+      - BioChemEntity: models/biochem_entity.md
+      - MedicalCondition: models/medical_condition.md
+    - Helper Models:
+      - IdentifierValue: models/identifier_value.md
+      - IdentifierPropertyValue: models/identifier_property_value.md
+
+# Theme configuration
+theme:
+  name: readthedocs
+  navigation_depth: 4
+
+# Markdown extensions for rich content
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+# Extra configuration
+extra_css:
+  - stylesheets/extra.css
+extra:
+  social:
+    - icon: fontawesome/brands/github-alt
+      link: https://github.com/fairscape/fairscape-models
