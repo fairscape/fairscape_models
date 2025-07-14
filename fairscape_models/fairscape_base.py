@@ -62,7 +62,7 @@ class ClassType(str, Enum):
     COMPUTATION = 'Computation'
     SCHEMA = 'Schema'
     EVIDENCE_GRAPH = 'EvidenceGraph'
-    ROCRATE = 'ROCrate'
+    ROCRATE = 'ROCrate' #TODO: Add ROCrate concept to EVI ontology and publish a new version
 
 def normalize_class_type(value: Union[str, ClassType]) -> ClassType:
     """Normalizes various formats of class type identifiers to standard form.
@@ -78,7 +78,7 @@ def normalize_class_type(value: Union[str, ClassType]) -> ClassType:
     value_str = str(value).strip()
     
     # Handle URL format
-    if value_str.startswith('https://'):
+    if value_str.startswith('https://') or value_str.startswith('http://'):
         value_str = value_str.split('#')[-1].split('/')[-1]
     
     # Handle prefixed format (e.g., EVI:ROCrate)
@@ -157,7 +157,7 @@ class FairscapeBaseModel(Identifier):
         """
 
         if bson is None:
-            insert_document = self.dict(by_alias=True)
+            insert_document = self.model_dump(by_alias=True)
         else:
             insert_document = bson
 
