@@ -11,19 +11,29 @@ from pydantic import (
     field_validator
     )
 import re
+from enum import Enum 
 from fairscape_models.fairscape_base import *
 from fairscape_models.utilities import OperationStatus
 
-def validate_type(value):
-    valid_types = {'integer', 'number', 'string', 'array','boolean', 'object'}
-    if value is not None:
-        if value not in valid_types:
-            raise ValueError(f"Type must be one of {valid_types}")
-    return value
+# TODO switch to ENUM for better clarification
+class ItemTypeEnum(Enum):
+    integer='integer'
+    number='number'
+    string='string'
+    array='array'
+    boolean='boolean'
+    object='object'
 
 class Item(BaseModel):
     type: str = Field(...)
-    _validate_type = field_validator('type', allow_reuse=True)(validate_type)
+
+    @field_validator('type', mode='after')
+    def validate_type(cls, value):
+        valid_types = {'integer', 'number', 'string', 'array','boolean', 'object'}
+        if value is not None:
+            if value not in valid_types:
+                raise ValueError(f"Type must be one of {valid_types}")
+        return value
 
 class Property(BaseModel):
     description: str = Field(...)
@@ -35,12 +45,11 @@ class Property(BaseModel):
     min_items: Optional[int] = Field(default = None, alias = 'min-items')
     max_items: Optional[int] = Field(default = None, alias = 'max-items')
     unique_items: Optional[bool] = Field(default = None, alias = 'unique-items')
-
     properties: Optional[Dict[str, 'Property']] = Field(default=None)
 
     model_config = ConfigDict(extra='allow')
 
-    @field_validator('index')
+    @field_validator('index', mode='after')
     def validate_index(cls, value):
         if isinstance(value, str):
             # Allow something like int::int for index. Raise error if else
@@ -49,9 +58,7 @@ class Property(BaseModel):
                 raise ValueError("Index must match the pattern 'int::int'")
         return value
 
-    _validate_type = field_validator('type', allow_reuse=True)(validate_type)
-
-    @field_validator('pattern')
+    @field_validator('pattern', mode='after')
     def validate_pattern(cls, value):
         if value is not None:
             try:
@@ -72,26 +79,5 @@ class Schema(FairscapeEVIBaseModel):
     required: Optional[List[str]] = []  
     separator: Optional[str] = Field(default=",")
     header: Optional[bool] = Field(default=True)
-    examples: Optional[List[Dict]] = []  
-
+    examples: Optional[List[Dict]] = []
     model_config = ConfigDict(extra='allow')
-
-    def create(self, MongoCollection: pymongo.collection.Collection) -> OperationStatus:
-        return super().create(MongoCollection)
-
-    def read(self, MongoCollection: pymongo.collection.Collection) -> OperationStatus:
-        return super().read(MongoCollection)
-
-    def update(self, MongoCollection: pymongo.collection.Collection) -> OperationStatus:
-        return super().update(MongoCollection)
-
-    def delete(self, MongoCollection: pymongo.collection.Collection) -> OperationStatus:
-        return super().delete(MongoCollection)
-
-def list_schemas(mongo_collection: pymongo.collection.Collection):
-    cursor = mongo_collection.find(
-        filter = {"@type": {"$regex": "^evi:Schema$|^EVI:Schema$|^Schema$", "$options": "i"}},
-        projection={"_id": False}
-    )
-    return {"schemas":  [{"@id": schema.get("@id"), "@type": "evi:Schema", "name": schema.get("name")} for schema in cursor] }
-
