@@ -13,7 +13,7 @@ class Dataset(BaseModel):
     version: str = Field(default="0.1.0")
     description: str = Field(min_length=10)
     keywords: List[str] = Field(...)
-    associatedPublication: Optional[str] = Field(default=None)
+    associatedPublication: Optional[Union[str,List[str]]] = Field(default=None)
     additionalDocumentation: Optional[str] = Field(default=None)
     fileFormat: str = Field(alias="format")
     dataSchema: Optional[IdentifierValue] = Field(

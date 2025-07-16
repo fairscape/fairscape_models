@@ -257,7 +257,7 @@ class ROCrateV1_2(BaseModel):
         :rtype List[fairscape_mds.models.rocrate.Dataset]
         """
         filterResults = list(filter(
-            lambda x: isinstance(x, Dataset), 
+            lambda x: isinstance(x, Dataset) and not isinstance(x, ROCrateMetadataElem), 
             self.metadataGraph
         ))
 
