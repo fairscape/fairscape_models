@@ -6,5 +6,4 @@ from fairscape_models.fairscape_base import IdentifierValue, IdentifierPropertyV
 from fairscape_models.medical_condition import MedicalCondition
 from fairscape_models.schema import Schema
 from fairscape_models.rocrate import ROCrateV1_2, ROCrateMetadataElem, ROCrateMetadataFileElem, ROCrateDistribution, GenericMetadataElem
-from fairscape_models.utilities import OperationStatus
 from fairscape_models.sample import Sample

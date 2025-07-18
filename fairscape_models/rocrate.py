@@ -156,15 +156,14 @@ class ROCrateV1_2(BaseModel):
             
             elif isinstance(item_type, str):
                 normalized_type = normalize_type(item_type)
-                model_class = type_map.get(normalized_type)
-                if model_class:
-                    try:
-                        new_graph.append(model_class.model_validate(item))
-                        continue
-                    except Exception:
-                        pass
-            
-            new_graph.append(GenericMetadataElem.model_validate(item))
+                model_class_to_use = type_map.get(normalized_type)
+
+            # If we found a specific class, use it. Let it raise a
+            if model_class_to_use:
+                new_graph.append(model_class_to_use.model_validate(item))
+            # Only if no specific class was matched, use the generic one.
+            else:
+                new_graph.append(GenericMetadataElem.model_validate(item))
         
         values["@graph"] = new_graph
         return values

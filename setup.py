@@ -6,7 +6,6 @@ setup(
     packages=find_packages(),
     install_requires=[
         "pydantic",
-        "pymongo"
     ],
     python_requires=">=3.8",
     description="Fairscape metadata models",

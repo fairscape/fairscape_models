@@ -1,4 +1,3 @@
-import pymongo
 from typing import (
         Optional,
         Dict,
@@ -13,7 +12,6 @@ from pydantic import (
 import re
 from enum import Enum 
 from fairscape_models.fairscape_base import *
-from fairscape_models.utilities import OperationStatus
 
 # TODO switch to ENUM for better clarification
 class ItemTypeEnum(Enum):
@@ -24,24 +22,12 @@ class ItemTypeEnum(Enum):
     boolean='boolean'
     object='object'
 
-class Item(BaseModel):
-    type: str = Field(...)
-
-    @field_validator('type', mode='after')
-    def validate_type(cls, value):
-        valid_types = {'integer', 'number', 'string', 'array','boolean', 'object'}
-        if value is not None:
-            if value not in valid_types:
-                raise ValueError(f"Type must be one of {valid_types}")
-        return value
-
 class Property(BaseModel):
     description: str = Field(...)
     index: Union[str, int] = Field(...)
     type: str = Field(...)
     value_url: Optional[str] = Field(default = None, alias = 'value-url')
     pattern: Optional[str] = Field(default = None)
-    items: Optional[Item] = Field(default = None, alias = 'items')
     min_items: Optional[int] = Field(default = None, alias = 'min-items')
     max_items: Optional[int] = Field(default = None, alias = 'max-items')
     unique_items: Optional[bool] = Field(default = None, alias = 'unique-items')
@@ -49,7 +35,7 @@ class Property(BaseModel):
 
     model_config = ConfigDict(extra='allow')
 
-    @field_validator('index', mode='after')
+    @field_validator('index', mode='before')
     def validate_index(cls, value):
         if isinstance(value, str):
             # Allow something like int::int for index. Raise error if else
@@ -58,13 +44,21 @@ class Property(BaseModel):
                 raise ValueError("Index must match the pattern 'int::int'")
         return value
 
-    @field_validator('pattern', mode='after')
+    @field_validator('pattern', mode='before')
     def validate_pattern(cls, value):
         if value is not None:
             try:
                 re.compile(value)
             except re.error:
                 raise ValueError("Pattern must be a valid regular expression")
+        return value
+    
+    @field_validator('type', mode='before')
+    def validate_property_type(cls, value):
+        valid_types = {'integer', 'number', 'string', 'array','boolean', 'object'}
+        if value is not None:
+            if value not in valid_types:
+                raise ValueError(f"Type must be one of {valid_types}")
         return value
 
 class Schema(FairscapeEVIBaseModel):

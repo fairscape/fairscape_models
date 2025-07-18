@@ -27,10 +27,3 @@ class Dataset(BaseModel):
     contentUrl: Optional[Union[str, List[str]]] = Field(default=None)
 
     model_config = ConfigDict(extra="allow")
-    
-    @field_validator('dataSchema', mode='before')
-    @classmethod
-    def validate_data_schema(cls, v):
-        if v == '' or v is None:
-            return None
-        return v
