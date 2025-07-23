@@ -24,11 +24,12 @@ COMPUTATION_TYPE = "Computation"
 ROCRATE_TYPE = "ROCrate"
 
 # TODO get from config
-DEFAULT_ARK_NAAN = "59852"
+DEFAULT_ARK_NAAN = "59853"
 DEFAULT_LICENSE = "https://creativecommons.org/licenses/by/4.0/"
 defaultContext = {
     "@vocab": "https://schema.org/",
     "evi": "https://w3id.org/EVI#",
+    "rai": "http://mlcommons.org/croissant/RAI/",
 
     # TODO fully specify default context
     "usedSoftware": {
