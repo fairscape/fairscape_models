@@ -1,0 +1,313 @@
+from typing import Any, Dict, List, Optional, Union, Callable, Tuple
+from pydantic import BaseModel, Field, ConfigDict
+
+##########################################################################
+# --- Main Document Subsections ------------------------------------------
+##########################################################################
+
+class OverviewSection(BaseModel):
+    # Core metadata
+    title: Optional[str] = None
+    description: Optional[str] = None
+    id_value: Optional[str] = None
+    doi: Optional[str] = None
+    license_value: Optional[str] = Field(default=None, alias="license")
+
+    # Dates
+    release_date: Optional[str] = None
+    created_date: Optional[str] = None
+    updated_date: Optional[str] = None
+
+    # People / orgs
+    authors: List[str] = Field(default_factory=list)
+    publisher: Optional[str] = None
+    principal_investigator: Optional[str] = None
+    contact_email: Optional[str] = None
+
+    # Legal 
+    copyright: Optional[str] = None
+    terms_of_use: Optional[str] = None  
+    citation: Optional[str] = None
+
+    # Versioning 
+    version: Optional[str] = None
+    content_size: Optional[str] = None
+    funding: List[str] = Field(default_factory=list)
+    keywords: List[str] = Field(default_factory=list)
+    published: Optional[bool] = None 
+
+    # Human-subjects 
+    human_subject: Optional[str] = None
+    human_subject_research: Optional[str] = None
+    human_subject_exemptions: Optional[str] = None
+    deidentified_samples: Optional[str] = None
+    fda_regulated: Optional[str] = None
+    confidentiality_level: Optional[str] = None
+    irb: Optional[str] = None
+    irb_protocol_id: Optional[str] = None
+    
+    ethical_review: Optional[str] = None
+    data_governance: Optional[str] = None
+    
+    completeness: Optional[str] = None
+
+    related_publications: List[str] = Field(default_factory=list)
+
+    model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+class UseCasesSection(BaseModel):
+    """Datasheet section for describing dataset use cases, limitations, and biases."""
+
+    intended_use: Optional[str] = Field(
+        default=None, description="Recommended dataset uses (e.g., training, validation)"
+    )
+    limitations: Optional[str] = Field(
+        default=None, description="Known limitations and non-recommended uses"
+    )
+    prohibited_uses: Optional[str] = Field(
+        default=None, description="Explicitly prohibited uses (subset of limitations)"
+    )
+    potential_sources_of_bias: Optional[str] = Field(
+        default=None, description="Description of known biases in the dataset"
+    )
+    maintenance_plan: Optional[str] = Field(
+        default=None, description="Versioning, maintainers, and deprecation policies"
+    )
+
+    model_config = ConfigDict(extra="allow")
+
+
+class DistributionSection(BaseModel):
+    """Datasheet section for high-level distribution metadata."""
+    
+    license_value: Optional[str] = Field(default=None, description="License URL or identifier")
+    publisher: Optional[str] = Field(default=None, description="Publisher of the release")
+    doi: Optional[str] = Field(default=None, description="DOI identifier for the release")
+    release_date: Optional[str] = Field(default=None, description="Publication/release date (ISO format)")
+    version: Optional[str] = Field(default=None, description="Version of the release")
+    
+    model_config = ConfigDict(extra="ignore")
+    
+
+class CompositionDetails(BaseModel):
+    # counts
+    files_count: int = 0
+    software_count: int = 0
+    instruments_count: int = 0
+    samples_count: int = 0
+    experiments_count: int = 0
+    computations_count: int = 0
+    schemas_count: int = 0
+    other_count: int = 0
+
+    # formats & access summaries
+    file_formats: Dict[str, int] = {}
+    software_formats: Dict[str, int] = {}
+    file_access: Dict[str, int] = {}
+    software_access: Dict[str, int] = {}
+
+    # patterns
+    computation_patterns: Optional[List[str]] = None
+    experiment_patterns: Optional[List[str]] = None
+
+    # inputs
+    input_datasets: Dict[str, int] = {}
+    input_datasets_count: int = 0
+    inputs_count: int = 0
+
+    # domain-specific
+    cell_lines: List[str] = []
+    species: List[str] = []
+    experiment_types: List[str] = []
+
+class SubCrateItem(BaseModel):
+    # Identity & basics
+    name: str = Field(default="Unnamed Sub-Crate")
+    id: str
+    description: Optional[str] = None
+    authors: Optional[str] = None
+    keywords: List[str] = Field(default_factory=list)
+    metadata_path: Optional[str] = None
+    statistical_summary_info: Optional[str] = None
+    size: Optional[str] = None
+
+    # High-level metadata
+    doi: Optional[str] = None
+    date: Optional[str] = None
+    contact: Optional[str] = None
+    published: Optional[bool] = None
+
+    # Policy / legal
+    copyright: Optional[str] = None
+    license: Optional[str] = None
+    terms_of_use: Optional[str] = None
+    confidentiality: Optional[str] = None
+    funder: Optional[str] = None
+    md5: Optional[str] = None
+    evidence: Optional[str] = None
+
+    composition_details: CompositionDetails = Field(default_factory=CompositionDetails)
+
+    # Publications
+    related_publications: List[str] = Field(default_factory=list)
+
+    model_config = ConfigDict(extra="ignore")
+
+
+
+class CompositionSection(BaseModel):
+    """List of SubCrates to be rendered."""
+    items: List[SubCrateItem] = Field(default_factory=list)
+    
+##########################################################################
+# --- Sub-Crate Preview Models -------------------------------------------
+##########################################################################
+
+
+class PreviewItem(BaseModel):
+    """Generic preview item used for datasets, software, computations, etc."""
+    id: str = Field(default="", description="Entity @id or guid")
+    name: str = Field(default="Unnamed Item")
+    description: Optional[str] = None
+    type: Optional[str] = Field(default=None, description="Primary normalized type (Dataset, Software, etc.)")
+    date: Optional[str] = Field(default=None, description="datePublished / dateModified / dateCreated")
+    identifier: Optional[str] = None
+
+    # Access & linking
+    content_status: Optional[str] = Field(default=None, description="Access / Download status text or link HTML")
+    content_url: Optional[str] = None
+
+    experimentType: Optional[str] = None
+    manufacturer: Optional[str] = None
+
+    schema_properties: Optional[Dict[str, Dict[str, Union[str, int]]]] = None
+
+    model_config = ConfigDict(extra="allow")
+
+
+class Preview(BaseModel):
+    """Full preview payload (overview + item buckets)."""
+
+    title: str = Field(default="Untitled RO-Crate")
+    id_value: Optional[str] = None
+    version: Optional[str] = None
+    description: Optional[str] = None
+    doi: Optional[str] = None
+    license_value: Optional[str] = None
+
+    # Dates
+    release_date: Optional[str] = None
+    created_date: Optional[str] = None
+    updated_date: Optional[str] = None
+
+    # People / orgs
+    authors: Optional[str] = None        
+    publisher: Optional[str] = None
+    principal_investigator: Optional[str] = None
+    contact_email: Optional[str] = None
+    confidentiality_level: Optional[str] = None
+
+    # Misc
+    keywords: List[str] = Field(default_factory=list)
+    citation: Optional[str] = None
+    related_publications: List[str] = Field(default_factory=list)
+
+    # Linked QC/summary stats report
+    statistical_summary_name: Optional[str] = None
+    statistical_summary_url: Optional[str] = None
+
+    # Item buckets
+    datasets: List[PreviewItem] = Field(default_factory=list)
+    software: List[PreviewItem] = Field(default_factory=list)
+    computations: List[PreviewItem] = Field(default_factory=list)
+    samples: List[PreviewItem] = Field(default_factory=list)
+    experiments: List[PreviewItem] = Field(default_factory=list)
+    instruments: List[PreviewItem] = Field(default_factory=list)
+    schemas: List[PreviewItem] = Field(default_factory=list)
+    other_items: List[PreviewItem] = Field(default_factory=list)
+
+    model_config = ConfigDict(extra="ignore")
+
+##########################################################################
+# --- AI-Readiness Score Models ------------------------------------------
+##########################################################################
+
+class SubCriterionScore(BaseModel):
+    """Score for an individual sub-criterion (e.g., FAIRness -> Findable)."""
+    has_content: bool = Field(default=False, description="Whether the sub-criterion has content/evidence")
+    details: Optional[str] = Field(default=None, description="Details about evidence or reasoning")
+
+
+class FairnessScore(BaseModel):
+    findable: SubCriterionScore = Field(default_factory=SubCriterionScore)
+    accessible: SubCriterionScore = Field(default_factory=SubCriterionScore)
+    interoperable: SubCriterionScore = Field(default_factory=SubCriterionScore)
+    reusable: SubCriterionScore = Field(default_factory=SubCriterionScore)
+
+
+class ProvenanceScore(BaseModel):
+    transparent: SubCriterionScore = Field(default_factory=SubCriterionScore)
+    traceable: SubCriterionScore = Field(default_factory=SubCriterionScore)
+    interpretable: SubCriterionScore = Field(default_factory=SubCriterionScore)
+    key_actors_identified: SubCriterionScore = Field(default_factory=SubCriterionScore)
+
+
+class CharacterizationScore(BaseModel):
+    semantics: SubCriterionScore = Field(default_factory=SubCriterionScore)
+    statistics: SubCriterionScore = Field(default_factory=SubCriterionScore)
+    standards: SubCriterionScore = Field(default_factory=SubCriterionScore)
+    potential_sources_of_bias: SubCriterionScore = Field(default_factory=SubCriterionScore)
+    data_quality: SubCriterionScore = Field(default_factory=SubCriterionScore)
+
+
+class PreModelExplainabilityScore(BaseModel):
+    data_documentation_template: SubCriterionScore = Field(default_factory=SubCriterionScore)
+    fit_for_purpose: SubCriterionScore = Field(default_factory=SubCriterionScore)
+    verifiable: SubCriterionScore = Field(default_factory=SubCriterionScore)
+
+
+class EthicsScore(BaseModel):
+    ethically_acquired: SubCriterionScore = Field(default_factory=SubCriterionScore)
+    ethically_managed: SubCriterionScore = Field(default_factory=SubCriterionScore)
+    ethically_disseminated: SubCriterionScore = Field(default_factory=SubCriterionScore)
+    secure: SubCriterionScore = Field(default_factory=SubCriterionScore)
+
+
+class SustainabilityScore(BaseModel):
+    persistent: SubCriterionScore = Field(default_factory=SubCriterionScore)
+    domain_appropriate: SubCriterionScore = Field(default_factory=SubCriterionScore)
+    well_governed: SubCriterionScore = Field(default_factory=SubCriterionScore)
+    associated: SubCriterionScore = Field(default_factory=SubCriterionScore)
+
+
+class ComputabilityScore(BaseModel):
+    standardized: SubCriterionScore = Field(default_factory=SubCriterionScore)
+    computationally_accessible: SubCriterionScore = Field(default_factory=SubCriterionScore)
+    portable: SubCriterionScore = Field(default_factory=SubCriterionScore)
+    contextualized: SubCriterionScore = Field(default_factory=SubCriterionScore)
+
+
+# ---- Top-level container ----------------------------------------------------
+
+class AIReadyScore(BaseModel):
+    fairness: FairnessScore = Field(default_factory=FairnessScore)
+    provenance: ProvenanceScore = Field(default_factory=ProvenanceScore)
+    characterization: CharacterizationScore = Field(default_factory=CharacterizationScore)
+    pre_model_explainability: PreModelExplainabilityScore = Field(default_factory=PreModelExplainabilityScore)
+    ethics: EthicsScore = Field(default_factory=EthicsScore)
+    sustainability: SustainabilityScore = Field(default_factory=SustainabilityScore)
+    computability: ComputabilityScore = Field(default_factory=ComputabilityScore)
+
+
+##########################################################################
+# --- Fairscape Datasheet Top Level Model --------------------------------
+##########################################################################
+
+class FairscapeDatasheet(BaseModel):
+    """Top-level datasheet composed of section DTOs."""
+    overview: Optional[OverviewSection] = None
+    use_cases: Optional[UseCasesSection] = None
+    distribution: Optional[DistributionSection] = None
+    composition: Optional[CompositionSection] = None
+
+    model_config = ConfigDict(extra="ignore")
