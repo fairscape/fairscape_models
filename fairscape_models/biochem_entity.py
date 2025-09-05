@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional, List
 
 from fairscape_models.fairscape_base import IdentifierValue, IdentifierPropertyValue
@@ -15,3 +15,5 @@ class BioChemEntity(BaseModel):
     associatedDisease: Optional[IdentifierValue] = Field(default=None)
     usedBy: Optional[List[IdentifierValue]] = Field(default=[])
     description: Optional[str] = Field(default=None)
+    
+    model_config = ConfigDict(extra="allow")
