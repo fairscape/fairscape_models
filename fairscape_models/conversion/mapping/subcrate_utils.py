@@ -3,16 +3,11 @@ from fairscape_models.conversion.models.FairscapeDatasheet import CompositionDet
 from collections import Counter
 
 def build_composition_details(converter_instance, source_entity_model) -> CompositionDetails:
-    """
-    Walk the subcrate graph once, normalize @type, and fill in counts,
-    formats, access summaries, patterns, inputs, and domain summaries.
-    """
     graph = converter_instance.source_crate.metadataGraph
     global_index = converter_instance.global_index
     
     details = CompositionDetails()
     
-    # Collections for aggregation
     file_formats = []
     software_formats = []
     file_access_types = []
@@ -23,12 +18,10 @@ def build_composition_details(converter_instance, source_entity_model) -> Compos
     species_counts = Counter()
     experiment_types_counts = Counter()
     
-    # Single pass through the graph
     for item in graph:
         if item.guid == "ro-crate-metadata.json":
             continue
             
-        # Skip subcrates
         if hasattr(item, 'ro_crate_metadata'):
             continue
             
@@ -68,18 +61,16 @@ def build_composition_details(converter_instance, source_entity_model) -> Compos
         else:
             details.other_count += 1
     
-    # Aggregate results
     details.file_formats = dict(Counter(file_formats))
     details.software_formats = dict(Counter(software_formats))
     details.file_access = dict(Counter(file_access_types))
     details.software_access = dict(Counter(software_access_types))
     details.computation_patterns = list(set(computation_patterns))
     details.experiment_patterns = list(set(experiment_patterns))
-    details.cell_lines = list(cell_lines.values())
+    details.cell_lines = cell_lines
     details.species = [f"{species} ({count})" for species, count in species_counts.items()]
-    details.experiment_types = [f"{exp_type} ({count})" for exp_type, count in experiment_types_counts.items()]
+    details.experiment_types = dict(experiment_types_counts)
     
-    # Calculate input datasets from computation patterns
     input_dataset_counts = _calculate_input_datasets(graph[1], global_index)
     details.input_datasets = input_dataset_counts
     details.input_datasets_count = sum(input_dataset_counts.values())
@@ -89,7 +80,6 @@ def build_composition_details(converter_instance, source_entity_model) -> Compos
 
 
 def _normalize_type(item) -> str:
-    """Normalize the @type field to a simple string."""
     type_field = getattr(item, 'metadataType', None) or getattr(item, '@type', None)
     
     if not type_field:
@@ -100,7 +90,6 @@ def _normalize_type(item) -> str:
     else:
         type_str = str(type_field)
     
-    # Check for specific types
     if "Dataset" in type_str or "EVI:Dataset" in type_str or "https://w3id.org/EVI#Dataset" in type_str:
         return "Dataset"
     elif "Software" in type_str or "EVI:Software" in type_str or "https://w3id.org/EVI#Software" in type_str or "SoftwareSourceCode" in type_str:
@@ -120,7 +109,6 @@ def _normalize_type(item) -> str:
 
 
 def _process_dataset(item, formats: List[str], access_types: List[str]):
-    """Process dataset item for format and access information."""
     format_val = getattr(item, 'fileFormat', 'unknown')
     formats.append(format_val)
     
@@ -134,7 +122,6 @@ def _process_dataset(item, formats: List[str], access_types: List[str]):
 
 
 def _process_software(item, formats: List[str], access_types: List[str]):
-    """Process software item for format and access information."""
     format_val = getattr(item, 'fileFormat', 'unknown')
     formats.append(format_val)
     
@@ -147,9 +134,7 @@ def _process_software(item, formats: List[str], access_types: List[str]):
         access_types.append("Available")
 
 
-def _process_sample(item, cell_lines: Dict[str, str], species_counts: Counter, global_index: Dict[str, Any]):
-    """Process sample for cell line and species information."""
-    # Check for cell line reference
+def _process_sample(item, cell_lines: Dict[str, Dict], species_counts: Counter, global_index: Dict[str, Any]):
     cell_line_ref = getattr(item, 'cellLineReference', None) or getattr(item, 'derivedFrom', None)
     if cell_line_ref:  
         if hasattr(cell_line_ref, 'guid'):
@@ -157,24 +142,31 @@ def _process_sample(item, cell_lines: Dict[str, str], species_counts: Counter, g
         else:
             ref_id = cell_line_ref.get("@id","")
         cell_line_details = global_index.get(ref_id, {})
+        
         if ref_id not in cell_lines:
-            cell_lines[ref_id] = cell_line_details.get('name', ref_id)
+            organism_name = "Unknown"
+            if cell_line_details.get("organism", {}).get("name", ""):
+                organism_name = cell_line_details["organism"]["name"]
             
-    scientific_name = "Unknown"
-    if cell_line_details.get("organism",{}).get("name",""):
-        scientific_name = cell_line_details["organism"]["name"]
+            cell_lines[ref_id] = {
+                'name': cell_line_details.get('name', ref_id),
+                'organism_name': organism_name,
+                'identifier': ref_id
+            }
+            
+        scientific_name = cell_lines[ref_id]['organism_name']
+    else:
+        scientific_name = "Unknown"
 
     species_counts[scientific_name] += 1
 
 
 def _process_experiment_type(item, experiment_types_counts: Counter):
-    """Extract and count experiment types."""
     exp_type = getattr(item, 'experimentType', 'Unknown')
     experiment_types_counts[exp_type] += 1
 
 
 def _extract_experiment_pattern(item, global_index: Dict[str, Any]) -> Optional[str]:
-    """Extract transformation pattern for experiments (Sample → outputs)."""
     output_formats = []
     
     generated = getattr(item, 'generated', [])
@@ -197,10 +189,9 @@ def _extract_experiment_pattern(item, global_index: Dict[str, Any]) -> Optional[
 
 
 def _extract_computation_pattern(item, global_index: Dict[str, Any]) -> Optional[str]:
-    """Extract transformation pattern for computations (inputs → outputs)."""
     input_formats = []
     output_formats = []
-    # Get input datasets
+    
     used_datasets = getattr(item, 'usedDataset', [])
     if used_datasets:
         if not isinstance(used_datasets, list):
@@ -213,7 +204,6 @@ def _extract_computation_pattern(item, global_index: Dict[str, Any]) -> Optional
                 if format_val and format_val != "unknown":
                     input_formats.append(format_val)
     
-    # Get output datasets
     generated = getattr(item, 'generated', [])
     if generated:
         if not isinstance(generated, list):
@@ -235,7 +225,6 @@ def _extract_computation_pattern(item, global_index: Dict[str, Any]) -> Optional
 
 
 def _get_ref_id(ref) -> Optional[str]:
-    """Extract ID from a reference (dict with @id or guid, or string)."""
     if isinstance(ref, dict):
         return ref.get('@id') or ref.get('guid')
     elif isinstance(ref, str):
@@ -246,7 +235,6 @@ def _get_ref_id(ref) -> Optional[str]:
 
 
 def _lookup_format(dataset_id: str, global_index: Dict[str, Any]) -> str:
-    """Lookup format for a dataset ID in the global index."""
     if dataset_id in global_index:
         entity_info = global_index[dataset_id]
         return entity_info.get('fileFormat', 'unknown')
@@ -254,12 +242,6 @@ def _lookup_format(dataset_id: str, global_index: Dict[str, Any]) -> str:
 
 
 def _calculate_input_datasets(root_dataset, global_index: Dict[str, Any]) -> Dict[str, int]:
-    """
-    Calculate input dataset counts from EVI:inputs field.
-    Looks up each input reference in the global index and aggregates by format.
-    If an input has a rocrateName attribute, includes it in the format key.
-    If an input is itself an RO-Crate, uses its outputs instead.
-    """
     input_counts = Counter()
     
     evi_inputs = getattr(root_dataset, 'EVI:inputs', None) or getattr(root_dataset, 'https://w3id.org/EVI#inputs', None) or getattr(root_dataset, 'inputs', None)
@@ -297,12 +279,10 @@ def _calculate_input_datasets(root_dataset, global_index: Dict[str, Any]) -> Dic
                         key = f"{rocrate_name} ({format_val})"
                         input_counts[key] += 1
             else:
-                
                 format_val = entity_info.get('fileFormat', 'unknown')
                 if format_val == 'unknown':
                     format_val = 'Sample'
                     
-                
                 rocrate_name = entity_info.get('rocrateName', '')
                 
                 if rocrate_name and rocrate_name != root_dataset.name:

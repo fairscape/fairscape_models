@@ -151,7 +151,7 @@ class SubCrateItem(BaseModel):
     # Publications
     related_publications: List[str] = Field(default_factory=list)
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="allow")
 
 
 
