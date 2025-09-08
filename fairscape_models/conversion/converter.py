@@ -3,10 +3,11 @@ from pydantic import BaseModel
 from fairscape_models.rocrate import ROCrateV1_2
 
 class ROCToTargetConverter:
-    def __init__(self, source_crate: ROCrateV1_2, mapping_configuration: Dict[str, Any]):
+    def __init__(self, source_crate: ROCrateV1_2, mapping_configuration: Dict[str, Any], global_index: Optional[Dict[str, Any]] = None ):
         self.source_crate = source_crate
         self.mapping_config = mapping_configuration
         self.root_entity = self._find_root_entity()
+        self.global_index = global_index or {}
         
         self.target_args_cache: Dict[str, Dict[str, Any]] = {}
         self.target_objects_cache: Dict[str, BaseModel] = {}
@@ -103,6 +104,9 @@ class ROCToTargetConverter:
             
             for child_object in self.target_objects_cache.values():
                 if isinstance(child_object, child_type):
+                    if "child_filter" in instruction:
+                        if not instruction["child_filter"](child_object):
+                            continue
                     item_to_link = child_object
                     if "child_attribute_to_link" in instruction:
                         item_to_link = getattr(child_object, instruction["child_attribute_to_link"])
