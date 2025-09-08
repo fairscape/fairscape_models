@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Optional, Union 
 from fairscape_models.conversion.models.FairscapeDatasheet import OverviewSection, UseCasesSection, DistributionSection, SubCrateItem, Preview, PreviewItem
 from fairscape_models.conversion.mapping.subcrate_utils import build_composition_details
+from fairscape_models.conversion.converter import ROCToTargetConverter
 
 def _as_list_str(value: Any) -> List[str]:
     if value is None:

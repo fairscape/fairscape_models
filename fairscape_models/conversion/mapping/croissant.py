@@ -8,7 +8,7 @@ from fairscape_models.conversion.models import (
     CroissantSource, CroissantIdentifier, DEFAULT_CROISSANT_CONTEXT
 )
 import fairscape_models.conversion.mapping.utils as conversion_utils
-
+from fairscape_models.conversion.converter import ROCToTargetConverter
 
 class EncodingFormat:
     CSV = "text/csv"
