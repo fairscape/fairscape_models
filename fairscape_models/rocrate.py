@@ -61,7 +61,7 @@ class ROCrateMetadataElem(BaseModel):
             'license': 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en',
             'associatedPublication': 'Clark T, Schaffer L, Obernier K, Al Manir S, Churas CP, Dailamy A, Doctor Y, Forget A, Hansen JN, Hu M, Lenkiewicz J, Levinson MA, Marquez C, Mohan J, Nourreddine S, Niestroy J, Pratt D, Qian G, Thaker S, Belisle-Pipon J-C, Brandt C, Chen J, Ding Y, Fodeh S, Krogan N, Lundberg E, Mali P, Payne-Foster P, Ratcliffe S, Ravitsky V, Sali A, Schulz W, Ideker T. Cell Maps for Artificial Intelligence: AI-Ready Maps of Human Cell Architecture from Disease-Relevant Cell Lines. BioRXiv 2024.',
             'author': ['Test']
-            'conditionsOfAccess': 'This dataset was created by investigators and staff of the Cell Maps for Artificial Intelligence project (CM4AI - https://cm4ai.org), a Data Generation Project of the NIH Bridge2AI program, and is copyright (c) 2024 by The Regents of the University of California and, for cellular imaging data, by The Board of Trustees of the Leland Stanford Junior University. It is licensed for reuse under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC-BY-NC-SA 4.0) license, whose terms are summarized here: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en.  Proper attribution credit as required by the license includes citation of the copyright holders and of the attribution parties, which includes citation of the following article: Clark T, Schaffer L, Obernier K, Al Manir S, Churas CP, Dailamy A, Doctor Y, Forget A, Hansen JN, Hu M, Lenkiewicz J, Levinson MA, Marquez C, Mohan J, Nourreddine S, Niestroy J, Pratt D, Qian G, Thaker S, Belisle-Pipon J-C, Brandt C, Chen J, Ding Y, Fodeh S, Krogan N, Lundberg E, Mali P, Payne-Foster P, Ratcliffe S, Ravitsky V, Sali A, Schulz W, Ideker T. Cell Maps for Artificial Intelligence: AI-Ready Maps of Human Cell Architecture from Disease-Relevant Cell Lines. BioRXiv 2024.”',
+            'conditionsOfAccess': 'This dataset was created by investigators and staff of the Cell Maps for Artificial Intelligence project (CM4AI - https://cm4ai.org), a Data Generation Project of the NIH Bridge2AI program, and is copyright (c) 2024 by The Regents of the University of California and, for cellular imaging data, by The Board of Trustees of the Leland Stanford Junior University. It is licensed for reuse under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC-BY-NC-SA 4.0) license, whose terms are summarized here: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en.  Proper attribution credit as required by the license includes citation of the copyright holders and of the attribution parties, which includes citation of the following article: Clark T, Schaffer L, Obernier K, Al Manir S, Churas CP, Dailamy A, Doctor Y, Forget A, Hansen JN, Hu M, Lenkiewicz J, Levinson MA, Marquez C, Mohan J, Nourreddine S, Niestroy J, Pratt D, Qian G, Thaker S, Belisle-Pipon J-C, Brandt C, Chen J, Ding Y, Fodeh S, Krogan N, Lundberg E, Mali P, Payne-Foster P, Ratcliffe S, Ravitsky V, Sali A, Schulz W, Ideker T. Cell Maps for Artificial Intelligence: AI-Ready Maps of Human Cell Architecture from Disease-Relevant Cell Lines. BioRXiv 2024."',
             'copyrightNotice': 'Copyright (c) 2024 by The Regents of the University of California',
             'hasPart': [
                 {'@id': 'https://fairscape.net/ark:59852/software-cellmaps_image_embedding-N2ux5jg'},
@@ -84,9 +84,30 @@ class ROCrateMetadataElem(BaseModel):
     hasPart: List[IdentifierValue]
     author: Union[str, List[str]]
     dataLicense: Optional[str] = Field(alias="license")
-    associatedPublication: Optional[Union[str, List[str]]] =  Field(default=None)
-    conditionsOfAccess: Optional[str] =  Field(default=None)
-    copyrightNotice: Optional[str] =  Field(default=None)
+    associatedPublication: Optional[Union[str, List[str]]] = Field(default=None)
+    conditionsOfAccess: Optional[str] = Field(default=None)
+    copyrightNotice: Optional[str] = Field(default=None)
+    
+    rai_data_limitations: Optional[str] = Field(alias="rai:dataLimitations", default=None)
+    rai_data_biases: Optional[str] = Field(alias="rai:dataBiases", default=None)
+    rai_data_use_cases: Optional[str] = Field(alias="rai:dataUseCases", default=None)
+    rai_data_release_maintenance_plan: Optional[str] = Field(alias="rai:dataReleaseMaintenancePlan", default=None)
+    rai_data_collection: Optional[str] = Field(alias="rai:dataCollection", default=None)
+    rai_data_collection_type: Optional[List[str]] = Field(alias="rai:dataCollectionType", default=None)
+    rai_data_collection_missing_data: Optional[str] = Field(alias="rai:dataCollectionMissingData", default=None)
+    rai_data_collection_raw_data: Optional[str] = Field(alias="rai:dataCollectionRawData", default=None)
+    rai_data_collection_timeframe: Optional[List[str]] = Field(alias="rai:dataCollectionTimeframe", default=None)
+    rai_data_imputation_protocol: Optional[str] = Field(alias="rai:dataImputationProtocol", default=None)
+    rai_data_manipulation_protocol: Optional[str] = Field(alias="rai:dataManipulationProtocol", default=None)
+    rai_data_preprocessing_protocol: Optional[List[str]] = Field(alias="rai:dataPreprocessingProtocol", default=None)
+    rai_data_annotation_protocol: Optional[str] = Field(alias="rai:dataAnnotationProtocol", default=None)
+    rai_data_annotation_platform: Optional[List[str]] = Field(alias="rai:dataAnnotationPlatform", default=None)
+    rai_data_annotation_analysis: Optional[List[str]] = Field(alias="rai:dataAnnotationAnalysis", default=None)
+    rai_personal_sensitive_information: Optional[List[str]] = Field(alias="rai:personalSensitiveInformation", default=None)
+    rai_data_social_impact: Optional[str] = Field(alias="rai:dataSocialImpact", default=None)
+    rai_annotations_per_item: Optional[str] = Field(alias="rai:annotationsPerItem", default=None)
+    rai_annotator_demographics: Optional[List[str]] = Field(alias="rai:annotatorDemographics", default=None)
+    rai_machine_annotation_tools: Optional[List[str]] = Field(alias="rai:machineAnnotationTools", default=None)
 
     
     
