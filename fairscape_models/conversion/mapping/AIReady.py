@@ -218,10 +218,10 @@ def _score_pre_model(pre_model: PreModelExplainabilityScore, root_data: Dict[str
     
     details = []
     if use_cases and str(use_cases).strip():
-        details.append("Use cases documented")
+        details.append(f"Use cases: {use_cases}")
     if limitations and str(limitations).strip():
-        details.append("Limitations documented")
-    
+        details.append(f"Limitations: {limitations}")
+
     if details:
         pre_model.fit_for_purpose = SubCriterionScore(
             has_content=True,
@@ -245,13 +245,12 @@ def _score_pre_model(pre_model: PreModelExplainabilityScore, root_data: Dict[str
             has_content=True,
             details=f"{percentage:.0f}% of files have checksums ({with_checksum}/{total})"
         )
-
 def _score_ethics(ethics: EthicsScore, root_data: Dict[str, Any]):
     """Score Ethics criteria."""
     details = []
     collection = root_data.get("rai:dataCollection", "")
     if collection and str(collection).strip():
-        details.append("Data collection described")
+        details.append(f"Data collection: {collection}")
     
     addl_props = root_data.get("additionalProperty", [])
     if isinstance(addl_props, list):
@@ -271,7 +270,7 @@ def _score_ethics(ethics: EthicsScore, root_data: Dict[str, Any]):
     details = []
     ethical_review = root_data.get("ethicalReview", "")
     if ethical_review and str(ethical_review).strip():
-        details.append("Ethical review documented")
+        details.append(f"Ethical review: {ethical_review}")
     
     if isinstance(addl_props, list):
         for prop in addl_props:
@@ -290,18 +289,18 @@ def _score_ethics(ethics: EthicsScore, root_data: Dict[str, Any]):
     details = []
     license_val = root_data.get("license", "")
     if license_val:
-        details.append("License specified")
+        details.append(f"License: {license_val}")
     
     psi = root_data.get("rai:personalSensitiveInformation", "")
     if psi and str(psi).strip():
-        details.append("Sensitive info documented")
+        details.append(f"Sensitive info: {psi}")
     
     if isinstance(addl_props, list):
         for prop in addl_props:
             if isinstance(prop, dict) and prop.get("name") == "Prohibited Uses":
                 pu_val = prop.get("value")
                 if pu_val:
-                    details.append("Prohibited uses defined")
+                    details.append(f"Prohibited uses: {pu_val}")
                     break
     
     if details:
@@ -316,7 +315,6 @@ def _score_ethics(ethics: EthicsScore, root_data: Dict[str, Any]):
             has_content=True,
             details=f"Confidentiality level: {conf}"
         )
-
 def _score_sustainability(sustainability: SustainabilityScore, root_data: Dict[str, Any]):
     """Score Sustainability criteria."""
     id_val = root_data.get("@id", "")
@@ -337,7 +335,7 @@ def _score_sustainability(sustainability: SustainabilityScore, root_data: Dict[s
     if maint and str(maint).strip():
         sustainability.domain_appropriate = SubCriterionScore(
             has_content=True,
-            details="Maintenance plan documented"
+            details="Maintenance plan: " + maint
         )
     
     addl_props = root_data.get("additionalProperty", [])
