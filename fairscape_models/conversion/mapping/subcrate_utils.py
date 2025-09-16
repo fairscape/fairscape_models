@@ -192,6 +192,12 @@ def _extract_computation_pattern(item, global_index: Dict[str, Any]) -> Optional
     input_formats = []
     output_formats = []
     
+    current_rocrate_name = None
+    if hasattr(item, 'guid'):
+        item_id = item.guid
+        if item_id in global_index:
+            current_rocrate_name = global_index[item_id].get('rocrateName')
+    
     used_datasets = getattr(item, 'usedDataset', [])
     if used_datasets:
         if not isinstance(used_datasets, list):
@@ -199,10 +205,16 @@ def _extract_computation_pattern(item, global_index: Dict[str, Any]) -> Optional
             
         for dataset_ref in used_datasets:
             dataset_id = _get_ref_id(dataset_ref)
-            if dataset_id:
-                format_val = _lookup_format(dataset_id, global_index)
+            if dataset_id and dataset_id in global_index:
+                dataset_info = global_index[dataset_id]
+                format_val = dataset_info.get('fileFormat', 'unknown')
+                dataset_rocrate_name = dataset_info.get('rocrateName')
+                
                 if format_val and format_val != "unknown":
-                    input_formats.append(format_val)
+                    if dataset_rocrate_name and dataset_rocrate_name != current_rocrate_name:
+                        input_formats.append(f"{dataset_rocrate_name} {format_val}")
+                    else:
+                        input_formats.append(format_val)
     
     generated = getattr(item, 'generated', [])
     if generated:
