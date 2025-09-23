@@ -1,6 +1,7 @@
 from typing import Dict, Any, Optional, Type, List, Callable
 from pydantic import BaseModel
 from fairscape_models.rocrate import ROCrateV1_2
+import dataclasses
 
 class ROCToTargetConverter:
     def __init__(self, source_crate: ROCrateV1_2, mapping_configuration: Dict[str, Any], global_index: Optional[Dict[str, Any]] = None ):
@@ -117,11 +118,22 @@ class ROCToTargetConverter:
         
         self.final_object = parent_object
 
-    def _get_python_attribute_name(self, model_instance: BaseModel, field_key: str) -> str:
-        for field_name, field_info in model_instance.model_fields.items():
-            if field_info.alias == field_key or field_name == field_key:
-                return field_name
+    def _get_python_attribute_name(self, model_instance, field_key: str) -> str:
+        if isinstance(model_instance, BaseModel):
+            for field_name, field_info in model_instance.model_fields.items():
+                if field_info.alias == field_key or field_name == field_key:
+                    return field_name
+            return field_key
+
+        if dataclasses.is_dataclass(model_instance):
+            for f in dataclasses.fields(model_instance):
+                if f.name == field_key:
+                    return f.name
+            return field_key
+
+        # Fallback
         return field_key
+
 
     def _map_single_object_from_dict(self, source_dict: Dict[str, Any], mapping_def: Dict[str, Any]) -> Dict[str, Any]:
         return self._map_source_to_args(source_dict, mapping_def)
