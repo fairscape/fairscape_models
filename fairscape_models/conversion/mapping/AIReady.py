@@ -331,7 +331,7 @@ def _score_sustainability(sustainability: SustainabilityScore, root_data: Dict[s
             details=f"Dataset has persistent identifier: {id_val}"
         )
     
-    maint = root_data.get("rai:dataMaintenancePlan", "")
+    maint = root_data.get("rai:dataReleaseMaintenancePlan", "")
     if maint and str(maint).strip():
         sustainability.domain_appropriate = SubCriterionScore(
             has_content=True,
