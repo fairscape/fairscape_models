@@ -63,7 +63,6 @@ function generateSchema({
 }
 
 function addProperty(schema, propertyName, propertyData) {
-  console.log("I was called!!");
   if (validateProperty(propertyData)) {
     schema.properties[propertyName] = propertyData;
     if (!schema.required.includes(propertyName)) {

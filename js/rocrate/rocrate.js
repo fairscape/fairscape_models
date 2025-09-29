@@ -1,5 +1,3 @@
-// File: src/rocrate/rocrate.js
-
 const path = require("path");
 const fs = require("fs");
 const {
@@ -74,7 +72,7 @@ async function get_registered_files(rocratePath) {
     const metadata = readROCrateMetadata(rocratePath);
 
     const registeredFiles = metadata["@graph"]
-      .filter((item) => item.contentUrl && item["@type"] !== "CreativeWork") // Assuming 'CreativeWork' is the descriptor type
+      .filter((item) => item.contentUrl && item["@type"] !== "CreativeWork")
       .map((item) => ({
         guid: item["@id"],
         name: item.contentUrl.replace(/^file:\/\/\//, "").replace(/\\/g, "/"),
@@ -137,6 +135,13 @@ function rocrate_create(
     keywords = keywords.split(",").map((keyword) => keyword.trim());
   }
 
+  const additionalProps =
+    otherRootProps.length === 1 &&
+    typeof otherRootProps[0] === "object" &&
+    !Array.isArray(otherRootProps[0])
+      ? otherRootProps[0]
+      : Object.fromEntries(otherRootProps.map((val, i) => [i, val]));
+
   const rootDatasetParams = {
     name,
     description,
@@ -145,21 +150,30 @@ function rocrate_create(
     version,
     license,
     datePublished,
-    ...otherRootProps,
+    ...additionalProps,
   };
   if (guid) rootDatasetParams["@id"] = guid;
 
   const isPartOf = [];
-  if (organizationName) isPartOf.push({ "@id": organizationName }); // Assuming organizationName is an ARK/GUID
-  if (projectName) isPartOf.push({ "@id": projectName }); // Assuming projectName is an ARK/GUID
+  if (organizationName) isPartOf.push({ "@id": organizationName });
+  if (projectName) isPartOf.push({ "@id": projectName });
   if (isPartOf.length > 0) rootDatasetParams.isPartOf = isPartOf;
 
   const createdRootDataset = generateROCrate(rocrate_path, rootDatasetParams);
   return createdRootDataset["@id"];
 }
 
-function register_software(rocrate_path, softwareParams, filepath = null) {
+function register_software(
+  rocrate_path,
+  softwareParams,
+  filepath = null,
+  md5 = null,
+  contentSize = null
+) {
   try {
+    if (md5) softwareParams.md5 = md5;
+    if (contentSize) softwareParams.contentSize = contentSize;
+
     const software_instance = generateSoftware(
       softwareParams,
       filepath,
