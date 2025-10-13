@@ -1,6 +1,6 @@
 // File: fairscape_models/js/utils/config.js
 
-const NAAN = "59852";
+const NAAN = "59853";
 
 const DEFAULT_CONTEXT = {
   "@vocab": "https://schema.org/",
