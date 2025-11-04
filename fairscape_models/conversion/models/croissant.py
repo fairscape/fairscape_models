@@ -79,7 +79,7 @@ class CroissantFileObject(BaseModel):
     type: str = Field(default="cr:FileObject", alias="@type")
     name: Optional[str] = None
     description: Optional[str] = None
-    content_url: Optional[str] = Field(default=None, alias="contentUrl")
+    content_url:  Optional[Union[str, List[str]]] = Field(default=None, alias="contentUrl")
     encoding_format: str = Field(alias="encodingFormat")
     sha256: Optional[str] = None
     md5: Optional[str] = None

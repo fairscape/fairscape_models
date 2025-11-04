@@ -22,6 +22,49 @@ class EncodingFormat:
     ZIP = "application/zip"
 
 
+CROISSANT_SPLIT_RECORDSET = {
+    "@id": "splits",
+    "@type": "cr:RecordSet",
+    "name": "splits",
+    "dataType": "cr:Split",
+    "description": "Maps split names to semantic values.",
+    "key": "splits/name",
+    "field": [
+        {
+            "@type": "cr:Field",
+            "@id": "splits/name",
+            "name": "splits/name",
+            "description": "One of: train, val, test.",
+            "dataType": "sc:Text"
+        },
+        {
+            "@type": "cr:Field",
+            "@id": "splits/url",
+            "name": "splits/url",
+            "description": "Corresponding mlcommons.org definition URL",
+             "dataType": [
+            "sc:URL",
+            "wd:Q3985153"
+          ]
+        }
+    ],
+    "data": [
+        {
+            "splits/name": "train",
+            "splits/url": "https://mlcommons.org/definitions/training_split"
+        },
+        {
+            "splits/name": "val",
+            "splits/url": "https://mlcommons.org/definitions/validation_split"
+        },
+        {
+            "splits/name": "test",
+            "splits/url": "https://mlcommons.org/definitions/test_split"
+        }
+    ]
+}
+
+
 def map_format_to_mime_type(format_str: Optional[str]) -> str:
     if not format_str:
         return EncodingFormat.TEXT
@@ -88,14 +131,12 @@ def _build_rai_property(
 ) -> Optional[Union[str, List[str]]]:
     source_dict = source_entity_model.model_dump(by_alias=True)
 
-    # Priority 1: Check for the direct RAI key.
     if rai_key in source_dict and source_dict[rai_key] is not None:
         value = source_dict[rai_key]
         if is_list and not isinstance(value, list):
             return [value]
         return value
 
-    # Priority 2: Fallback to additionalProperty.
     prop_list = source_dict.get("additionalProperty")
     if prop_list and additional_prop_name:
         values = _get_additional_prop_values(prop_list, additional_prop_name)
@@ -110,13 +151,11 @@ def _build_personal_sensitive_info(
 ) -> Optional[List[str]]:
     source_dict = source_entity_model.model_dump(by_alias=True)
     
-    # Priority 1: Check for the direct RAI key.
     rai_key = "rai:personalSensitiveInformation"
     if rai_key in source_dict and source_dict[rai_key] is not None:
         value = source_dict[rai_key]
         return value if isinstance(value, list) else [value]
         
-    # Priority 2: Fallback to the custom parser for additionalProperty.
     return _parse_personal_sensitive_info(source_dict.get("additionalProperty"))
 
 
@@ -127,8 +166,10 @@ def _create_fields_recursively(
     record_set_id: str,
     file_object_id: str,
     parent_path: str = ""
-) -> List[CroissantField]:
+):
     fields = []
+    has_split_field = False
+    
     for prop_name, prop_details in properties.items():
         field_dict = converter_instance._map_single_object_from_dict(prop_details, field_mapping_def)
         
@@ -143,10 +184,15 @@ def _create_fields_recursively(
             "extract": {"column": f"{full_path.replace('/', '.')}"}
         }
 
+        if prop_name.lower() == "split":
+            has_split_field = True
+            field_dict["dataType"] = ["sc:Text", "wd:Q3985153"]
+            field_dict["references"] = {"field": {"@id": "splits/name"}}
+
         if prop_details.get("type") == "object" and "properties" in prop_details and prop_details["properties"]:
             field_dict["dataType"] = "sc:Thing"
             nested_properties = prop_details["properties"]
-            sub_fields = _create_fields_recursively(
+            sub_fields, nested_has_split = _create_fields_recursively(
                 converter_instance,
                 nested_properties,
                 field_mapping_def,
@@ -154,6 +200,8 @@ def _create_fields_recursively(
                 file_object_id,
                 parent_path=full_path
             )
+            if nested_has_split:
+                has_split_field = True
             if sub_fields:
                 field_dict["subField"] = sub_fields
         
@@ -163,7 +211,7 @@ def _create_fields_recursively(
 
         fields.append(CroissantField.model_validate(field_dict))
     
-    return fields
+    return fields, has_split_field
 
 
 def build_croissant_record_sets(
@@ -171,6 +219,7 @@ def build_croissant_record_sets(
     source_entity_model: BaseModel
 ) -> List[CroissantRecordSet]:
     record_sets = []
+    has_any_split_field = False
     source_rocrate = converter_instance.source_crate
     all_target_objects = converter_instance.target_objects_cache
     field_mapping_def = converter_instance.mapping_config.get("sub_mappings", {}).get("field_mapping")
@@ -192,13 +241,16 @@ def build_croissant_record_sets(
         
         record_set_id = conversion_utils.ro_crate_id_to_croissant_local_id(schema.guid, prefix="recordset-")
 
-        croissant_fields = _create_fields_recursively(
+        croissant_fields, has_split = _create_fields_recursively(
             converter_instance,
             {k: v.model_dump(by_alias=True) for k, v in schema.properties.items()}, 
             field_mapping_def,
             record_set_id=record_set_id,
             file_object_id=target_file_object.id
         )
+
+        if has_split:
+            has_any_split_field = True
 
         if not croissant_fields: continue
 
@@ -209,6 +261,9 @@ def build_croissant_record_sets(
             "field": croissant_fields,
             "key": [f"{record_set_id}/{conversion_utils.format_name(req)}" for req in schema.required] if schema.required else None
         }))
+    
+    if has_any_split_field:
+        record_sets.append(CroissantRecordSet.model_validate(CROISSANT_SPLIT_RECORDSET))
         
     return record_sets
 
@@ -227,11 +282,9 @@ CROISSANT_DATASET_MAPPING = {
     "creator":        {"source_key": "author", "parser": conversion_utils.parse_authors_to_person_list},
     "publisher":      {"source_key": "publisher", "parser": conversion_utils.parse_publisher},
     
-    # Mapped with builder functions
     "distribution":   {"builder_func": None},
     "recordSet":      {"builder_func": build_croissant_record_sets},
     
-    # RAI Properties with fallback logic
     "rai:dataCollection": {"source_key": "rai:dataCollection"},
     "rai:dataCollectionType": {"source_key": "rai:dataCollectionType"},
     "rai:dataCollectionMissingData": {"source_key": "rai:dataCollectionMissingData"},
