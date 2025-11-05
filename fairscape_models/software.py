@@ -6,7 +6,7 @@ from fairscape_models.fairscape_base import IdentifierValue, SOFTWARE_TYPE
 class Software(BaseModel): 
     guid: str = Field(alias="@id")
     name: str
-    metadataType: Optional[str] = Field(default="https://w3id.org/EVI#Software")
+    metadataType: Optional[str] = Field(default="https://w3id.org/EVI#Software", alias="@type")
     additionalType: Optional[str] = Field(default=SOFTWARE_TYPE)
     author: str = Field(min_length=4)
     dateModified: Optional[str]

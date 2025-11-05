@@ -6,7 +6,7 @@ from fairscape_models.fairscape_base import IdentifierValue, DATASET_TYPE
 class Dataset(BaseModel):
     guid: str = Field(alias="@id")
     name: str
-    metadataType: Optional[str] = Field(default="https://w3id.org/EVI#Dataset")
+    metadataType: Optional[str] = Field(default="https://w3id.org/EVI#Dataset",alias="@type")
     additionalType: Optional[str] = Field(default=DATASET_TYPE)
     author: Union[str, List[str]]
     datePublished: str = Field(...)

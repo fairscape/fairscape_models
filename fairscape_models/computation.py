@@ -6,7 +6,7 @@ from fairscape_models.fairscape_base import IdentifierValue, COMPUTATION_TYPE
 class Computation(BaseModel):
     guid: str = Field(alias="@id")
     name: str
-    metadataType: Optional[str] = Field(default="https://w3id.org/EVI#Computation")
+    metadataType: Optional[str] = Field(default="https://w3id.org/EVI#Computation",alias="@type")
     additionalType: Optional[str] = Field(default=COMPUTATION_TYPE)
     runBy: str
     description: str = Field(min_length=10)
