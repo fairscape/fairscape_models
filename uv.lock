@@ -44,7 +44,7 @@ wheels = [
 
 [[package]]
 name = "fairscape-models"
-version = "1.0.5"
+version = "1.0.14"
 source = { editable = "." }
 dependencies = [
     { name = "mongomock" },
