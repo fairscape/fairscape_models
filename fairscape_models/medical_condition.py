@@ -14,4 +14,5 @@ class MedicalCondition(BaseModel):
     identifier: Optional[List[IdentifierPropertyValue]] = Field(default=[])
     drug: Optional[List[IdentifierValue]] = Field(default=[])
     usedBy: Optional[List[IdentifierValue]] = Field(default=[])
+    isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
     description: str

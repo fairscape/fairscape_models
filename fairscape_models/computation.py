@@ -17,5 +17,6 @@ class Computation(BaseModel):
     usedSoftware: Optional[List[IdentifierValue]] = Field(default=[])
     usedDataset: Optional[List[IdentifierValue]] = Field(default=[])
     generated: Optional[List[IdentifierValue]] = Field(default=[])
+    isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
     
     model_config = ConfigDict(extra="allow")

@@ -13,4 +13,5 @@ class Instrument(BaseModel):
     additionalDocumentation: Optional[str] = Field(default=None)
     usedByExperiment: Optional[List[IdentifierValue]] = Field(default=[])  # changed from usedByComputation
     contentUrl: Optional[str] = Field(default=None)
+    isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
     model_config = ConfigDict(extra="allow")

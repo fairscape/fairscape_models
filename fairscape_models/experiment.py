@@ -17,4 +17,5 @@ class Experiment(BaseModel):
     usedTreatment: Optional[List[IdentifierValue]] = Field(default=[])
     usedStain: Optional[List[IdentifierValue]] = Field(default=[])
     generated: Optional[List[IdentifierValue]] = Field(default=[])
+    isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
     model_config = ConfigDict(extra="allow")

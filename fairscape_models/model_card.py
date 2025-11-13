@@ -34,3 +34,5 @@ class ModelCard(BaseModel):
     url: Optional[str] = Field(default=None)
     dataLicense: Optional[str] = Field(alias="license", default=None)
     citation: Optional[str] = Field(default=None)
+
+    isPartOf: Optional[List[IdentifierValue]] = Field(default=[])

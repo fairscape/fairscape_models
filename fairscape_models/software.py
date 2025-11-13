@@ -17,5 +17,6 @@ class Software(BaseModel):
     fileFormat: str = Field(title="fileFormat", alias="format")
     usedByComputation: Optional[List[IdentifierValue]] = Field(default=[])
     contentUrl: Optional[str] = Field(default=None)
+    isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
 
     model_config = ConfigDict(extra="allow")

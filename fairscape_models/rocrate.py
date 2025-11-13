@@ -14,8 +14,9 @@ from fairscape_models.software import Software
 class GenericMetadataElem(BaseModel):
     """Generic Metadata Element of an ROCrate"""
     guid: str = Field(alias="@id")
-    metadataType: Union[str, List[str]] = Field(alias="@type")
-    
+    metadataType: Union[str, List[str]] = Field(alias="@type")    
+    isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
+ 
     model_config = ConfigDict(extra="allow")
 
 class ROCrateMetadataFileElem(BaseModel):
@@ -79,7 +80,7 @@ class ROCrateMetadataElem(BaseModel):
     name: str
     description: str
     keywords: List[str]
-    isPartOf: List[IdentifierValue]
+    isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
     version: str
     hasPart: List[IdentifierValue]
     author: Union[str, List[str]]

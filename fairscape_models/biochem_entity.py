@@ -15,5 +15,6 @@ class BioChemEntity(BaseModel):
     associatedDisease: Optional[IdentifierValue] = Field(default=None)
     usedBy: Optional[List[IdentifierValue]] = Field(default=[])
     description: Optional[str] = Field(default=None)
+    isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
     
     model_config = ConfigDict(extra="allow")

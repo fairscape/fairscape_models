@@ -7,11 +7,12 @@ from typing import (
 from pydantic import (
     BaseModel,
     Field,
-    field_validator
+    field_validator,
+    ConfigDict
     )
 import re
 from enum import Enum 
-from fairscape_models.fairscape_base import *
+from fairscape_models.fairscape_base import IdentifierValue, FairscapeEVIBaseModel
 
 # TODO switch to ENUM for better clarification
 class ItemTypeEnum(Enum):
@@ -74,4 +75,6 @@ class Schema(FairscapeEVIBaseModel):
     separator: Optional[str] = Field(default=",")
     header: Optional[bool] = Field(default=True)
     examples: Optional[List[Dict]] = []
+    isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
+
     model_config = ConfigDict(extra='allow')

@@ -11,5 +11,6 @@ class Sample(BaseModel):
     keywords: List[str] = Field(...)
     contentUrl: Optional[Union[str, List[str]]] = Field(default=None)
     cellLineReference: Optional[IdentifierValue] = Field(default=None) 
+    isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
 
     model_config = ConfigDict(extra='allow')
