@@ -16,6 +16,7 @@ class ModelCard(BaseModel):
     author: Union[str, List[str]]
     keywords: List[str]
     version: str
+    isPartOf: Optional[List[IdentifierValue]] = Field(default=None)
     
     modelType: Union[str, List[str]]
     framework: Union[str, List[str]]
@@ -23,10 +24,11 @@ class ModelCard(BaseModel):
     trainingDataset: Union[str, List[IdentifierValue]]
     generatedBy: IdentifierValue
     
-    parameters_millions: Optional[float] = Field(default=None)
-    gmacs: Optional[float] = Field(default=None)
-    activations_millions: Optional[float] = Field(default=None)
+    parameters: Optional[float] = Field(default=None)
     inputSize: Optional[str] = Field(default=None)
+    hasBias: Optional[str] = Field(default=None)
+    intendedUseCase: Optional[str] = Field(default=None)
+    usageInformation: Optional[str] = Field(default=None)
     
     baseModel: Optional[str] = Field(default=None)
     associatedPublication: Optional[Union[str, List[str]]] = Field(default=None)
