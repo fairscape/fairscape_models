@@ -15,6 +15,7 @@ class Computation(BaseModel):
     additionalDocumentation: Optional[str] = Field(default=None)
     command: Optional[Union[List[str], str]] = Field(default=None)
     usedSoftware: Optional[List[IdentifierValue]] = Field(default=[])
+    usedMLModel: Optional[List[IdentifierValue]] = Field(default=[])
     usedDataset: Optional[List[IdentifierValue]] = Field(default=[])
     generated: Optional[List[IdentifierValue]] = Field(default=[])
     isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
