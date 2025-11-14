@@ -10,7 +10,7 @@ class ModelCard(BaseModel):
     model_config = ConfigDict(extra="allow")
     
     guid: str = Field(alias="@id")
-    metadataType: Union[str, List[str]] = Field(alias="@type",default="MLModel")
+    metadataType: Union[str, List[str]] = Field(alias="@type",default="EVI:MLModel")
     name: str
     description: str
     author: Union[str, List[str]]
