@@ -16,7 +16,6 @@ class ModelCard(BaseModel):
     author: Union[str, List[str]]
     keywords: List[str]
     version: str
-    isPartOf: Optional[List[IdentifierValue]] = Field(default=None)
     
     modelType: Union[str, List[str]]
     framework: Union[str, List[str]]
