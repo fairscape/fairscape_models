@@ -8,6 +8,7 @@ const {
 const { generateSoftware } = require("../models/software.js");
 const { generateDataset } = require("../models/dataset.js");
 const { generateComputation } = require("../models/computation.js");
+const { generateAnnotation } = require("../models/annotation.js");
 const { generateSchema } = require("../models/schema.js");
 
 function copyToROCrate(sourceFilepath, destinationFilepath) {
@@ -210,6 +211,16 @@ function register_computation(rocrate_path, computationParams) {
   }
 }
 
+function register_annotation(rocrate_path, annotationParams) {
+  try {
+    const annotationInstance = generateAnnotation(annotationParams);
+    appendCrate(rocrate_path, [annotationInstance]);
+    return annotationInstance["@id"];
+  } catch (error) {
+    throw new Error(`Error registering annotation: ${error.message}`);
+  }
+}
+
 module.exports = {
   get_ro_crate_metadata,
   register_schema,
@@ -219,4 +230,5 @@ module.exports = {
   register_software,
   register_dataset,
   register_computation,
+  register_annotation,
 };
