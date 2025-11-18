@@ -1,3 +1,4 @@
+from fairscape_models.annotation import Annotation
 from fairscape_models.biochem_entity import BioChemEntity
 from fairscape_models.computation import Computation
 from fairscape_models.dataset import Dataset

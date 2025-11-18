@@ -21,6 +21,7 @@ DATASET_TYPE = "Dataset"
 DATASET_CONTAINER_TYPE = "DatasetContainer"
 SOFTWARE_TYPE = "Software"
 COMPUTATION_TYPE = "Computation"
+ANNOTATION_TYPE = "Annotation"
 ROCRATE_TYPE = "ROCrate"
 
 # TODO get from config
@@ -58,6 +59,7 @@ class ClassType(str, Enum):
     DATASET = 'Dataset'
     SOFTWARE = 'Software'
     COMPUTATION = 'Computation'
+    ANNOTATION = 'Annotation'
     SCHEMA = 'Schema'
     EVIDENCE_GRAPH = 'EvidenceGraph'
     ROCRATE = 'ROCrate' #TODO: Add ROCrate concept to EVI ontology and publish a new version
