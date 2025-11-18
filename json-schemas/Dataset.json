@@ -1,13 +1,16 @@
 {
   "$defs": {
     "IdentifierValue": {
+      "additionalProperties": true,
       "properties": {
         "@id": {
           "title": "@Id",
           "type": "string"
         }
       },
-      "required": ["@id"],
+      "required": [
+        "@id"
+      ],
       "title": "IdentifierValue",
       "type": "object"
     }
@@ -32,7 +35,7 @@
         }
       ],
       "default": "https://w3id.org/EVI#Dataset",
-      "title": "Metadatatype"
+      "title": "@Type"
     },
     "additionalType": {
       "anyOf": [
@@ -83,6 +86,12 @@
     },
     "associatedPublication": {
       "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         {
           "type": "string"
         },
@@ -185,6 +194,21 @@
       ],
       "default": null,
       "title": "Contenturl"
+    },
+    "isPartOf": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Ispartof"
     }
   },
   "required": [

@@ -1,13 +1,16 @@
 {
   "$defs": {
     "IdentifierValue": {
+      "additionalProperties": true,
       "properties": {
         "@id": {
           "title": "@Id",
           "type": "string"
         }
       },
-      "required": ["@id"],
+      "required": [
+        "@id"
+      ],
       "title": "IdentifierValue",
       "type": "object"
     }
@@ -32,7 +35,7 @@
         }
       ],
       "default": "https://w3id.org/EVI#Software",
-      "title": "Metadatatype"
+      "title": "@Type"
     },
     "additionalType": {
       "anyOf": [
@@ -52,8 +55,15 @@
       "type": "string"
     },
     "dateModified": {
-      "title": "Datemodified",
-      "type": "string"
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Datemodified"
     },
     "version": {
       "default": "0.1.0",
@@ -119,6 +129,21 @@
       ],
       "default": null,
       "title": "Contenturl"
+    },
+    "isPartOf": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Ispartof"
     }
   },
   "required": [

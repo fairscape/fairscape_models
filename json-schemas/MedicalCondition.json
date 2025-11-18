@@ -24,6 +24,7 @@
       "type": "object"
     },
     "IdentifierValue": {
+      "additionalProperties": true,
       "properties": {
         "@id": {
           "title": "@Id",
@@ -103,6 +104,21 @@
       ],
       "default": [],
       "title": "Usedby"
+    },
+    "isPartOf": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Ispartof"
     },
     "description": {
       "title": "Description",

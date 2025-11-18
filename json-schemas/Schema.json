@@ -1,16 +1,17 @@
 {
   "$defs": {
-    "Item": {
+    "IdentifierValue": {
+      "additionalProperties": true,
       "properties": {
-        "type": {
-          "title": "Type",
+        "@id": {
+          "title": "@Id",
           "type": "string"
         }
       },
       "required": [
-        "type"
+        "@id"
       ],
-      "title": "Item",
+      "title": "IdentifierValue",
       "type": "object"
     },
     "Property": {
@@ -59,17 +60,6 @@
           "default": null,
           "title": "Pattern"
         },
-        "items": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Item"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null
-        },
         "min-items": {
           "anyOf": [
             {
@@ -105,6 +95,21 @@
           ],
           "default": null,
           "title": "Unique-Items"
+        },
+        "properties": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "$ref": "#/$defs/Property"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Properties"
         }
       },
       "required": [
@@ -270,6 +275,21 @@
       ],
       "default": [],
       "title": "Examples"
+    },
+    "isPartOf": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Ispartof"
     }
   },
   "required": [

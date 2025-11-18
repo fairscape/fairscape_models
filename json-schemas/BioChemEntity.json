@@ -24,6 +24,7 @@
       "type": "object"
     },
     "IdentifierValue": {
+      "additionalProperties": true,
       "properties": {
         "@id": {
           "title": "@Id",
@@ -37,6 +38,7 @@
       "type": "object"
     }
   },
+  "additionalProperties": true,
   "description": "Pydantic model for the Schema.org BioChemEntity datatype\n\nThis class can apply to Protiens, Genes, Chemical Entities, or Biological Samples",
   "properties": {
     "@id": {
@@ -111,6 +113,21 @@
       ],
       "default": null,
       "title": "Description"
+    },
+    "isPartOf": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Ispartof"
     }
   },
   "required": [

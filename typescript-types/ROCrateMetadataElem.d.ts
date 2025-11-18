@@ -10,15 +10,35 @@ export type Type = string[];
 export type Name = string;
 export type Description = string;
 export type Keywords = string[];
+export type Ispartof = IdentifierValue[] | null;
 export type Id1 = string;
-export type Ispartof = IdentifierValue[];
 export type Version = string;
 export type Haspart = IdentifierValue[];
 export type Author = string | string[];
 export type License = string | null;
-export type Associatedpublication = string | string[];
+export type Associatedpublication = string[] | string | null;
 export type Conditionsofaccess = string | null;
 export type Copyrightnotice = string | null;
+export type RaiDatalimitations = string | null;
+export type RaiDatabiases = string | null;
+export type RaiDatausecases = string | null;
+export type RaiDatareleasemaintenanceplan = string | null;
+export type RaiDatacollection = string | null;
+export type RaiDatacollectiontype = string[] | null;
+export type RaiDatacollectionmissingdata = string | null;
+export type RaiDatacollectionrawdata = string | null;
+export type RaiDatacollectiontimeframe = string[] | null;
+export type RaiDataimputationprotocol = string | null;
+export type RaiDatamanipulationprotocol = string | null;
+export type RaiDatapreprocessingprotocol = string[] | null;
+export type RaiDataannotationprotocol = string | null;
+export type RaiDataannotationplatform = string[] | null;
+export type RaiDataannotationanalysis = string[] | null;
+export type RaiPersonalsensitiveinformation = string[] | null;
+export type RaiDatasocialimpact = string | null;
+export type RaiAnnotationsperitem = string | null;
+export type RaiAnnotatordemographics = string[] | null;
+export type RaiMachineannotationtools = string[] | null;
 
 /**
  * Metadata Element of ROCrate that represents the crate as a whole
@@ -39,7 +59,7 @@ export type Copyrightnotice = string | null;
  *         'license': 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en',
  *         'associatedPublication': 'Clark T, Schaffer L, Obernier K, Al Manir S, Churas CP, Dailamy A, Doctor Y, Forget A, Hansen JN, Hu M, Lenkiewicz J, Levinson MA, Marquez C, Mohan J, Nourreddine S, Niestroy J, Pratt D, Qian G, Thaker S, Belisle-Pipon J-C, Brandt C, Chen J, Ding Y, Fodeh S, Krogan N, Lundberg E, Mali P, Payne-Foster P, Ratcliffe S, Ravitsky V, Sali A, Schulz W, Ideker T. Cell Maps for Artificial Intelligence: AI-Ready Maps of Human Cell Architecture from Disease-Relevant Cell Lines. BioRXiv 2024.',
  *         'author': ['Test']
- *         'conditionsOfAccess': 'This dataset was created by investigators and staff of the Cell Maps for Artificial Intelligence project (CM4AI - https://cm4ai.org), a Data Generation Project of the NIH Bridge2AI program, and is copyright (c) 2024 by The Regents of the University of California and, for cellular imaging data, by The Board of Trustees of the Leland Stanford Junior University. It is licensed for reuse under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC-BY-NC-SA 4.0) license, whose terms are summarized here: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en.  Proper attribution credit as required by the license includes citation of the copyright holders and of the attribution parties, which includes citation of the following article: Clark T, Schaffer L, Obernier K, Al Manir S, Churas CP, Dailamy A, Doctor Y, Forget A, Hansen JN, Hu M, Lenkiewicz J, Levinson MA, Marquez C, Mohan J, Nourreddine S, Niestroy J, Pratt D, Qian G, Thaker S, Belisle-Pipon J-C, Brandt C, Chen J, Ding Y, Fodeh S, Krogan N, Lundberg E, Mali P, Payne-Foster P, Ratcliffe S, Ravitsky V, Sali A, Schulz W, Ideker T. Cell Maps for Artificial Intelligence: AI-Ready Maps of Human Cell Architecture from Disease-Relevant Cell Lines. BioRXiv 2024.”',
+ *         'conditionsOfAccess': 'This dataset was created by investigators and staff of the Cell Maps for Artificial Intelligence project (CM4AI - https://cm4ai.org), a Data Generation Project of the NIH Bridge2AI program, and is copyright (c) 2024 by The Regents of the University of California and, for cellular imaging data, by The Board of Trustees of the Leland Stanford Junior University. It is licensed for reuse under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC-BY-NC-SA 4.0) license, whose terms are summarized here: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en.  Proper attribution credit as required by the license includes citation of the copyright holders and of the attribution parties, which includes citation of the following article: Clark T, Schaffer L, Obernier K, Al Manir S, Churas CP, Dailamy A, Doctor Y, Forget A, Hansen JN, Hu M, Lenkiewicz J, Levinson MA, Marquez C, Mohan J, Nourreddine S, Niestroy J, Pratt D, Qian G, Thaker S, Belisle-Pipon J-C, Brandt C, Chen J, Ding Y, Fodeh S, Krogan N, Lundberg E, Mali P, Payne-Foster P, Ratcliffe S, Ravitsky V, Sali A, Schulz W, Ideker T. Cell Maps for Artificial Intelligence: AI-Ready Maps of Human Cell Architecture from Disease-Relevant Cell Lines. BioRXiv 2024."',
  *         'copyrightNotice': 'Copyright (c) 2024 by The Regents of the University of California',
  *         'hasPart': [
  *             {'@id': 'https://fairscape.net/ark:59852/software-cellmaps_image_embedding-N2ux5jg'},
@@ -56,7 +76,7 @@ export interface ROCrateMetadataElem {
   name: Name;
   description: Description;
   keywords: Keywords;
-  isPartOf: Ispartof;
+  isPartOf?: Ispartof;
   version: Version;
   hasPart: Haspart;
   author: Author;
@@ -64,6 +84,26 @@ export interface ROCrateMetadataElem {
   associatedPublication?: Associatedpublication;
   conditionsOfAccess?: Conditionsofaccess;
   copyrightNotice?: Copyrightnotice;
+  "rai:dataLimitations"?: RaiDatalimitations;
+  "rai:dataBiases"?: RaiDatabiases;
+  "rai:dataUseCases"?: RaiDatausecases;
+  "rai:dataReleaseMaintenancePlan"?: RaiDatareleasemaintenanceplan;
+  "rai:dataCollection"?: RaiDatacollection;
+  "rai:dataCollectionType"?: RaiDatacollectiontype;
+  "rai:dataCollectionMissingData"?: RaiDatacollectionmissingdata;
+  "rai:dataCollectionRawData"?: RaiDatacollectionrawdata;
+  "rai:dataCollectionTimeframe"?: RaiDatacollectiontimeframe;
+  "rai:dataImputationProtocol"?: RaiDataimputationprotocol;
+  "rai:dataManipulationProtocol"?: RaiDatamanipulationprotocol;
+  "rai:dataPreprocessingProtocol"?: RaiDatapreprocessingprotocol;
+  "rai:dataAnnotationProtocol"?: RaiDataannotationprotocol;
+  "rai:dataAnnotationPlatform"?: RaiDataannotationplatform;
+  "rai:dataAnnotationAnalysis"?: RaiDataannotationanalysis;
+  "rai:personalSensitiveInformation"?: RaiPersonalsensitiveinformation;
+  "rai:dataSocialImpact"?: RaiDatasocialimpact;
+  "rai:annotationsPerItem"?: RaiAnnotationsperitem;
+  "rai:annotatorDemographics"?: RaiAnnotatordemographics;
+  "rai:machineAnnotationTools"?: RaiMachineannotationtools;
   [k: string]: unknown;
 }
 export interface IdentifierValue {

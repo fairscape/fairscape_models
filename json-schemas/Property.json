@@ -1,117 +1,115 @@
 {
   "$defs": {
-    "Item": {
+    "Property": {
+      "additionalProperties": true,
       "properties": {
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "index": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ],
+          "title": "Index"
+        },
         "type": {
           "title": "Type",
           "type": "string"
+        },
+        "value-url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value-Url"
+        },
+        "pattern": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pattern"
+        },
+        "min-items": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min-Items"
+        },
+        "max-items": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max-Items"
+        },
+        "unique-items": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unique-Items"
+        },
+        "properties": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "$ref": "#/$defs/Property"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Properties"
         }
       },
       "required": [
+        "description",
+        "index",
         "type"
       ],
-      "title": "Item",
+      "title": "Property",
       "type": "object"
     }
   },
-  "additionalProperties": true,
-  "properties": {
-    "description": {
-      "title": "Description",
-      "type": "string"
-    },
-    "index": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "integer"
-        }
-      ],
-      "title": "Index"
-    },
-    "type": {
-      "title": "Type",
-      "type": "string"
-    },
-    "value-url": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Value-Url"
-    },
-    "pattern": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Pattern"
-    },
-    "items": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/Item"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null
-    },
-    "min-items": {
-      "anyOf": [
-        {
-          "type": "integer"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Min-Items"
-    },
-    "max-items": {
-      "anyOf": [
-        {
-          "type": "integer"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Max-Items"
-    },
-    "unique-items": {
-      "anyOf": [
-        {
-          "type": "boolean"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Unique-Items"
+  "allOf": [
+    {
+      "$ref": "#/$defs/Property"
     }
-  },
-  "required": [
-    "description",
-    "index",
-    "type"
-  ],
-  "title": "Property",
-  "type": "object"
+  ]
 }

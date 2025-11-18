@@ -10,14 +10,14 @@ export type Context = {
 } | null;
 export type Id = string;
 export type Name = string;
-export type Metadatatype = string | null;
+export type Type = string | null;
 export type Additionaltype = string | null;
 export type Author = string | string[];
 export type Datepublished = string;
 export type Version = string;
 export type Description = string;
 export type Keywords = string[];
-export type Associatedpublication = string | null;
+export type Associatedpublication = string[] | string | null;
 export type Additionaldocumentation = string | null;
 export type Format = string;
 export type Id1 = string;
@@ -25,12 +25,13 @@ export type Generatedby = IdentifierValue | IdentifierValue[] | null;
 export type Derivedfrom = IdentifierValue[] | null;
 export type Usedbycomputation = IdentifierValue[] | null;
 export type Contenturl = string[] | string | null;
+export type Ispartof = IdentifierValue[] | null;
 export type Id2 = string;
 export type Name1 = string;
-export type Metadatatype1 = string | null;
+export type Type1 = string | null;
 export type Additionaltype1 = string | null;
 export type Author1 = string;
-export type Datemodified = string;
+export type Datemodified = string | null;
 export type Version1 = string;
 export type Description1 = string;
 export type Associatedpublication1 = string | null;
@@ -38,9 +39,10 @@ export type Additionaldocumentation1 = string | null;
 export type FileFormat = string;
 export type Usedbycomputation1 = IdentifierValue[] | null;
 export type Contenturl1 = string | null;
+export type Ispartof1 = IdentifierValue[] | null;
 export type Id3 = string;
 export type Name2 = string;
-export type Metadatatype2 = string | null;
+export type Type2 = string | null;
 export type Additionaltype2 = string | null;
 export type Runby = string;
 export type Description2 = string;
@@ -49,25 +51,47 @@ export type Associatedpublication2 = string | null;
 export type Additionaldocumentation2 = string | null;
 export type Command = string[] | string | null;
 export type Usedsoftware = IdentifierValue[] | null;
+export type Usedmlmodel = IdentifierValue[] | null;
 export type Useddataset = IdentifierValue[] | null;
 export type Generated = IdentifierValue[] | null;
+export type Ispartof2 = IdentifierValue[] | null;
 export type Id4 = string;
-export type Type = string[];
+export type Type3 = string[];
 export type Name3 = string;
 export type Description3 = string;
 export type Keywords1 = string[];
-export type Ispartof = IdentifierValue[];
+export type Ispartof3 = IdentifierValue[] | null;
 export type Version2 = string;
 export type Haspart = IdentifierValue[];
 export type Author2 = string | string[];
 export type License = string | null;
-export type Associatedpublication3 = string | string[];
+export type Associatedpublication3 = string[] | string | null;
 export type Conditionsofaccess = string | null;
 export type Copyrightnotice = string | null;
+export type RaiDatalimitations = string | null;
+export type RaiDatabiases = string | null;
+export type RaiDatausecases = string | null;
+export type RaiDatareleasemaintenanceplan = string | null;
+export type RaiDatacollection = string | null;
+export type RaiDatacollectiontype = string[] | null;
+export type RaiDatacollectionmissingdata = string | null;
+export type RaiDatacollectionrawdata = string | null;
+export type RaiDatacollectiontimeframe = string[] | null;
+export type RaiDataimputationprotocol = string | null;
+export type RaiDatamanipulationprotocol = string | null;
+export type RaiDatapreprocessingprotocol = string[] | null;
+export type RaiDataannotationprotocol = string | null;
+export type RaiDataannotationplatform = string[] | null;
+export type RaiDataannotationanalysis = string[] | null;
+export type RaiPersonalsensitiveinformation = string[] | null;
+export type RaiDatasocialimpact = string | null;
+export type RaiAnnotationsperitem = string | null;
+export type RaiAnnotatordemographics = string[] | null;
+export type RaiMachineannotationtools = string[] | null;
 export type Id5 = string;
-export type Type1 = "CreativeWork";
+export type Type4 = "CreativeWork";
 export type Guid = string;
-export type Type2 = string;
+export type Type5 = string;
 export type Name4 = string;
 export type Url = string | null;
 export type Description4 = string;
@@ -76,14 +100,16 @@ export type Keywords2 = string[];
 export type Published = boolean;
 export type Description5 = string;
 export type Index = string | number;
-export type Type3 = string;
+export type Type6 = string;
 export type ValueUrl = string | null;
 export type Pattern = string | null;
-export type Type4 = string;
 export type MinItems = number | null;
 export type MaxItems = number | null;
 export type UniqueItems = boolean | null;
-export type Type5 = string | null;
+export type Properties1 = {
+  [k: string]: Property;
+} | null;
+export type Type7 = string | null;
 export type Additionalproperties = boolean | null;
 export type Required = string[] | null;
 export type Separator = string | null;
@@ -93,24 +119,28 @@ export type Examples =
       [k: string]: unknown;
     }[]
   | null;
+export type Ispartof4 = IdentifierValue[] | null;
 export type Id6 = string;
-export type Type6 = string | null;
+export type Type8 = string | null;
 export type Name5 = string;
 export type Identifier = IdentifierPropertyValue[] | null;
-export type Type7 = string;
+export type Type9 = string;
 export type Value = string;
 export type Name6 = string;
 export type Usedby = IdentifierValue[] | null;
 export type Description6 = string | null;
+export type Ispartof5 = IdentifierValue[] | null;
 export type Id7 = string;
-export type Type8 = string | null;
+export type Type10 = string | null;
 export type Name7 = string;
 export type Identifier1 = IdentifierPropertyValue[] | null;
 export type Drug = IdentifierValue[] | null;
 export type Usedby1 = IdentifierValue[] | null;
+export type Ispartof6 = IdentifierValue[] | null;
 export type Description7 = string;
 export type Id8 = string;
-export type Type9 = string | string[];
+export type Type11 = string | string[];
+export type Ispartof7 = IdentifierValue[] | null;
 export type Graph = (
   | Dataset
   | Software
@@ -131,7 +161,7 @@ export interface ROCrateV1_2 {
 export interface Dataset {
   "@id": Id;
   name: Name;
-  metadataType?: Metadatatype;
+  "@type"?: Type;
   additionalType?: Additionaltype;
   author: Author;
   datePublished: Datepublished;
@@ -146,6 +176,7 @@ export interface Dataset {
   derivedFrom?: Derivedfrom;
   usedByComputation?: Usedbycomputation;
   contentUrl?: Contenturl;
+  isPartOf?: Ispartof;
   [k: string]: unknown;
 }
 export interface IdentifierValue {
@@ -155,7 +186,7 @@ export interface IdentifierValue {
 export interface Software {
   "@id": Id2;
   name: Name1;
-  metadataType?: Metadatatype1;
+  "@type"?: Type1;
   additionalType?: Additionaltype1;
   author: Author1;
   dateModified: Datemodified;
@@ -166,12 +197,13 @@ export interface Software {
   format: FileFormat;
   usedByComputation?: Usedbycomputation1;
   contentUrl?: Contenturl1;
+  isPartOf?: Ispartof1;
   [k: string]: unknown;
 }
 export interface Computation {
   "@id": Id3;
   name: Name2;
-  metadataType?: Metadatatype2;
+  "@type"?: Type2;
   additionalType?: Additionaltype2;
   runBy: Runby;
   description: Description2;
@@ -180,8 +212,10 @@ export interface Computation {
   additionalDocumentation?: Additionaldocumentation2;
   command?: Command;
   usedSoftware?: Usedsoftware;
+  usedMLModel?: Usedmlmodel;
   usedDataset?: Useddataset;
   generated?: Generated;
+  isPartOf?: Ispartof2;
   [k: string]: unknown;
 }
 /**
@@ -203,7 +237,7 @@ export interface Computation {
  *         'license': 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en',
  *         'associatedPublication': 'Clark T, Schaffer L, Obernier K, Al Manir S, Churas CP, Dailamy A, Doctor Y, Forget A, Hansen JN, Hu M, Lenkiewicz J, Levinson MA, Marquez C, Mohan J, Nourreddine S, Niestroy J, Pratt D, Qian G, Thaker S, Belisle-Pipon J-C, Brandt C, Chen J, Ding Y, Fodeh S, Krogan N, Lundberg E, Mali P, Payne-Foster P, Ratcliffe S, Ravitsky V, Sali A, Schulz W, Ideker T. Cell Maps for Artificial Intelligence: AI-Ready Maps of Human Cell Architecture from Disease-Relevant Cell Lines. BioRXiv 2024.',
  *         'author': ['Test']
- *         'conditionsOfAccess': 'This dataset was created by investigators and staff of the Cell Maps for Artificial Intelligence project (CM4AI - https://cm4ai.org), a Data Generation Project of the NIH Bridge2AI program, and is copyright (c) 2024 by The Regents of the University of California and, for cellular imaging data, by The Board of Trustees of the Leland Stanford Junior University. It is licensed for reuse under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC-BY-NC-SA 4.0) license, whose terms are summarized here: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en.  Proper attribution credit as required by the license includes citation of the copyright holders and of the attribution parties, which includes citation of the following article: Clark T, Schaffer L, Obernier K, Al Manir S, Churas CP, Dailamy A, Doctor Y, Forget A, Hansen JN, Hu M, Lenkiewicz J, Levinson MA, Marquez C, Mohan J, Nourreddine S, Niestroy J, Pratt D, Qian G, Thaker S, Belisle-Pipon J-C, Brandt C, Chen J, Ding Y, Fodeh S, Krogan N, Lundberg E, Mali P, Payne-Foster P, Ratcliffe S, Ravitsky V, Sali A, Schulz W, Ideker T. Cell Maps for Artificial Intelligence: AI-Ready Maps of Human Cell Architecture from Disease-Relevant Cell Lines. BioRXiv 2024.”',
+ *         'conditionsOfAccess': 'This dataset was created by investigators and staff of the Cell Maps for Artificial Intelligence project (CM4AI - https://cm4ai.org), a Data Generation Project of the NIH Bridge2AI program, and is copyright (c) 2024 by The Regents of the University of California and, for cellular imaging data, by The Board of Trustees of the Leland Stanford Junior University. It is licensed for reuse under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC-BY-NC-SA 4.0) license, whose terms are summarized here: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en.  Proper attribution credit as required by the license includes citation of the copyright holders and of the attribution parties, which includes citation of the following article: Clark T, Schaffer L, Obernier K, Al Manir S, Churas CP, Dailamy A, Doctor Y, Forget A, Hansen JN, Hu M, Lenkiewicz J, Levinson MA, Marquez C, Mohan J, Nourreddine S, Niestroy J, Pratt D, Qian G, Thaker S, Belisle-Pipon J-C, Brandt C, Chen J, Ding Y, Fodeh S, Krogan N, Lundberg E, Mali P, Payne-Foster P, Ratcliffe S, Ravitsky V, Sali A, Schulz W, Ideker T. Cell Maps for Artificial Intelligence: AI-Ready Maps of Human Cell Architecture from Disease-Relevant Cell Lines. BioRXiv 2024."',
  *         'copyrightNotice': 'Copyright (c) 2024 by The Regents of the University of California',
  *         'hasPart': [
  *             {'@id': 'https://fairscape.net/ark:59852/software-cellmaps_image_embedding-N2ux5jg'},
@@ -216,11 +250,11 @@ export interface Computation {
  */
 export interface ROCrateMetadataElem {
   "@id": Id4;
-  "@type": Type;
+  "@type": Type3;
   name: Name3;
   description: Description3;
   keywords: Keywords1;
-  isPartOf: Ispartof;
+  isPartOf?: Ispartof3;
   version: Version2;
   hasPart: Haspart;
   author: Author2;
@@ -228,6 +262,26 @@ export interface ROCrateMetadataElem {
   associatedPublication?: Associatedpublication3;
   conditionsOfAccess?: Conditionsofaccess;
   copyrightNotice?: Copyrightnotice;
+  "rai:dataLimitations"?: RaiDatalimitations;
+  "rai:dataBiases"?: RaiDatabiases;
+  "rai:dataUseCases"?: RaiDatausecases;
+  "rai:dataReleaseMaintenancePlan"?: RaiDatareleasemaintenanceplan;
+  "rai:dataCollection"?: RaiDatacollection;
+  "rai:dataCollectionType"?: RaiDatacollectiontype;
+  "rai:dataCollectionMissingData"?: RaiDatacollectionmissingdata;
+  "rai:dataCollectionRawData"?: RaiDatacollectionrawdata;
+  "rai:dataCollectionTimeframe"?: RaiDatacollectiontimeframe;
+  "rai:dataImputationProtocol"?: RaiDataimputationprotocol;
+  "rai:dataManipulationProtocol"?: RaiDatamanipulationprotocol;
+  "rai:dataPreprocessingProtocol"?: RaiDatapreprocessingprotocol;
+  "rai:dataAnnotationProtocol"?: RaiDataannotationprotocol;
+  "rai:dataAnnotationPlatform"?: RaiDataannotationplatform;
+  "rai:dataAnnotationAnalysis"?: RaiDataannotationanalysis;
+  "rai:personalSensitiveInformation"?: RaiPersonalsensitiveinformation;
+  "rai:dataSocialImpact"?: RaiDatasocialimpact;
+  "rai:annotationsPerItem"?: RaiAnnotationsperitem;
+  "rai:annotatorDemographics"?: RaiAnnotatordemographics;
+  "rai:machineAnnotationTools"?: RaiMachineannotationtools;
   [k: string]: unknown;
 }
 /**
@@ -250,14 +304,14 @@ export interface ROCrateMetadataElem {
  */
 export interface ROCrateMetadataFileElem {
   "@id": Id5;
-  "@type": Type1;
+  "@type": Type4;
   conformsTo: IdentifierValue;
   about: IdentifierValue;
   [k: string]: unknown;
 }
 export interface Schema {
   "@id": Guid;
-  "@type"?: Type2;
+  "@type"?: Type5;
   name: Name4;
   "@context"?: Context1;
   url?: Url;
@@ -266,12 +320,13 @@ export interface Schema {
   keywords?: Keywords2;
   published?: Published;
   properties: Properties;
-  type?: Type5;
+  type?: Type7;
   additionalProperties?: Additionalproperties;
   required?: Required;
   separator?: Separator;
   header?: Header;
   examples?: Examples;
+  isPartOf?: Ispartof4;
   [k: string]: unknown;
 }
 export interface Context1 {
@@ -283,17 +338,13 @@ export interface Properties {
 export interface Property {
   description: Description5;
   index: Index;
-  type: Type3;
+  type: Type6;
   "value-url"?: ValueUrl;
   pattern?: Pattern;
-  items?: Item | null;
   "min-items"?: MinItems;
   "max-items"?: MaxItems;
   "unique-items"?: UniqueItems;
-  [k: string]: unknown;
-}
-export interface Item {
-  type: Type4;
+  properties?: Properties1;
   [k: string]: unknown;
 }
 /**
@@ -303,16 +354,17 @@ export interface Item {
  */
 export interface BioChemEntity {
   "@id": Id6;
-  "@type"?: Type6;
+  "@type"?: Type8;
   name: Name5;
   identifier?: Identifier;
   associatedDisease?: IdentifierValue | null;
   usedBy?: Usedby;
   description?: Description6;
+  isPartOf?: Ispartof5;
   [k: string]: unknown;
 }
 export interface IdentifierPropertyValue {
-  "@type"?: Type7;
+  "@type"?: Type9;
   value: Value;
   name: Name6;
   [k: string]: unknown;
@@ -324,11 +376,12 @@ export interface IdentifierPropertyValue {
  */
 export interface MedicalCondition {
   "@id": Id7;
-  "@type"?: Type8;
+  "@type"?: Type10;
   name: Name7;
   identifier?: Identifier1;
   drug?: Drug;
   usedBy?: Usedby1;
+  isPartOf?: Ispartof6;
   description: Description7;
   [k: string]: unknown;
 }
@@ -337,6 +390,7 @@ export interface MedicalCondition {
  */
 export interface GenericMetadataElem {
   "@id": Id8;
-  "@type": Type9;
+  "@type": Type11;
+  isPartOf?: Ispartof7;
   [k: string]: unknown;
 }

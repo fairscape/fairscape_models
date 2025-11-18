@@ -1,13 +1,16 @@
 {
   "$defs": {
     "IdentifierValue": {
+      "additionalProperties": true,
       "properties": {
         "@id": {
           "title": "@Id",
           "type": "string"
         }
       },
-      "required": ["@id"],
+      "required": [
+        "@id"
+      ],
       "title": "IdentifierValue",
       "type": "object"
     }
@@ -20,8 +23,7 @@
     },
     "@type": {
       "const": "CreativeWork",
-      "title": "@Type",
-      "default": "CreativeWork"
+      "title": "@Type"
     },
     "conformsTo": {
       "$ref": "#/$defs/IdentifierValue"
@@ -30,7 +32,12 @@
       "$ref": "#/$defs/IdentifierValue"
     }
   },
-  "required": ["@id", "@type", "conformsTo", "about"],
+  "required": [
+    "@id",
+    "@type",
+    "conformsTo",
+    "about"
+  ],
   "title": "ROCrateMetadataFileElem",
   "type": "object"
 }

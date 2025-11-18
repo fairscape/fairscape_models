@@ -16,6 +16,7 @@ export type Additionaldocumentation = string | null;
 export type Usedbyexperiment = IdentifierValue[] | null;
 export type Id1 = string;
 export type Contenturl = string | null;
+export type Ispartof = IdentifierValue[] | null;
 
 export interface Instrument {
   "@id": Id;
@@ -28,6 +29,7 @@ export interface Instrument {
   additionalDocumentation?: Additionaldocumentation;
   usedByExperiment?: Usedbyexperiment;
   contentUrl?: Contenturl;
+  isPartOf?: Ispartof;
   [k: string]: unknown;
 }
 export interface IdentifierValue {

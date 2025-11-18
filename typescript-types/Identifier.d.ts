@@ -7,7 +7,7 @@
 
 export type Guid = string;
 export type MetadataType = ClassType;
-export type ClassType = "Dataset" | "Software" | "Computation" | "Schema" | "EvidenceGraph" | "ROCrate";
+export type ClassType = "Dataset" | "Software" | "Computation" | "Annotation" | "Schema" | "EvidenceGraph" | "ROCrate";
 export type Name = string;
 
 export interface Identifier {

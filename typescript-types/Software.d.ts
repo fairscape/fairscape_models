@@ -7,10 +7,10 @@
 
 export type Id = string;
 export type Name = string;
-export type Metadatatype = string | null;
+export type Type = string | null;
 export type Additionaltype = string | null;
 export type Author = string;
-export type Datemodified = string;
+export type Datemodified = string | null;
 export type Version = string;
 export type Description = string;
 export type Associatedpublication = string | null;
@@ -19,11 +19,12 @@ export type FileFormat = string;
 export type Usedbycomputation = IdentifierValue[] | null;
 export type Id1 = string;
 export type Contenturl = string | null;
+export type Ispartof = IdentifierValue[] | null;
 
 export interface Software {
   "@id": Id;
   name: Name;
-  metadataType?: Metadatatype;
+  "@type"?: Type;
   additionalType?: Additionaltype;
   author: Author;
   dateModified: Datemodified;
@@ -34,6 +35,7 @@ export interface Software {
   format: FileFormat;
   usedByComputation?: Usedbycomputation;
   contentUrl?: Contenturl;
+  isPartOf?: Ispartof;
   [k: string]: unknown;
 }
 export interface IdentifierValue {

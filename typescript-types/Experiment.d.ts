@@ -20,6 +20,7 @@ export type Usedsample = IdentifierValue[] | null;
 export type Usedtreatment = IdentifierValue[] | null;
 export type Usedstain = IdentifierValue[] | null;
 export type Generated = IdentifierValue[] | null;
+export type Ispartof = IdentifierValue[] | null;
 
 export interface Experiment {
   "@id": Id;
@@ -36,6 +37,7 @@ export interface Experiment {
   usedTreatment?: Usedtreatment;
   usedStain?: Usedstain;
   generated?: Generated;
+  isPartOf?: Ispartof;
   [k: string]: unknown;
 }
 export interface IdentifierValue {

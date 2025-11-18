@@ -1,6 +1,7 @@
 {
   "$defs": {
     "BioChemEntity": {
+      "additionalProperties": true,
       "description": "Pydantic model for the Schema.org BioChemEntity datatype\n\nThis class can apply to Protiens, Genes, Chemical Entities, or Biological Samples",
       "properties": {
         "@id": {
@@ -75,6 +76,21 @@
           ],
           "default": null,
           "title": "Description"
+        },
+        "isPartOf": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/IdentifierValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Ispartof"
         }
       },
       "required": [
@@ -95,7 +111,7 @@
           "title": "Name",
           "type": "string"
         },
-        "metadataType": {
+        "@type": {
           "anyOf": [
             {
               "type": "string"
@@ -105,7 +121,7 @@
             }
           ],
           "default": "https://w3id.org/EVI#Computation",
-          "title": "Metadatatype"
+          "title": "@Type"
         },
         "additionalType": {
           "anyOf": [
@@ -189,6 +205,21 @@
           "default": [],
           "title": "Usedsoftware"
         },
+        "usedMLModel": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/IdentifierValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Usedmlmodel"
+        },
         "usedDataset": {
           "anyOf": [
             {
@@ -218,6 +249,21 @@
           ],
           "default": [],
           "title": "Generated"
+        },
+        "isPartOf": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/IdentifierValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Ispartof"
         }
       },
       "required": [
@@ -241,7 +287,7 @@
           "title": "Name",
           "type": "string"
         },
-        "metadataType": {
+        "@type": {
           "anyOf": [
             {
               "type": "string"
@@ -251,7 +297,7 @@
             }
           ],
           "default": "https://w3id.org/EVI#Dataset",
-          "title": "Metadatatype"
+          "title": "@Type"
         },
         "additionalType": {
           "anyOf": [
@@ -302,6 +348,12 @@
         },
         "associatedPublication": {
           "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
             {
               "type": "string"
             },
@@ -404,6 +456,21 @@
           ],
           "default": null,
           "title": "Contenturl"
+        },
+        "isPartOf": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/IdentifierValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Ispartof"
         }
       },
       "required": [
@@ -439,6 +506,21 @@
             }
           ],
           "title": "@Type"
+        },
+        "isPartOf": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/IdentifierValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Ispartof"
         }
       },
       "required": [
@@ -472,6 +554,7 @@
       "type": "object"
     },
     "IdentifierValue": {
+      "additionalProperties": true,
       "properties": {
         "@id": {
           "title": "@Id",
@@ -482,19 +565,6 @@
         "@id"
       ],
       "title": "IdentifierValue",
-      "type": "object"
-    },
-    "Item": {
-      "properties": {
-        "type": {
-          "title": "Type",
-          "type": "string"
-        }
-      },
-      "required": [
-        "type"
-      ],
-      "title": "Item",
       "type": "object"
     },
     "MedicalCondition": {
@@ -565,6 +635,21 @@
           "default": [],
           "title": "Usedby"
         },
+        "isPartOf": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/IdentifierValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Ispartof"
+        },
         "description": {
           "title": "Description",
           "type": "string"
@@ -624,17 +709,6 @@
           "default": null,
           "title": "Pattern"
         },
-        "items": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Item"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null
-        },
         "min-items": {
           "anyOf": [
             {
@@ -670,6 +744,21 @@
           ],
           "default": null,
           "title": "Unique-Items"
+        },
+        "properties": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "$ref": "#/$defs/Property"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Properties"
         }
       },
       "required": [
@@ -682,7 +771,7 @@
     },
     "ROCrateMetadataElem": {
       "additionalProperties": true,
-      "description": "Metadata Element of ROCrate that represents the crate as a whole\n\nExample\n    ```\n    {\n        '@id': 'https://fairscape.net/ark:59852/rocrate-2.cm4ai_chromatin_mda-mb-468_untreated_imageembedfold1_initialrun0.1alpha',\n        '@type': ['Dataset', 'https://w3id.org/EVI#ROCrate'],\n        'name': 'Initial integration run',\n        'description': 'Ideker Lab CM4AI 0.1 alpha MDA-MB-468 untreated chromatin Initial integration run IF Image Embedding IF microscopy images embedding fold1',\n        'keywords': ['Ideker Lab', 'fold1'],\n        'isPartOf': [\n            {'@id': 'ark:/Ideker_Lab'}, \n            {'@id': 'ark:/Ideker_Lab/CM4AI'}\n            ],\n        'version': '0.5alpha',\n        'license': 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en',\n        'associatedPublication': 'Clark T, Schaffer L, Obernier K, Al Manir S, Churas CP, Dailamy A, Doctor Y, Forget A, Hansen JN, Hu M, Lenkiewicz J, Levinson MA, Marquez C, Mohan J, Nourreddine S, Niestroy J, Pratt D, Qian G, Thaker S, Belisle-Pipon J-C, Brandt C, Chen J, Ding Y, Fodeh S, Krogan N, Lundberg E, Mali P, Payne-Foster P, Ratcliffe S, Ravitsky V, Sali A, Schulz W, Ideker T. Cell Maps for Artificial Intelligence: AI-Ready Maps of Human Cell Architecture from Disease-Relevant Cell Lines. BioRXiv 2024.',\n        'author': ['Test']\n        'conditionsOfAccess': 'This dataset was created by investigators and staff of the Cell Maps for Artificial Intelligence project (CM4AI - https://cm4ai.org), a Data Generation Project of the NIH Bridge2AI program, and is copyright (c) 2024 by The Regents of the University of California and, for cellular imaging data, by The Board of Trustees of the Leland Stanford Junior University. It is licensed for reuse under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC-BY-NC-SA 4.0) license, whose terms are summarized here: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en.  Proper attribution credit as required by the license includes citation of the copyright holders and of the attribution parties, which includes citation of the following article: Clark T, Schaffer L, Obernier K, Al Manir S, Churas CP, Dailamy A, Doctor Y, Forget A, Hansen JN, Hu M, Lenkiewicz J, Levinson MA, Marquez C, Mohan J, Nourreddine S, Niestroy J, Pratt D, Qian G, Thaker S, Belisle-Pipon J-C, Brandt C, Chen J, Ding Y, Fodeh S, Krogan N, Lundberg E, Mali P, Payne-Foster P, Ratcliffe S, Ravitsky V, Sali A, Schulz W, Ideker T. Cell Maps for Artificial Intelligence: AI-Ready Maps of Human Cell Architecture from Disease-Relevant Cell Lines. BioRXiv 2024.\u201d',\n        'copyrightNotice': 'Copyright (c) 2024 by The Regents of the University of California',\n        'hasPart': [\n            {'@id': 'https://fairscape.net/ark:59852/software-cellmaps_image_embedding-N2ux5jg'},\n            {'@id': 'https://fairscape.net/ark:59852/dataset-cellmaps_image_embedding-output-file-N2ux5jg'},\n            {'@id': 'https://fairscape.net/ark:59852/dataset-Densenet-model-file-N2ux5jg'},\n            {'@id': 'https://fairscape.net/ark:59852/computation-IF-Image-Embedding-N2ux5jg'}\n        ]\n    }\n    ```",
+      "description": "Metadata Element of ROCrate that represents the crate as a whole\n\nExample\n    ```\n    {\n        '@id': 'https://fairscape.net/ark:59852/rocrate-2.cm4ai_chromatin_mda-mb-468_untreated_imageembedfold1_initialrun0.1alpha',\n        '@type': ['Dataset', 'https://w3id.org/EVI#ROCrate'],\n        'name': 'Initial integration run',\n        'description': 'Ideker Lab CM4AI 0.1 alpha MDA-MB-468 untreated chromatin Initial integration run IF Image Embedding IF microscopy images embedding fold1',\n        'keywords': ['Ideker Lab', 'fold1'],\n        'isPartOf': [\n            {'@id': 'ark:/Ideker_Lab'}, \n            {'@id': 'ark:/Ideker_Lab/CM4AI'}\n            ],\n        'version': '0.5alpha',\n        'license': 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en',\n        'associatedPublication': 'Clark T, Schaffer L, Obernier K, Al Manir S, Churas CP, Dailamy A, Doctor Y, Forget A, Hansen JN, Hu M, Lenkiewicz J, Levinson MA, Marquez C, Mohan J, Nourreddine S, Niestroy J, Pratt D, Qian G, Thaker S, Belisle-Pipon J-C, Brandt C, Chen J, Ding Y, Fodeh S, Krogan N, Lundberg E, Mali P, Payne-Foster P, Ratcliffe S, Ravitsky V, Sali A, Schulz W, Ideker T. Cell Maps for Artificial Intelligence: AI-Ready Maps of Human Cell Architecture from Disease-Relevant Cell Lines. BioRXiv 2024.',\n        'author': ['Test']\n        'conditionsOfAccess': 'This dataset was created by investigators and staff of the Cell Maps for Artificial Intelligence project (CM4AI - https://cm4ai.org), a Data Generation Project of the NIH Bridge2AI program, and is copyright (c) 2024 by The Regents of the University of California and, for cellular imaging data, by The Board of Trustees of the Leland Stanford Junior University. It is licensed for reuse under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC-BY-NC-SA 4.0) license, whose terms are summarized here: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en.  Proper attribution credit as required by the license includes citation of the copyright holders and of the attribution parties, which includes citation of the following article: Clark T, Schaffer L, Obernier K, Al Manir S, Churas CP, Dailamy A, Doctor Y, Forget A, Hansen JN, Hu M, Lenkiewicz J, Levinson MA, Marquez C, Mohan J, Nourreddine S, Niestroy J, Pratt D, Qian G, Thaker S, Belisle-Pipon J-C, Brandt C, Chen J, Ding Y, Fodeh S, Krogan N, Lundberg E, Mali P, Payne-Foster P, Ratcliffe S, Ravitsky V, Sali A, Schulz W, Ideker T. Cell Maps for Artificial Intelligence: AI-Ready Maps of Human Cell Architecture from Disease-Relevant Cell Lines. BioRXiv 2024.\"',\n        'copyrightNotice': 'Copyright (c) 2024 by The Regents of the University of California',\n        'hasPart': [\n            {'@id': 'https://fairscape.net/ark:59852/software-cellmaps_image_embedding-N2ux5jg'},\n            {'@id': 'https://fairscape.net/ark:59852/dataset-cellmaps_image_embedding-output-file-N2ux5jg'},\n            {'@id': 'https://fairscape.net/ark:59852/dataset-Densenet-model-file-N2ux5jg'},\n            {'@id': 'https://fairscape.net/ark:59852/computation-IF-Image-Embedding-N2ux5jg'}\n        ]\n    }\n    ```",
       "properties": {
         "@id": {
           "title": "@Id",
@@ -711,11 +800,19 @@
           "type": "array"
         },
         "isPartOf": {
-          "items": {
-            "$ref": "#/$defs/IdentifierValue"
-          },
-          "title": "Ispartof",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/IdentifierValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Ispartof"
         },
         "version": {
           "title": "Version",
@@ -756,16 +853,19 @@
         "associatedPublication": {
           "anyOf": [
             {
-              "type": "string"
-            },
-            {
               "items": {
                 "type": "string"
               },
               "type": "array"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
             }
           ],
-          "default": "",
+          "default": null,
           "title": "Associatedpublication"
         },
         "conditionsOfAccess": {
@@ -777,7 +877,7 @@
               "type": "null"
             }
           ],
-          "default": "",
+          "default": null,
           "title": "Conditionsofaccess"
         },
         "copyrightNotice": {
@@ -789,8 +889,272 @@
               "type": "null"
             }
           ],
-          "default": "",
+          "default": null,
           "title": "Copyrightnotice"
+        },
+        "rai:dataLimitations": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rai:Datalimitations"
+        },
+        "rai:dataBiases": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rai:Databiases"
+        },
+        "rai:dataUseCases": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rai:Datausecases"
+        },
+        "rai:dataReleaseMaintenancePlan": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rai:Datareleasemaintenanceplan"
+        },
+        "rai:dataCollection": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rai:Datacollection"
+        },
+        "rai:dataCollectionType": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rai:Datacollectiontype"
+        },
+        "rai:dataCollectionMissingData": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rai:Datacollectionmissingdata"
+        },
+        "rai:dataCollectionRawData": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rai:Datacollectionrawdata"
+        },
+        "rai:dataCollectionTimeframe": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rai:Datacollectiontimeframe"
+        },
+        "rai:dataImputationProtocol": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rai:Dataimputationprotocol"
+        },
+        "rai:dataManipulationProtocol": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rai:Datamanipulationprotocol"
+        },
+        "rai:dataPreprocessingProtocol": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rai:Datapreprocessingprotocol"
+        },
+        "rai:dataAnnotationProtocol": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rai:Dataannotationprotocol"
+        },
+        "rai:dataAnnotationPlatform": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rai:Dataannotationplatform"
+        },
+        "rai:dataAnnotationAnalysis": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rai:Dataannotationanalysis"
+        },
+        "rai:personalSensitiveInformation": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rai:Personalsensitiveinformation"
+        },
+        "rai:dataSocialImpact": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rai:Datasocialimpact"
+        },
+        "rai:annotationsPerItem": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rai:Annotationsperitem"
+        },
+        "rai:annotatorDemographics": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rai:Annotatordemographics"
+        },
+        "rai:machineAnnotationTools": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rai:Machineannotationtools"
         }
       },
       "required": [
@@ -799,7 +1163,6 @@
         "name",
         "description",
         "keywords",
-        "isPartOf",
         "version",
         "hasPart",
         "author",
@@ -990,6 +1353,21 @@
           ],
           "default": [],
           "title": "Examples"
+        },
+        "isPartOf": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/IdentifierValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Ispartof"
         }
       },
       "required": [
@@ -1012,7 +1390,7 @@
           "title": "Name",
           "type": "string"
         },
-        "metadataType": {
+        "@type": {
           "anyOf": [
             {
               "type": "string"
@@ -1022,7 +1400,7 @@
             }
           ],
           "default": "https://w3id.org/EVI#Software",
-          "title": "Metadatatype"
+          "title": "@Type"
         },
         "additionalType": {
           "anyOf": [
@@ -1042,8 +1420,15 @@
           "type": "string"
         },
         "dateModified": {
-          "title": "Datemodified",
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Datemodified"
         },
         "version": {
           "default": "0.1.0",
@@ -1109,6 +1494,21 @@
           ],
           "default": null,
           "title": "Contenturl"
+        },
+        "isPartOf": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/IdentifierValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [],
+          "title": "Ispartof"
         }
       },
       "required": [

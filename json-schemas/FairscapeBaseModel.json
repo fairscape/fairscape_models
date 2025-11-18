@@ -5,6 +5,7 @@
         "Dataset",
         "Software",
         "Computation",
+        "Annotation",
         "Schema",
         "EvidenceGraph",
         "ROCrate"
@@ -47,6 +48,7 @@
       "default": {
         "@vocab": "https://schema.org/",
         "evi": "https://w3id.org/EVI#",
+        "rai": "http://mlcommons.org/croissant/RAI/",
         "usedSoftware": {
           "@id": "https://w3id.org/EVI#",
           "@type": "@id"
@@ -56,11 +58,11 @@
           "@type": "@id"
         },
         "generatedBy": {
-          "@id": "https://w3id.org/EVI#generated",
+          "@id": "https://w3id.org/EVI#generatedBy",
           "@type": "@id"
         },
         "generated": {
-          "@id": "https://w3id.org/EVI#generatedBy",
+          "@id": "https://w3id.org/EVI#generated",
           "@type": "@id"
         },
         "hasDistribution": {

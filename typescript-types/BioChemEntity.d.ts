@@ -15,6 +15,7 @@ export type Name1 = string;
 export type Id1 = string;
 export type Usedby = IdentifierValue[] | null;
 export type Description = string | null;
+export type Ispartof = IdentifierValue[] | null;
 
 /**
  * Pydantic model for the Schema.org BioChemEntity datatype
@@ -29,6 +30,7 @@ export interface BioChemEntity {
   associatedDisease?: IdentifierValue | null;
   usedBy?: Usedby;
   description?: Description;
+  isPartOf?: Ispartof;
   [k: string]: unknown;
 }
 export interface IdentifierPropertyValue {

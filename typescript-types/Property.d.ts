@@ -5,29 +5,28 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
+export type Property = Property1;
 export type Description = string;
 export type Index = string | number;
 export type Type = string;
 export type ValueUrl = string | null;
 export type Pattern = string | null;
-export type Type1 = string;
 export type MinItems = number | null;
 export type MaxItems = number | null;
 export type UniqueItems = boolean | null;
+export type Properties = {
+  [k: string]: Property1;
+} | null;
 
-export interface Property {
+export interface Property1 {
   description: Description;
   index: Index;
   type: Type;
   "value-url"?: ValueUrl;
   pattern?: Pattern;
-  items?: Item | null;
   "min-items"?: MinItems;
   "max-items"?: MaxItems;
   "unique-items"?: UniqueItems;
-  [k: string]: unknown;
-}
-export interface Item {
-  type: Type1;
+  properties?: Properties;
   [k: string]: unknown;
 }

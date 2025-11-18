@@ -7,14 +7,14 @@
 
 export type Id = string;
 export type Name = string;
-export type Metadatatype = string | null;
+export type Type = string | null;
 export type Additionaltype = string | null;
 export type Author = string | string[];
 export type Datepublished = string;
 export type Version = string;
 export type Description = string;
 export type Keywords = string[];
-export type Associatedpublication = string | null;
+export type Associatedpublication = string[] | string | null;
 export type Additionaldocumentation = string | null;
 export type Format = string;
 export type Id1 = string;
@@ -22,11 +22,12 @@ export type Generatedby = IdentifierValue | IdentifierValue[] | null;
 export type Derivedfrom = IdentifierValue[] | null;
 export type Usedbycomputation = IdentifierValue[] | null;
 export type Contenturl = string[] | string | null;
+export type Ispartof = IdentifierValue[] | null;
 
 export interface Dataset {
   "@id": Id;
   name: Name;
-  metadataType?: Metadatatype;
+  "@type"?: Type;
   additionalType?: Additionaltype;
   author: Author;
   datePublished: Datepublished;
@@ -41,6 +42,7 @@ export interface Dataset {
   derivedFrom?: Derivedfrom;
   usedByComputation?: Usedbycomputation;
   contentUrl?: Contenturl;
+  isPartOf?: Ispartof;
   [k: string]: unknown;
 }
 export interface IdentifierValue {

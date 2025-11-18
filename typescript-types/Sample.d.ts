@@ -13,6 +13,7 @@ export type Description = string;
 export type Keywords = string[];
 export type Contenturl = string[] | string | null;
 export type Id1 = string;
+export type Ispartof = IdentifierValue[] | null;
 
 export interface Sample {
   "@id": Id;
@@ -23,6 +24,7 @@ export interface Sample {
   keywords: Keywords;
   contentUrl?: Contenturl;
   cellLineReference?: IdentifierValue | null;
+  isPartOf?: Ispartof;
   [k: string]: unknown;
 }
 export interface IdentifierValue {

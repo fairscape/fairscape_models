@@ -1,13 +1,16 @@
 {
   "$defs": {
     "IdentifierValue": {
+      "additionalProperties": true,
       "properties": {
         "@id": {
           "title": "@Id",
           "type": "string"
         }
       },
-      "required": ["@id"],
+      "required": [
+        "@id"
+      ],
       "title": "IdentifierValue",
       "type": "object"
     }
@@ -32,7 +35,7 @@
         }
       ],
       "default": "https://w3id.org/EVI#Computation",
-      "title": "Metadatatype"
+      "title": "@Type"
     },
     "additionalType": {
       "anyOf": [
@@ -116,6 +119,21 @@
       "default": [],
       "title": "Usedsoftware"
     },
+    "usedMLModel": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Usedmlmodel"
+    },
     "usedDataset": {
       "anyOf": [
         {
@@ -145,9 +163,30 @@
       ],
       "default": [],
       "title": "Generated"
+    },
+    "isPartOf": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Ispartof"
     }
   },
-  "required": ["@id", "name", "runBy", "description", "dateCreated"],
+  "required": [
+    "@id",
+    "name",
+    "runBy",
+    "description",
+    "dateCreated"
+  ],
   "title": "Computation",
   "type": "object"
 }

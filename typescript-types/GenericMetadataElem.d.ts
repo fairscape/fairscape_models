@@ -7,6 +7,8 @@
 
 export type Id = string;
 export type Type = string | string[];
+export type Ispartof = IdentifierValue[] | null;
+export type Id1 = string;
 
 /**
  * Generic Metadata Element of an ROCrate
@@ -14,5 +16,10 @@ export type Type = string | string[];
 export interface GenericMetadataElem {
   "@id": Id;
   "@type": Type;
+  isPartOf?: Ispartof;
+  [k: string]: unknown;
+}
+export interface IdentifierValue {
+  "@id": Id1;
   [k: string]: unknown;
 }

@@ -7,7 +7,7 @@
 
 export type Id = string;
 export type Name = string;
-export type Metadatatype = string | null;
+export type Type = string | null;
 export type Additionaltype = string | null;
 export type Runby = string;
 export type Description = string;
@@ -17,13 +17,15 @@ export type Additionaldocumentation = string | null;
 export type Command = string[] | string | null;
 export type Usedsoftware = IdentifierValue[] | null;
 export type Id1 = string;
+export type Usedmlmodel = IdentifierValue[] | null;
 export type Useddataset = IdentifierValue[] | null;
 export type Generated = IdentifierValue[] | null;
+export type Ispartof = IdentifierValue[] | null;
 
 export interface Computation {
   "@id": Id;
   name: Name;
-  metadataType?: Metadatatype;
+  "@type"?: Type;
   additionalType?: Additionaltype;
   runBy: Runby;
   description: Description;
@@ -32,8 +34,10 @@ export interface Computation {
   additionalDocumentation?: Additionaldocumentation;
   command?: Command;
   usedSoftware?: Usedsoftware;
+  usedMLModel?: Usedmlmodel;
   usedDataset?: Useddataset;
   generated?: Generated;
+  isPartOf?: Ispartof;
   [k: string]: unknown;
 }
 export interface IdentifierValue {

@@ -15,6 +15,7 @@ export type Name1 = string;
 export type Drug = IdentifierValue[] | null;
 export type Id1 = string;
 export type Usedby = IdentifierValue[] | null;
+export type Ispartof = IdentifierValue[] | null;
 export type Description = string;
 
 /**
@@ -29,6 +30,7 @@ export interface MedicalCondition {
   identifier?: Identifier;
   drug?: Drug;
   usedBy?: Usedby;
+  isPartOf?: Ispartof;
   description: Description;
   [k: string]: unknown;
 }

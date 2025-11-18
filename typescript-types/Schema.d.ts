@@ -18,11 +18,13 @@ export type Index = string | number;
 export type Type1 = string;
 export type ValueUrl = string | null;
 export type Pattern = string | null;
-export type Type2 = string;
 export type MinItems = number | null;
 export type MaxItems = number | null;
 export type UniqueItems = boolean | null;
-export type Type3 = string | null;
+export type Properties1 = {
+  [k: string]: Property;
+} | null;
+export type Type2 = string | null;
 export type Additionalproperties = boolean | null;
 export type Required = string[] | null;
 export type Separator = string | null;
@@ -32,6 +34,8 @@ export type Examples =
       [k: string]: unknown;
     }[]
   | null;
+export type Ispartof = IdentifierValue[] | null;
+export type Id = string;
 
 export interface Schema {
   "@id": Guid;
@@ -44,12 +48,13 @@ export interface Schema {
   keywords?: Keywords;
   published?: Published;
   properties: Properties;
-  type?: Type3;
+  type?: Type2;
   additionalProperties?: Additionalproperties;
   required?: Required;
   separator?: Separator;
   header?: Header;
   examples?: Examples;
+  isPartOf?: Ispartof;
   [k: string]: unknown;
 }
 export interface Context {
@@ -64,13 +69,13 @@ export interface Property {
   type: Type1;
   "value-url"?: ValueUrl;
   pattern?: Pattern;
-  items?: Item | null;
   "min-items"?: MinItems;
   "max-items"?: MaxItems;
   "unique-items"?: UniqueItems;
+  properties?: Properties1;
   [k: string]: unknown;
 }
-export interface Item {
-  type: Type2;
+export interface IdentifierValue {
+  "@id": Id;
   [k: string]: unknown;
 }
