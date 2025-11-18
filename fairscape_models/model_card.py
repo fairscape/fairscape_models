@@ -17,11 +17,11 @@ class ModelCard(BaseModel):
     keywords: List[str]
     version: str
     
-    modelType: Union[str, List[str]]
-    framework: Union[str, List[str]]
-    modelFormat: Union[str, List[str]]
-    trainingDataset: Union[str, List[IdentifierValue]]
-    generatedBy: IdentifierValue
+    modelType: Optional[Union[str, List[str]]]
+    framework: Optional[Union[str, List[str]]]
+    modelFormat: Optional[Union[str, List[str]]]
+    trainingDataset: Optional[Union[str, List[IdentifierValue]]]
+    generatedBy: Optional[IdentifierValue]
     
     parameters: Optional[float] = Field(default=None)
     inputSize: Optional[str] = Field(default=None)
