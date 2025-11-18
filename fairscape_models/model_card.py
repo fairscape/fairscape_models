@@ -10,18 +10,18 @@ class ModelCard(BaseModel):
     model_config = ConfigDict(extra="allow")
     
     guid: str = Field(alias="@id")
-    metadataType: Union[str, List[str]] = Field(alias="@type",default="EVI:MLModel")
+    metadataType: Union[str, List[str]] = Field(alias="@type",default="https://w3id.org/EVI#MLModel")
     name: str
     description: str
     author: Union[str, List[str]]
     keywords: List[str]
     version: str
     
-    modelType: Optional[Union[str, List[str]]]
-    framework: Optional[Union[str, List[str]]]
-    modelFormat: Optional[Union[str, List[str]]]
-    trainingDataset: Optional[Union[str, List[IdentifierValue]]]
-    generatedBy: Optional[IdentifierValue]
+    modelType: Optional[Union[str, List[str]]] = Field(default=None)
+    framework: Optional[Union[str, List[str]]] = Field(default=None)
+    modelFormat: Optional[Union[str, List[str]]] = Field(default=None)
+    trainingDataset: Optional[Union[str, List[IdentifierValue]]] = Field(default=None)
+    generatedBy: Optional[IdentifierValue] = Field(default=None)
     
     parameters: Optional[float] = Field(default=None)
     inputSize: Optional[str] = Field(default=None)
