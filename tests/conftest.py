@@ -58,3 +58,14 @@ def experiment_minimal_data():
         "description": "An experiment to test things.",
         "datePerformed": "2024-01-01"
     }
+
+@pytest.fixture
+def annotation_minimal_data():
+    """Minimal data for a valid Annotation."""
+    return {
+        "@id": "ark:59852/test-annotation",
+        "name": "Test Annotation",
+        "createdBy": "Test Annotator",
+        "dateCreated": "2023-11-09",
+        "description": "A test annotation description that is long enough."
+    }

@@ -26,3 +26,17 @@ requires-python = ">=3.8"
 
 [project.urls]
 "Homepage" = "https://github.com/fairscape/fairscape-models"
+
+[tool.coverage.run]
+omit = [
+    "fairscape_models/conversion/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
