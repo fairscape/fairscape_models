@@ -193,55 +193,61 @@ class ROCrateV1_2(BaseModel):
         return values
 
     def cleanIdentifiers(self):
-        """ Clean metadata guid property from full urls to ark:{NAAN}/{postfix} 
+        """ Clean metadata guid property from full urls to ark:{NAAN}/{postfix}
         """
 
         def cleanGUID(metadata):
-            """ Clean metadata guid property from full urls to ark:{NAAN}/{postfix} 
+            """ Clean metadata guid property from full urls to ark:{NAAN}/{postfix}
             """
-            if "http" in metadata.guid:
+            if hasattr(metadata, 'guid') and isinstance(metadata.guid, str) and "http" in metadata.guid:
                 metadata.guid = urllib.parse.urlparse(metadata.guid).path.lstrip('/')
- 
+
+        def cleanIdentifierList(identifier_list):
+            """Helper to clean a list of identifiers"""
+            if identifier_list is None:
+                return
+            if not isinstance(identifier_list, list):
+                return
+            for item in identifier_list:
+                if hasattr(item, 'guid') and isinstance(item.guid, str) and "ark:" in item.guid:
+                    cleanGUID(item)
+
+        def cleanIdentifierUnion(identifier_union):
+            """Helper to clean a Union[IdentifierValue, List[IdentifierValue]] field"""
+            if identifier_union is None:
+                return
+            if isinstance(identifier_union, list):
+                cleanIdentifierList(identifier_union)
+            elif hasattr(identifier_union, 'guid') and isinstance(identifier_union.guid, str) and "ark:" in identifier_union.guid:
+                cleanGUID(identifier_union)
+
         #clean ROCrate metadata identifier
         rocrateMetadata = self.getCrateMetadata()
         cleanGUID(rocrateMetadata)
-        
-        # clean identifiers and evi properties
+
         for elem in self.getEVIElements():
-            if "ark:" in elem.guid:  # Only clean if contains "ark:"
+
+            if "ark:" in elem.guid:  
                 cleanGUID(elem)
-                
+
             if isinstance(elem, Dataset):
-                # usedByComputation
-                for usedByComputation in elem.usedByComputation:
-                    if "ark:" in usedByComputation.guid:
-                        cleanGUID(usedByComputation)
-                        
-                # generatedBy
-                for generatedBy in elem.generatedBy:
-                    if "ark:" in generatedBy.guid:
-                        cleanGUID(generatedBy)
-                        
+
+                cleanIdentifierList(elem.usedByComputation)
+
+                cleanIdentifierList(elem.derivedFrom)
+
+                cleanIdentifierUnion(elem.generatedBy)
+
             if isinstance(elem, Software):
-                for usedByElem in elem.usedByComputation:
-                    if "ark:" in usedByElem.guid:
-                        cleanGUID(usedByElem)
-                        
+                cleanIdentifierList(elem.usedByComputation)
+
             if isinstance(elem, Computation):
-                # elem.usedDataset
-                for usedDataset in elem.usedDataset:
-                    if "ark:" in usedDataset.guid:
-                        cleanGUID(usedDataset)
-                        
-                # elem.generated
-                for generated in elem.generated:
-                    if "ark:" in generated.guid:
-                        cleanGUID(generated)
-                        
-                # elem.usedSoftware
-                for usedSoftware in elem.usedSoftware:
-                    if "ark:" in usedSoftware.guid:
-                        cleanGUID(usedSoftware)
+
+                cleanIdentifierList(elem.usedDataset)
+
+                cleanIdentifierList(elem.generated)
+
+                cleanIdentifierList(elem.usedSoftware)
 
     def getCrateMetadata(self)-> ROCrateMetadataElem:
         """ Filter the Metadata Graph for the Metadata Element Describing the Toplevel ROCrate
