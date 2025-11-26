@@ -10,6 +10,7 @@ from fairscape_models.medical_condition import MedicalCondition
 from fairscape_models.computation import Computation
 from fairscape_models.dataset import Dataset
 from fairscape_models.software import Software
+from fairscape_models.patient import Patient
 
 class GenericMetadataElem(BaseModel):
     """Generic Metadata Element of an ROCrate"""
@@ -132,6 +133,7 @@ class ROCrateV1_2(BaseModel):
         Schema,
         BioChemEntity,
         MedicalCondition,
+        Patient,
         GenericMetadataElem
     ]] = Field(alias="@graph")
     

@@ -137,3 +137,116 @@ class ROCToTargetConverter:
 
     def _map_single_object_from_dict(self, source_dict: Dict[str, Any], mapping_def: Dict[str, Any]) -> Dict[str, Any]:
         return self._map_source_to_args(source_dict, mapping_def)
+
+
+class TargetToROCrateConverter:
+    """Converts from various formats (D4D, Croissant, etc.) to ROCrate format."""
+
+    def __init__(self, source_collection: Any, dataset_mappings: Dict[str, Any], collection_mapping: Dict[str, Any]):
+        self.source = source_collection
+        self.dataset_mappings = dataset_mappings
+        self.collection_mapping = collection_mapping
+        self.converted_datasets: List[Any] = []
+        self.release_rocrate: Optional[Any] = None
+        self.is_single_dataset = not hasattr(source_collection, 'resources')
+
+    def _get_source_dict(self, source: Any) -> Dict[str, Any]:
+        if hasattr(source, 'model_dump'):
+            return source.model_dump()
+        elif hasattr(source, '__dict__'):
+            return source.__dict__
+        elif isinstance(source, dict):
+            return source
+        else:
+            return {}
+
+    def convert(self):
+        """Main conversion method that orchestrates the entire conversion process."""
+        if self.is_single_dataset:
+            self._convert_single_dataset()
+        else:
+            self._convert_collection_to_release()
+            self._convert_datasets_to_subcrates()
+        return self._assemble_rocrate()
+
+    def _convert_single_dataset(self):
+        """Converts a single dataset to a ROCrate release."""
+        from fairscape_models.rocrate import ROCrateMetadataElem
+
+        source_dict = self._get_source_dict(self.source)
+        release_args = self._apply_mapping(source_dict, self.dataset_mappings)
+        release_args["@type"] = ["Dataset", "https://w3id.org/EVI#ROCrate"]
+        release_args["@id"] = release_args.get("@id", "./")
+        self.release_rocrate = ROCrateMetadataElem.model_construct(**release_args)
+
+    def _convert_collection_to_release(self):
+        """Converts a collection/dataset collection to a ROCrate release."""
+        from fairscape_models.rocrate import ROCrateMetadataElem
+
+        source_dict = self._get_source_dict(self.source)
+        release_args = self._apply_mapping(source_dict, self.collection_mapping)
+        release_args["@type"] = ["Dataset", "https://w3id.org/EVI#ROCrate"]
+        release_args["@id"] = release_args.get("@id", "./")
+        self.release_rocrate = ROCrateMetadataElem.model_construct(**release_args)
+
+    def _convert_datasets_to_subcrates(self):
+        """Converts individual datasets within a collection to subcrate elements."""
+        from fairscape_models.rocrate import ROCrateMetadataElem
+
+        resources = getattr(self.source, 'resources', [])
+        if not resources:
+            return
+
+        for dataset in resources:
+            source_dict = self._get_source_dict(dataset)
+            subcrate_args = self._apply_mapping(source_dict, self.dataset_mappings)
+            subcrate_args["@type"] = ["Dataset", "https://w3id.org/EVI#ROCrate"]
+            if "@id" not in subcrate_args:
+                subcrate_args["@id"] = source_dict.get("id", f"subcrate-{len(self.converted_datasets)}")
+
+            self.converted_datasets.append(ROCrateMetadataElem.model_construct(**subcrate_args))
+
+    def _apply_mapping(self, source_dict: Dict[str, Any], mapping: Dict[str, Any]) -> Dict[str, Any]:
+        """Applies a mapping configuration to source data to produce target arguments."""
+        result = {}
+        for target_key, spec in mapping.items():
+            value = None
+
+            if "fixed_value" in spec:
+                value = spec["fixed_value"]
+            elif "source_key" in spec:
+                value = source_dict.get(spec["source_key"])
+                if "parser" in spec and value is not None:
+                    value = spec["parser"](value)
+            elif "builder_func" in spec:
+                value = spec["builder_func"](source_dict)
+
+            if value is not None:
+                result[target_key] = value
+
+        return result
+
+    def _assemble_rocrate(self):
+        """Assembles the final ROCrate object with all metadata elements."""
+        from fairscape_models.rocrate import ROCrateV1_2, ROCrateMetadataElem
+
+        metadata_graph = [
+            ROCrateMetadataElem.model_construct(**{
+                "@id": "ro-crate-metadata.json",
+                "@type": "CreativeWork",
+                "conformsTo": {"@id": "https://w3id.org/ro/crate/1.2"},
+                "about": {"@id": self.release_rocrate.guid}
+            }),
+            self.release_rocrate
+        ]
+
+        metadata_graph.extend(self.converted_datasets)
+
+        return ROCrateV1_2.model_construct(
+            context={
+                "@vocab": "https://schema.org/",
+                "evi": "https://w3id.org/EVI#",
+                "rai": "http://mlcommons.org/croissant/RAI/"
+            },
+            metadataGraph=metadata_graph
+        )

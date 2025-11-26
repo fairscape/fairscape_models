@@ -109,6 +109,7 @@ class ComputabilityScore(BaseModel):
     ))
 
 class AIReadyScore(BaseModel):
+    name: str
     fairness: FairnessScore = Field(default_factory=FairnessScore)
     provenance: ProvenanceScore = Field(default_factory=ProvenanceScore)
     characterization: CharacterizationScore = Field(default_factory=CharacterizationScore)
