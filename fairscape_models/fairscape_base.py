@@ -20,6 +20,7 @@ IdentifierPattern = "^ark:[0-9]{5}\\/[a-zA-Z0-9_\\-]*.$"
 DATASET_TYPE = "Dataset"
 DATASET_CONTAINER_TYPE = "DatasetContainer"
 SOFTWARE_TYPE = "Software"
+MLMODEL_TYPE = "MLModel"
 COMPUTATION_TYPE = "Computation"
 ANNOTATION_TYPE = "Annotation"
 ROCRATE_TYPE = "ROCrate"
@@ -58,6 +59,7 @@ defaultContext = {
 class ClassType(str, Enum):
     DATASET = 'Dataset'
     SOFTWARE = 'Software'
+    MLMODEL = 'MLModel'
     COMPUTATION = 'Computation'
     ANNOTATION = 'Annotation'
     SCHEMA = 'Schema'

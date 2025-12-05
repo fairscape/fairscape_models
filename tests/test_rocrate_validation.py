@@ -13,6 +13,9 @@ from fairscape_models.rocrate import (
 from fairscape_models.dataset import Dataset
 from fairscape_models.software import Software
 from fairscape_models.computation import Computation
+from fairscape_models.mlmodel import MLModel
+from fairscape_models.annotation import Annotation
+from fairscape_models.experiment import Experiment
 
 # Define the path to the Test-ROcrates directory
 TEST_ROCRATES_PATH = pathlib.Path(__file__).parent / "test_rocrates"
@@ -191,3 +194,188 @@ def test_get_medical_conditions(comprehensive_rocrate_data):
     assert len(conditions) == 1
     assert isinstance(conditions[0], MedicalCondition)
     assert conditions[0].guid == "ark:59852/test-condition"
+
+
+def test_clean_identifiers_with_none_fields():
+    """Test cleanIdentifiers with None fields to ensure it doesn't crash."""
+    data = {
+        "@context": {},
+        "@graph": [
+            {
+                "@id": "ro-crate-metadata.json",
+                "@type": "CreativeWork",
+                "conformsTo": {"@id": "https://w3id.org/ro/crate/1.1"},
+                "about": {"@id": "ark:59852/test-crate"}
+            },
+            {
+                "@id": "ark:59852/test-crate",
+                "@type": ["Dataset", "https://w3id.org/EVI#ROCrate"],
+                "name": "Test Crate", "description": "A test crate for validation", "keywords": [],
+                "version": "1.0", "author": "tester", "license": "MIT",
+                "hasPart": [{"@id": "ark:59852/test-dataset"}]
+            },
+            {
+                "@id": "ark:59852/test-dataset",
+                "@type": "https://w3id.org/EVI#Dataset",
+                "name": "Test Dataset", "author": "tester", "datePublished": "2024-01-01",
+                "description": "A test dataset", "keywords": [], "format": "text/plain",
+                "usedByComputation": None,  # None field
+                "generatedBy": None  # None field
+            }
+        ]
+    }
+    rocrate = ROCrateV1_2.model_validate(data)
+    # Should not crash
+    rocrate.cleanIdentifiers()
+    assert True
+
+
+def test_clean_identifiers_with_single_identifier():
+    """Test cleanIdentifiers with single IdentifierValue (not a list) in generatedBy."""
+    data = {
+        "@context": {},
+        "@graph": [
+            {
+                "@id": "ro-crate-metadata.json",
+                "@type": "CreativeWork",
+                "conformsTo": {"@id": "https://w3id.org/ro/crate/1.1"},
+                "about": {"@id": "ark:59852/test-crate"}
+            },
+            {
+                "@id": "ark:59852/test-crate",
+                "@type": ["Dataset", "https://w3id.org/EVI#ROCrate"],
+                "name": "Test Crate", "description": "A test crate for validation", "keywords": [],
+                "version": "1.0", "author": "tester", "license": "MIT",
+                "hasPart": [{"@id": "ark:59852/test-dataset"}]
+            },
+            {
+                "@id": "https://fairscape.net/ark:59852/test-dataset",
+                "@type": "https://w3id.org/EVI#Dataset",
+                "name": "Test Dataset", "author": "tester", "datePublished": "2024-01-01",
+                "description": "A test dataset", "keywords": [], "format": "text/plain",
+                "generatedBy": {"@id": "https://fairscape.net/ark:59852/test-computation"}  # Single identifier, not list
+            }
+        ]
+    }
+    rocrate = ROCrateV1_2.model_validate(data)
+    rocrate.cleanIdentifiers()
+    dataset = rocrate.getDatasets()[0]
+    assert dataset.generatedBy.guid == "ark:59852/test-computation"
+
+
+def test_clean_identifiers_with_mlmodel():
+    """Test cleanIdentifiers with MLModel elements."""
+    data = {
+        "@context": {},
+        "@graph": [
+            {
+                "@id": "ro-crate-metadata.json",
+                "@type": "CreativeWork",
+                "conformsTo": {"@id": "https://w3id.org/ro/crate/1.1"},
+                "about": {"@id": "ark:59852/test-crate"}
+            },
+            {
+                "@id": "ark:59852/test-crate",
+                "@type": ["Dataset", "https://w3id.org/EVI#ROCrate"],
+                "name": "Test Crate", "description": "A test crate for validation", "keywords": [],
+                "version": "1.0", "author": "tester", "license": "MIT",
+                "hasPart": [{"@id": "ark:59852/test-mlmodel"}]
+            },
+            {
+                "@id": "https://fairscape.net/ark:59852/test-mlmodel",
+                "@type": "https://w3id.org/EVI#MLModel",
+                "name": "Test ML Model", "author": "tester", "datePublished": "2024-01-01",
+                "description": "A test ML model", "format": "application/x-hdf5",
+                "usedByComputation": [{"@id": "https://fairscape.net/ark:59852/test-computation"}],
+                "trainedOn": [{"@id": "https://fairscape.net/ark:59852/test-dataset"}]
+            }
+        ]
+    }
+    rocrate = ROCrateV1_2.model_validate(data)
+    rocrate.cleanIdentifiers()
+    mlmodel = rocrate.getMLModels()[0]
+    assert mlmodel.guid == "ark:59852/test-mlmodel"
+    assert mlmodel.usedByComputation[0].guid == "ark:59852/test-computation"
+    assert mlmodel.trainedOn[0].guid == "ark:59852/test-dataset"
+
+
+def test_clean_identifiers_with_annotation():
+    """Test cleanIdentifiers with Annotation elements."""
+    data = {
+        "@context": {},
+        "@graph": [
+            {
+                "@id": "ro-crate-metadata.json",
+                "@type": "CreativeWork",
+                "conformsTo": {"@id": "https://w3id.org/ro/crate/1.1"},
+                "about": {"@id": "ark:59852/test-crate"}
+            },
+            {
+                "@id": "ark:59852/test-crate",
+                "@type": ["Dataset", "https://w3id.org/EVI#ROCrate"],
+                "name": "Test Crate", "description": "A test crate for validation", "keywords": [],
+                "version": "1.0", "author": "tester", "license": "MIT",
+                "hasPart": [{"@id": "ark:59852/test-annotation"}]
+            },
+            {
+                "@id": "https://fairscape.net/ark:59852/test-annotation",
+                "@type": "https://w3id.org/EVI#Annotation",
+                "name": "Test Annotation", "author": "tester", "dateCreated": "2024-01-01",
+                "description": "A test annotation",
+                "createdBy": "tester",
+                "usedDataset": [{"@id": "https://fairscape.net/ark:59852/test-dataset"}],
+                "generated": [{"@id": "https://fairscape.net/ark:59852/test-output"}]
+            }
+        ]
+    }
+    rocrate = ROCrateV1_2.model_validate(data)
+    rocrate.cleanIdentifiers()
+    annotation = rocrate.getAnnotations()[0]
+    assert annotation.guid == "ark:59852/test-annotation"
+    assert annotation.usedDataset[0].guid == "ark:59852/test-dataset"
+    assert annotation.generated[0].guid == "ark:59852/test-output"
+
+
+def test_clean_identifiers_with_experiment():
+    """Test cleanIdentifiers with Experiment elements."""
+    data = {
+        "@context": {},
+        "@graph": [
+            {
+                "@id": "ro-crate-metadata.json",
+                "@type": "CreativeWork",
+                "conformsTo": {"@id": "https://w3id.org/ro/crate/1.1"},
+                "about": {"@id": "ark:59852/test-crate"}
+            },
+            {
+                "@id": "ark:59852/test-crate",
+                "@type": ["Dataset", "https://w3id.org/EVI#ROCrate"],
+                "name": "Test Crate", "description": "A test crate for validation", "keywords": [],
+                "version": "1.0", "author": "tester", "license": "MIT",
+                "hasPart": [{"@id": "ark:59852/test-experiment"}]
+            },
+            {
+                "@id": "https://fairscape.net/ark:59852/test-experiment",
+                "@type": "https://w3id.org/EVI#Experiment",
+                "name": "Test Experiment", "author": "tester", "dateCreated": "2024-01-01",
+                "description": "A test experiment",
+                "experimentType": "microscopy",
+                "runBy": "tester",
+                "datePerformed": "2024-01-01",
+                "usedInstrument": [{"@id": "https://fairscape.net/ark:59852/test-instrument"}],
+                "usedSample": [{"@id": "https://fairscape.net/ark:59852/test-sample"}],
+                "usedTreatment": [{"@id": "https://fairscape.net/ark:59852/test-treatment"}],
+                "usedStain": [{"@id": "https://fairscape.net/ark:59852/test-stain"}],
+                "generated": [{"@id": "https://fairscape.net/ark:59852/test-result"}]
+            }
+        ]
+    }
+    rocrate = ROCrateV1_2.model_validate(data)
+    rocrate.cleanIdentifiers()
+    experiment = rocrate.getExperiments()[0]
+    assert experiment.guid == "ark:59852/test-experiment"
+    assert experiment.usedInstrument[0].guid == "ark:59852/test-instrument"
+    assert experiment.usedSample[0].guid == "ark:59852/test-sample"
+    assert experiment.usedTreatment[0].guid == "ark:59852/test-treatment"
+    assert experiment.usedStain[0].guid == "ark:59852/test-stain"
+    assert experiment.generated[0].guid == "ark:59852/test-result"

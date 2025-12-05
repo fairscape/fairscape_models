@@ -1,8 +1,11 @@
+from fairscape_models.activity import Activity
+from fairscape_models.digital_object import DigitalObject
 from fairscape_models.annotation import Annotation
 from fairscape_models.biochem_entity import BioChemEntity
 from fairscape_models.computation import Computation
 from fairscape_models.dataset import Dataset
 from fairscape_models.software import Software
+from fairscape_models.mlmodel import MLModel
 from fairscape_models.fairscape_base import IdentifierValue, IdentifierPropertyValue
 from fairscape_models.medical_condition import MedicalCondition
 from fairscape_models.schema import Schema
