@@ -1,22 +1,11 @@
-from pydantic import BaseModel, Field, ConfigDict
-from typing import Optional, List, Union
+from pydantic import Field, ConfigDict
+from typing import Optional, List
 
 from fairscape_models.fairscape_base import IdentifierValue, SOFTWARE_TYPE
+from fairscape_models.digital_object import DigitalObject
 
-class Software(BaseModel): 
-    guid: str = Field(alias="@id")
-    name: str
+class Software(DigitalObject):
     metadataType: Optional[str] = Field(default="https://w3id.org/EVI#Software", alias="@type")
     additionalType: Optional[str] = Field(default=SOFTWARE_TYPE)
-    author: str = Field(min_length=4)
     dateModified: Optional[str]
-    version: str = Field(default="0.1.0")
-    description: str =  Field(min_length=10)
-    associatedPublication: Optional[str] = Field(default=None)
-    additionalDocumentation: Optional[str] = Field(default=None)
     fileFormat: str = Field(title="fileFormat", alias="format")
-    usedByComputation: Optional[List[IdentifierValue]] = Field(default=[])
-    contentUrl: Optional[str] = Field(default=None)
-    isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
-
-    model_config = ConfigDict(extra="allow")

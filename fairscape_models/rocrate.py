@@ -8,8 +8,11 @@ from fairscape_models.schema import Schema
 from fairscape_models.biochem_entity import BioChemEntity
 from fairscape_models.medical_condition import MedicalCondition
 from fairscape_models.computation import Computation
+from fairscape_models.annotation import Annotation
+from fairscape_models.experiment import Experiment
 from fairscape_models.dataset import Dataset
 from fairscape_models.software import Software
+from fairscape_models.mlmodel import MLModel
 from fairscape_models.patient import Patient
 
 class GenericMetadataElem(BaseModel):
@@ -127,7 +130,10 @@ class ROCrateV1_2(BaseModel):
     metadataGraph: List[Union[
         Dataset,
         Software,
+        MLModel,
         Computation,
+        Annotation,
+        Experiment,
         ROCrateMetadataElem,
         ROCrateMetadataFileElem,
         Schema,
@@ -146,7 +152,10 @@ class ROCrateV1_2(BaseModel):
         type_map = {
             "Dataset": Dataset,
             "Software": Software,
+            "MLModel": MLModel,
             "Computation": Computation,
+            "Annotation": Annotation,
+            "Experiment": Experiment,
             "CreativeWork": ROCrateMetadataFileElem,
             "Schema": Schema,
             "BioChemEntity": BioChemEntity,
@@ -206,8 +215,6 @@ class ROCrateV1_2(BaseModel):
             """Helper to clean a list of identifiers"""
             if identifier_list is None:
                 return
-            if not isinstance(identifier_list, list):
-                return
             for item in identifier_list:
                 if hasattr(item, 'guid') and isinstance(item.guid, str) and "ark:" in item.guid:
                     cleanGUID(item)
@@ -241,6 +248,11 @@ class ROCrateV1_2(BaseModel):
             if isinstance(elem, Software):
                 cleanIdentifierList(elem.usedByComputation)
 
+            if isinstance(elem, MLModel):
+                cleanIdentifierList(elem.usedByComputation)
+
+                cleanIdentifierList(elem.trainedOn)
+
             if isinstance(elem, Computation):
 
                 cleanIdentifierList(elem.usedDataset)
@@ -248,6 +260,26 @@ class ROCrateV1_2(BaseModel):
                 cleanIdentifierList(elem.generated)
 
                 cleanIdentifierList(elem.usedSoftware)
+
+                cleanIdentifierList(elem.usedMLModel)
+
+            if isinstance(elem, Annotation):
+
+                cleanIdentifierList(elem.usedDataset)
+
+                cleanIdentifierList(elem.generated)
+
+            if isinstance(elem, Experiment):
+
+                cleanIdentifierList(elem.usedInstrument)
+
+                cleanIdentifierList(elem.usedSample)
+
+                cleanIdentifierList(elem.usedTreatment)
+
+                cleanIdentifierList(elem.usedStain)
+
+                cleanIdentifierList(elem.generated)
 
     def getCrateMetadata(self)-> ROCrateMetadataElem:
         """ Filter the Metadata Graph for the Metadata Element Describing the Toplevel ROCrate
@@ -316,7 +348,49 @@ class ROCrateV1_2(BaseModel):
         :rtype List[fairscape_mds.models.rocrate.Computation]
         """
         filterResults = list(filter(
-            lambda x: isinstance(x, Computation), 
+            lambda x: isinstance(x, Computation),
+            self.metadataGraph
+        ))
+
+        return filterResults
+
+    def getAnnotations(self) -> List[Annotation]:
+        """ Filter the Metadata Graph for Annotation Elements
+
+        :param self
+        :return: All Annotation metadata records within the ROCrate
+        :rtype List[fairscape_mds.models.rocrate.Annotation]
+        """
+        filterResults = list(filter(
+            lambda x: isinstance(x, Annotation),
+            self.metadataGraph
+        ))
+
+        return filterResults
+
+    def getExperiments(self) -> List[Experiment]:
+        """ Filter the Metadata Graph for Experiment Elements
+
+        :param self
+        :return: All Experiment metadata records within the ROCrate
+        :rtype List[fairscape_mds.models.rocrate.Experiment]
+        """
+        filterResults = list(filter(
+            lambda x: isinstance(x, Experiment),
+            self.metadataGraph
+        ))
+
+        return filterResults
+
+    def getMLModels(self) -> List[MLModel]:
+        """ Filter the Metadata Graph for MLModel Elements
+
+        :param self
+        :return: All MLModel metadata records within the ROCrate
+        :rtype List[fairscape_mds.models.rocrate.MLModel]
+        """
+        filterResults = list(filter(
+            lambda x: isinstance(x, MLModel),
             self.metadataGraph
         ))
 
@@ -354,13 +428,18 @@ class ROCrateV1_2(BaseModel):
 
 
     def getEVIElements(self) -> List[Union[
-        Computation, 
-        Dataset, 
-        Software, 
+        Computation,
+        Annotation,
+        Experiment,
+        Dataset,
+        Software,
+        MLModel,
         Schema,
         BioChemEntity,
         MedicalCondition
         ]]:
         """ Query the metadata graph for elements which require minting identifiers
         """
-        return self.getDatasets() + self.getSoftware() + self.getComputations() + self.getSchemas()
+        return (self.getDatasets() + self.getSoftware() + self.getMLModels() +
+                self.getComputations() + self.getAnnotations() + self.getExperiments() +
+                self.getSchemas())
