@@ -1,4 +1,4 @@
-from pydantic import Field, ConfigDict, AliasChoices
+from pydantic import Field, ConfigDict, AliasChoices, model_validator
 from typing import Optional, List, Union
 
 from fairscape_models.fairscape_base import IdentifierValue, DATASET_TYPE
@@ -17,3 +17,29 @@ class Dataset(DigitalObject):
     )
     generatedBy: Optional[Union[IdentifierValue, List[IdentifierValue]]] = Field(default=[])
     derivedFrom: Optional[List[IdentifierValue]] = Field(default=[])
+
+    @model_validator(mode='after')
+    def populate_prov_fields(self):
+        """Auto-populate PROV-O fields from EVI fields"""
+        # Map generatedBy → prov:wasGeneratedBy
+        if self.generatedBy:
+            if isinstance(self.generatedBy, list):
+                self.wasGeneratedBy = self.generatedBy
+            else:
+                self.wasGeneratedBy = [self.generatedBy]
+        else:
+            self.wasGeneratedBy = []
+
+        # Map derivedFrom → prov:wasDerivedFrom
+        self.wasDerivedFrom = self.derivedFrom or []
+
+        # Map author
+        if self.author:
+            if isinstance(self.author, str):
+                self.wasAttributedTo = [IdentifierValue(**{"@id": self.author})]
+            elif isinstance(self.author, list):
+                self.wasAttributedTo = [IdentifierValue(**{"@id": a}) for a in self.author]
+        else:
+            self.wasAttributedTo = []
+
+        return self

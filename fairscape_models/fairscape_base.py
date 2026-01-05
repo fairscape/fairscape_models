@@ -32,6 +32,7 @@ defaultContext = {
     "@vocab": "https://schema.org/",
     "evi": "https://w3id.org/EVI#",
     "rai": "http://mlcommons.org/croissant/RAI/",
+    "prov": "http://www.w3.org/ns/prov#",
 
     # TODO fully specify default context
     "usedSoftware": {
