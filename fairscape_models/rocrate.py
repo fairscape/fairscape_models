@@ -256,13 +256,24 @@ class ROCrateV1_2(BaseModel):
 
                 cleanIdentifierUnion(elem.generatedBy)
 
+                # Clean PROV fields
+                cleanIdentifierList(elem.wasGeneratedBy)
+                cleanIdentifierList(elem.wasDerivedFrom)
+                cleanIdentifierList(elem.wasAttributedTo)
+
             if isinstance(elem, Software):
                 cleanIdentifierList(elem.usedByComputation)
+
+                # Clean PROV fields
+                cleanIdentifierList(elem.wasAttributedTo)
 
             if isinstance(elem, MLModel):
                 cleanIdentifierList(elem.usedByComputation)
 
                 cleanIdentifierList(elem.trainedOn)
+
+                # Clean PROV fields
+                cleanIdentifierList(elem.wasAttributedTo)
 
             if isinstance(elem, Computation):
 
@@ -274,11 +285,19 @@ class ROCrateV1_2(BaseModel):
 
                 cleanIdentifierList(elem.usedMLModel)
 
+                # Clean PROV fields
+                cleanIdentifierList(elem.used)
+                cleanIdentifierList(elem.wasAssociatedWith)
+
             if isinstance(elem, Annotation):
 
                 cleanIdentifierList(elem.usedDataset)
 
                 cleanIdentifierList(elem.generated)
+
+                # Clean PROV fields
+                cleanIdentifierList(elem.used)
+                cleanIdentifierList(elem.wasAssociatedWith)
 
             if isinstance(elem, Experiment):
 
@@ -291,6 +310,10 @@ class ROCrateV1_2(BaseModel):
                 cleanIdentifierList(elem.usedStain)
 
                 cleanIdentifierList(elem.generated)
+
+                # Clean PROV fields
+                cleanIdentifierList(elem.used)
+                cleanIdentifierList(elem.wasAssociatedWith)
 
     def getCrateMetadata(self)-> ROCrateMetadataElem:
         """ Filter the Metadata Graph for the Metadata Element Describing the Toplevel ROCrate

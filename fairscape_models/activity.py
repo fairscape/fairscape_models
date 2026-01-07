@@ -1,5 +1,5 @@
-from pydantic import BaseModel, Field, ConfigDict
-from typing import Optional, List
+from pydantic import BaseModel, Field, ConfigDict, model_validator
+from typing import Optional, List, Union
 
 from fairscape_models.fairscape_base import IdentifierValue
 
@@ -13,4 +13,8 @@ class Activity(BaseModel):
     generated: Optional[List[IdentifierValue]] = Field(default=[])
     isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
 
-    model_config = ConfigDict(extra="allow")
+    # PROV-O fields (auto-populated)
+    used: Optional[List[Union[str, IdentifierValue]]] = Field(default=[], alias="prov:used")
+    wasAssociatedWith: Optional[List[Union[str, IdentifierValue]]] = Field(default=[], alias="prov:wasAssociatedWith")
+
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
