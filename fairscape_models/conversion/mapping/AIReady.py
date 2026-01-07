@@ -60,7 +60,7 @@ def score_rocrate(crate_data: Union[Dict[str, Any], ROCrateV1_2]) -> AIReadyScor
     _score_pre_model(score.pre_model_explainability, root_data, metadata_graph)
     _score_ethics(score.ethics, root_data)
     _score_sustainability(score.sustainability, root_data)
-    _score_computability(score.computability, metadata_graph)
+    _score_computability(score.computability, root_data, metadata_graph)
     
     return score
 
@@ -126,22 +126,34 @@ def _score_provenance(provenance: ProvenanceScore, root_data: Dict[str, Any], me
             has_content=True,
             details=", ".join(actors)
         )
-    
-    datasets_count = 0
-    transformations_count = 0
-    software_count = 0
-    
-    for entity in metadata_graph:
-        entity_type = _get_type(entity)
 
-        if "Dataset" in entity_type:
-            datasets_count += 1
-        
-        if "Computation" in entity_type or "Experiment" in entity_type:
-            transformations_count += 1
-        
-        if "Software" in entity_type:
-            software_count += 1
+    # Check for aggregated metrics first (from release-level RO-Crate)
+    dataset_count = root_data.get("evi:datasetCount")
+    computation_count = root_data.get("evi:computationCount")
+    software_count = root_data.get("evi:softwareCount")
+
+    if dataset_count is not None:
+        # Use pre-aggregated values from release
+        datasets_count = dataset_count
+        transformations_count = computation_count
+        software_count = software_count
+    else:
+        # Fall back to counting in metadata_graph (for backwards compatibility)
+        datasets_count = 0
+        transformations_count = 0
+        software_count = 0
+
+        for entity in metadata_graph:
+            entity_type = _get_type(entity)
+
+            if "Dataset" in entity_type:
+                datasets_count += 1
+
+            if "Computation" in entity_type or "Experiment" in entity_type:
+                transformations_count += 1
+
+            if "Software" in entity_type:
+                software_count += 1
     
     if datasets_count > 0:
         provenance.transparent = SubCriterionScore(
@@ -169,29 +181,39 @@ def _score_characterization(characterization: CharacterizationScore, root_data: 
             has_content=True,
             details=str(bias)[:200] + ("..." if len(str(bias)) > 200 else "")
         )
-    
-    total_size = 0
-    stats_count = 0
-    
-    for entity in metadata_graph:
-        entity_type = _get_type(entity)
 
-        if "Dataset" in entity_type or "ROCrate" in entity_type:
-            size = entity.get("contentSize", "")
-            if size:
-                try:
-                    if isinstance(size, str):
-                        if "TB" in size:
-                            total_size += float(size.replace("TB", "").strip()) * 1e12
-                        elif "GB" in size:
-                            total_size += float(size.replace("GB", "").strip()) * 1e9
-                        elif "MB" in size:
-                            total_size += float(size.replace("MB", "").strip()) * 1e6
-                except:
-                    pass
-            
-            if entity.get("hasSummaryStatistics"):
-                stats_count += 1
+    # Check for aggregated metrics first
+    total_size_bytes = root_data.get("evi:totalContentSizeBytes")
+    stats_count_agg = root_data.get("evi:entitiesWithSummaryStats")
+
+    if total_size_bytes is not None:
+        # Use pre-aggregated statistics
+        total_size = total_size_bytes
+        stats_count = stats_count_agg
+    else:
+        # Fall back to iterating metadata_graph
+        total_size = 0
+        stats_count = 0
+
+        for entity in metadata_graph:
+            entity_type = _get_type(entity)
+
+            if "Dataset" in entity_type or "ROCrate" in entity_type:
+                size = entity.get("contentSize", "")
+                if size:
+                    try:
+                        if isinstance(size, str):
+                            if "TB" in size:
+                                total_size += float(size.replace("TB", "").strip()) * 1e12
+                            elif "GB" in size:
+                                total_size += float(size.replace("GB", "").strip()) * 1e9
+                            elif "MB" in size:
+                                total_size += float(size.replace("MB", "").strip()) * 1e6
+                    except:
+                        pass
+
+                if entity.get("hasSummaryStatistics"):
+                    stats_count += 1
     
     details = []
     if total_size > 0:
@@ -227,17 +249,27 @@ def _score_pre_model(pre_model: PreModelExplainabilityScore, root_data: Dict[str
             has_content=True,
             details=", ".join(details)
         )
-    
-    total = 0
-    with_checksum = 0
-    
-    for entity in metadata_graph:
-        entity_type = _get_type(entity)
-        
-        if "Dataset" in entity_type or "Software" in entity_type or "ROCrate" in entity_type:
-            total += 1
-            if entity.get("md5") or entity.get("MD5"):
-                with_checksum += 1
+
+    # Check for aggregated metrics first
+    total_entities = root_data.get("evi:totalEntities")
+    entities_with_checksums = root_data.get("evi:entitiesWithChecksums")
+
+    if total_entities is not None:
+        # Use pre-aggregated checksum data
+        total = total_entities
+        with_checksum = entities_with_checksums
+    else:
+        # Fall back to counting in metadata_graph
+        total = 0
+        with_checksum = 0
+
+        for entity in metadata_graph:
+            entity_type = _get_type(entity)
+
+            if "Dataset" in entity_type or "Software" in entity_type or "ROCrate" in entity_type:
+                total += 1
+                if entity.get("md5") or entity.get("MD5"):
+                    with_checksum += 1
     
     if total > 0 and with_checksum > 0:
         percentage = (with_checksum / total) * 100
@@ -350,17 +382,25 @@ def _score_sustainability(sustainability: SustainabilityScore, root_data: Dict[s
                     )
                     break
 
-def _score_computability(computability: ComputabilityScore, metadata_graph: List[Dict]):
+def _score_computability(computability: ComputabilityScore, root_data: Dict[str, Any], metadata_graph: List[Dict]):
     """Score Computability criteria."""
-    formats = set()
-    
-    for entity in metadata_graph:
-        entity_type = _get_type(entity)
-        
-        if "Dataset" in entity_type or "Software" in entity_type:
-            fmt = _get_format(entity)
-            if fmt:
-                formats.add(str(fmt))
+    # Check for aggregated metrics first
+    formats_agg = root_data.get("evi:formats")
+
+    if formats_agg is not None:
+        # Use pre-aggregated formats
+        formats = set(formats_agg)
+    else:
+        # Fall back to collecting from metadata_graph
+        formats = set()
+
+        for entity in metadata_graph:
+            entity_type = _get_type(entity)
+
+            if "Dataset" in entity_type or "Software" in entity_type:
+                fmt = _get_format(entity)
+                if fmt:
+                    formats.add(str(fmt))
     
     if formats:
         fmt_list = sorted(list(formats))[:5]
@@ -415,7 +455,7 @@ def _build_ai_ready_score(value: Any, *, converter_instance) -> AIReadyScore:
     _score_pre_model(score.pre_model_explainability, root_data, metadata_graph)
     _score_ethics(score.ethics, root_data)
     _score_sustainability(score.sustainability, root_data)
-    _score_computability(score.computability, metadata_graph)
+    _score_computability(score.computability, root_data, metadata_graph)
     
     return score
 

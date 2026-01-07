@@ -114,9 +114,20 @@ class ROCrateMetadataElem(BaseModel):
     rai_annotator_demographics: Optional[List[str]] = Field(alias="rai:annotatorDemographics", default=None)
     rai_machine_annotation_tools: Optional[List[str]] = Field(alias="rai:machineAnnotationTools", default=None)
 
-    
-    
-    
+    # Aggregated metrics for AI-Ready scoring (roll-up properties from sub-crates)
+    evi_dataset_count: Optional[int] = Field(alias="evi:datasetCount", default=None)
+    evi_computation_count: Optional[int] = Field(alias="evi:computationCount", default=None)
+    evi_software_count: Optional[int] = Field(alias="evi:softwareCount", default=None)
+    evi_schema_count: Optional[int] = Field(alias="evi:schemaCount", default=None)
+    evi_total_content_size_bytes: Optional[int] = Field(alias="evi:totalContentSizeBytes", default=None)
+    evi_entities_with_summary_stats: Optional[int] = Field(alias="evi:entitiesWithSummaryStats", default=None)
+    evi_entities_with_checksums: Optional[int] = Field(alias="evi:entitiesWithChecksums", default=None)
+    evi_total_entities: Optional[int] = Field(alias="evi:totalEntities", default=None)
+    evi_formats: Optional[List[str]] = Field(alias="evi:formats", default=None)
+
+
+
+
 class ROCrateDistribution(BaseModel):
     extractedROCrateBucket: Optional[str] = Field(default=None)
     archivedROCrateBucket: Optional[str] = Field(default=None)
