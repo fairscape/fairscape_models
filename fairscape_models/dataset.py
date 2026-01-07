@@ -36,9 +36,9 @@ class Dataset(DigitalObject):
         # Map author
         if self.author:
             if isinstance(self.author, str):
-                self.wasAttributedTo = [IdentifierValue(**{"@id": self.author})]
+                self.wasAttributedTo = [self.author]
             elif isinstance(self.author, list):
-                self.wasAttributedTo = [IdentifierValue(**{"@id": a}) for a in self.author]
+                self.wasAttributedTo = [a for a in self.author]
         else:
             self.wasAttributedTo = []
 
