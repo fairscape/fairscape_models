@@ -1,11 +1,11 @@
 from pydantic import Field, ConfigDict, model_validator
-from typing import Optional, List
+from typing import Optional, List, Union
 
 from fairscape_models.fairscape_base import IdentifierValue, SOFTWARE_TYPE
 from fairscape_models.digital_object import DigitalObject
 
 class Software(DigitalObject):
-    metadataType: Optional[str] = Field(default="https://w3id.org/EVI#Software", alias="@type")
+    metadataType: Optional[Union[List[str], str]] = Field(default=['prov:Entity', "https://w3id.org/EVI#Software"], alias="@type")
     additionalType: Optional[str] = Field(default=SOFTWARE_TYPE)
     dateModified: Optional[str] = None
     fileFormat: str = Field(title="fileFormat", alias="format")

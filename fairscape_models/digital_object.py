@@ -7,7 +7,7 @@ class DigitalObject(BaseModel):
     """Base class for DigitalObject types (Dataset, Software, MLModel)"""
     guid: str = Field(alias="@id")
     name: str
-    metadataType: Optional[str] = Field(default=None, alias="@type")
+    metadataType: Optional[Union[List[str], str]] = Field(default=['prov:Entity', "https://w3id.org/EVI#DigitalObject"], alias="@type")
     author: Union[str, IdentifierValue, List[Union[str, IdentifierValue]]]
     description: str = Field(min_length=10)
     version: str = Field(default="0.1.0")

@@ -5,7 +5,7 @@ from fairscape_models.fairscape_base import IdentifierValue, MLMODEL_TYPE
 from fairscape_models.digital_object import DigitalObject
 
 class MLModel(DigitalObject):
-    metadataType: Optional[str] = Field(default="https://w3id.org/EVI#MLModel", alias="@type")
+    metadataType: Optional[Union[List[str], str]] = Field(default=['prov:Entity', "https://w3id.org/EVI#MLModel"], alias="@type")
     additionalType: Optional[str] = Field(default=MLMODEL_TYPE)
     dateModified: Optional[str] = Field(default=None)
     fileFormat: str = Field(alias="format")
