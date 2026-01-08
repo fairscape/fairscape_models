@@ -22,8 +22,8 @@ def test_mlmodel_instantiation(mlmodel_minimal_data):
 
     # Test PROV field auto-population
     assert len(mlmodel.wasAttributedTo) == 1
-    assert isinstance(mlmodel.wasAttributedTo[0], IdentifierValue)
-    assert mlmodel.wasAttributedTo[0].guid == mlmodel_minimal_data["author"]
+    assert isinstance(mlmodel.wasAttributedTo[0], str)
+    assert mlmodel.wasAttributedTo[0] == mlmodel_minimal_data["author"]
 
 def test_mlmodel_missing_required_field(mlmodel_minimal_data):
     """Test ValidationError for missing a required field."""
@@ -45,8 +45,8 @@ def test_mlmodel_with_multiple_authors(mlmodel_minimal_data):
 
     # Test PROV:wasAttributedTo handles list of authors
     assert len(mlmodel.wasAttributedTo) == 2
-    assert all(isinstance(item, IdentifierValue) for item in mlmodel.wasAttributedTo)
-    author_ids = [item.guid for item in mlmodel.wasAttributedTo]
+    assert all(isinstance(item, str) for item in mlmodel.wasAttributedTo)
+    author_ids = [item for item in mlmodel.wasAttributedTo]
     assert "ML Author 1" in author_ids
     assert "ML Author 2" in author_ids
 

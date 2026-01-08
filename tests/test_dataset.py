@@ -14,8 +14,8 @@ def test_dataset_instantiation(dataset_minimal_data):
     assert dataset.wasGeneratedBy == []  # No generatedBy provided
     assert dataset.wasDerivedFrom == []  # No derivedFrom provided
     assert len(dataset.wasAttributedTo) == 1
-    assert isinstance(dataset.wasAttributedTo[0], IdentifierValue)
-    assert dataset.wasAttributedTo[0].guid == dataset_minimal_data["author"]
+    assert isinstance(dataset.wasAttributedTo[0], str)
+    assert dataset.wasAttributedTo[0] == dataset_minimal_data["author"]
 
 def test_dataset_missing_required_field(dataset_minimal_data):
     """Test that a ValidationError is raised for a missing required field."""
@@ -67,8 +67,8 @@ def test_dataset_with_provenance(dataset_minimal_data):
     assert dataset.wasDerivedFrom[0].guid == "ark:59852/dataset-source"
 
     assert len(dataset.wasAttributedTo) == 2
-    assert all(isinstance(item, IdentifierValue) for item in dataset.wasAttributedTo)
-    author_ids = [item.guid for item in dataset.wasAttributedTo]
+    assert all(isinstance(item, str) for item in dataset.wasAttributedTo)
+    author_ids = [item for item in dataset.wasAttributedTo]
     assert "Author 1" in author_ids
     assert "Author 2" in author_ids
 
