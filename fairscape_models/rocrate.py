@@ -193,16 +193,13 @@ class ROCrateV1_2(BaseModel):
             item_type = item["@type"]
             
             if isinstance(item_type, list):
-                normalized_types = [normalize_type(t) for t in item_type]
-                if "ROCrate" in normalized_types or "Dataset" in normalized_types:
-                    new_graph.append(ROCrateMetadataElem.model_validate(item))
-                    continue
+                item_type = item_type[-1]
             
-            elif isinstance(item_type, str):
+            if isinstance(item_type, str):
                 normalized_type = normalize_type(item_type)
                 model_class_to_use = type_map.get(normalized_type)
 
-            # If we found a specific class, use it. Let it raise a
+            # If we found a specific class, use it.
             if model_class_to_use:
                 new_graph.append(model_class_to_use.model_validate(item))
             # Only if no specific class was matched, use the generic one.

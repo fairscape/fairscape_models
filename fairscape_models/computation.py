@@ -5,7 +5,7 @@ from fairscape_models.fairscape_base import IdentifierValue, COMPUTATION_TYPE
 from fairscape_models.activity import Activity
 
 class Computation(Activity):
-    metadataType: Optional[str] = Field(default="https://w3id.org/EVI#Computation", alias="@type")
+    metadataType: Optional[Union[List[str], str]] = Field(default=['prov:Activity', "https://w3id.org/EVI#Computation"], alias="@type")
     additionalType: Optional[str] = Field(default=COMPUTATION_TYPE)
     runBy: Union[str, IdentifierValue]
     dateCreated: str

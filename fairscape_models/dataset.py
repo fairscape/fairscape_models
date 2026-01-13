@@ -5,7 +5,7 @@ from fairscape_models.fairscape_base import IdentifierValue, DATASET_TYPE
 from fairscape_models.digital_object import DigitalObject
 
 class Dataset(DigitalObject):
-    metadataType: Optional[str] = Field(default="https://w3id.org/EVI#Dataset", alias="@type")
+    metadataType: Optional[Union[List[str], str]] = Field(default=['prov:Entity', "https://w3id.org/EVI#Dataset"], alias="@type")
     additionalType: Optional[str] = Field(default=DATASET_TYPE)
     datePublished: str = Field(...)
     keywords: List[str] = Field(...)
