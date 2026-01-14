@@ -2,7 +2,6 @@ import urllib.parse
 from typing import Any, Dict, List, Literal, Optional, Union
 from pydantic import BaseModel, Field, ConfigDict, model_validator
 
-
 from fairscape_models.fairscape_base import IdentifierValue
 from fairscape_models.schema import Schema
 from fairscape_models.biochem_entity import BioChemEntity
@@ -14,6 +13,11 @@ from fairscape_models.dataset import Dataset
 from fairscape_models.software import Software
 from fairscape_models.mlmodel import MLModel
 from fairscape_models.patient import Patient
+from fairscape_models.instrument import Instrument
+from fairscape_models.model_card import ModelCard
+from fairscape_models.sample import Sample
+from fairscape_models.activity import Activity
+from fairscape_models.digital_object import DigitalObject
 
 class GenericMetadataElem(BaseModel):
     """Generic Metadata Element of an ROCrate"""
@@ -151,6 +155,12 @@ class ROCrateV1_2(BaseModel):
         BioChemEntity,
         MedicalCondition,
         Patient,
+        Instrument,
+        ModelCard,
+        Sample,
+        Activity,
+        Annotation,
+        DigitalObject,
         GenericMetadataElem
     ]] = Field(alias="@graph")
     
