@@ -36,11 +36,11 @@ defaultContext = {
 
     # TODO fully specify default context
     "usedSoftware": {
-        "@id": "https://w3id.org/EVI#",
+        "@id": "https://w3id.org/EVI#usedSoftware",
         "@type": "@id"
     },
     "usedDataset": {
-        "@id": "https://w3id.org/EVI#",
+        "@id": "https://w3id.org/EVI#usedDataset",
         "@type": "@id"
     },
     "generatedBy": {
