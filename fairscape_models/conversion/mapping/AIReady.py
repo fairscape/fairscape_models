@@ -53,7 +53,7 @@ def score_rocrate(crate_data: Union[Dict[str, Any], ROCrateV1_2]) -> AIReadyScor
     if not root_data:
         raise ValueError("Root entity not found in RO-Crate metadata graph.")
     
-    score = AIReadyScore()
+    score = AIReadyScore(name=f"AI-Ready Score for {root_data.get('name')}")
     _score_fairness(score.fairness, root_data)
     _score_provenance(score.provenance, root_data, metadata_graph)
     _score_characterization(score.characterization, root_data, metadata_graph)
