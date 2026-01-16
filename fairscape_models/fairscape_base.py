@@ -28,7 +28,7 @@ ROCRATE_TYPE = "ROCrate"
 # TODO get from config
 DEFAULT_ARK_NAAN = "59853"
 DEFAULT_LICENSE = "https://creativecommons.org/licenses/by/4.0/"
-defaultContext = {
+DEFAULT_CONTEXT = {
     "@vocab": "https://schema.org/",
     "evi": "https://w3id.org/EVI#",
     "rai": "http://mlcommons.org/croissant/RAI/",
@@ -36,11 +36,11 @@ defaultContext = {
 
     # TODO fully specify default context
     "usedSoftware": {
-        "@id": "https://w3id.org/EVI#",
+        "@id": "https://w3id.org/EVI#usefdSoftware",
         "@type": "@id"
     },
     "usedDataset": {
-        "@id": "https://w3id.org/EVI#",
+        "@id": "https://w3id.org/EVI#usedDataset",
         "@type": "@id"
     },
     "generatedBy": {
@@ -136,7 +136,7 @@ class FairscapeBaseModel(Identifier):
         extra='allow'
     )
     context: Optional[Dict[str, str]] = Field(
-        default=defaultContext,
+        default=DEFAULT_CONTEXT,
         title="context",
         alias="@context"
     )
