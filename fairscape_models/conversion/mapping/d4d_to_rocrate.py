@@ -81,17 +81,8 @@ def _extract_strings_recursively(value: Any) -> List[str]:
         return [value.strip()] if value.strip() else []
 
     if isinstance(value, dict):
-        # Look for specific keys first
-        for key in ['description', 'response', 'identification', 'distribution',
-                    'was_directly_observed', 'was_reported_by_subjects',
-                    'was_inferred_derived', 'was_validated_verified']:
-            if key in value:
-                strings.extend(_extract_strings_recursively(value[key]))
-
-        # If no specific keys found, extract from all values
-        if not strings:
-            for v in value.values():
-                strings.extend(_extract_strings_recursively(v))
+        for v in value.values():
+            strings.extend(_extract_strings_recursively(v))
 
     elif isinstance(value, list):
         for item in value:
@@ -241,6 +232,192 @@ def _combine_social_impact(source_dict: Dict[str, Any]) -> Optional[str]:
     return " ".join(items) if items else None
 
 
+def _extract_missing_data(source_dict: Dict[str, Any]) -> Optional[str]:
+    """Extract missing data information from instances and documentation."""
+    items = []
+    # Extract from missing_data_documentation at dataset level
+    if source_dict.get("missing_data_documentation"):
+        extracted = _flatten_to_string(source_dict["missing_data_documentation"])
+        if extracted:
+            items.append(extracted)
+    # Extract missing_information from instances
+    if source_dict.get("instances"):
+        instances = source_dict["instances"]
+        if isinstance(instances, list):
+            for inst in instances:
+                if isinstance(inst, dict) and inst.get("missing_information"):
+                    extracted = _flatten_to_string(inst["missing_information"])
+                    if extracted:
+                        items.append(extracted)
+    return " ".join(items) if items else None
+
+
+def _extract_collection_timeframe(source_dict: Dict[str, Any]) -> Optional[List[str]]:
+    """Extract collection timeframe information."""
+    if source_dict.get("collection_timeframes"):
+        return _flatten_to_list(source_dict["collection_timeframes"])
+    return None
+
+
+def _extract_imputation_protocol(source_dict: Dict[str, Any]) -> Optional[str]:
+    """Extract imputation protocol information."""
+    if source_dict.get("imputation_protocols"):
+        return _flatten_to_string(source_dict["imputation_protocols"])
+    return None
+
+
+def _extract_annotation_analysis(source_dict: Dict[str, Any]) -> Optional[List[str]]:
+    """Extract annotation analysis information."""
+    if source_dict.get("annotation_analyses"):
+        return _flatten_to_list(source_dict["annotation_analyses"])
+    return None
+
+
+def _extract_annotations_per_item(source_dict: Dict[str, Any]) -> Optional[str]:
+    """Extract annotations_per_item from labeling strategies."""
+    items = []
+    if source_dict.get("labeling_strategies"):
+        strategies = source_dict["labeling_strategies"]
+        if isinstance(strategies, list):
+            for strategy in strategies:
+                if isinstance(strategy, dict) and strategy.get("annotations_per_item"):
+                    items.append(str(strategy.get("annotations_per_item")))
+        elif isinstance(strategies, dict) and strategies.get("annotations_per_item"):
+            items.append(str(strategies.get("annotations_per_item")))
+    return ", ".join(items) if items else None
+
+
+def _extract_human_subject(source_dict: Dict[str, Any]) -> Optional[str]:
+    """Extract human subject research information."""
+    if source_dict.get("human_subject_research"):
+        return _flatten_to_string(source_dict["human_subject_research"])
+    return None
+
+
+def _extract_confidentiality_level(source_dict: Dict[str, Any]) -> Optional[str]:
+    """Extract confidentiality level from regulatory restrictions."""
+    if source_dict.get("regulatory_restrictions"):
+        restrictions = source_dict["regulatory_restrictions"]
+        if isinstance(restrictions, dict):
+            level = restrictions.get("confidentiality_level")
+            if level:
+                return _format_enum_value(level)
+        elif isinstance(restrictions, list):
+            for r in restrictions:
+                if isinstance(r, dict) and r.get("confidentiality_level"):
+                    return _format_enum_value(r.get("confidentiality_level"))
+    return None
+
+
+def _extract_governance_committee(source_dict: Dict[str, Any]) -> Optional[str]:
+    """Extract governance committee contact from regulatory restrictions."""
+    if source_dict.get("regulatory_restrictions"):
+        restrictions = source_dict["regulatory_restrictions"]
+        if isinstance(restrictions, dict):
+            return restrictions.get("governance_committee_contact")
+        elif isinstance(restrictions, list):
+            for r in restrictions:
+                if isinstance(r, dict) and r.get("governance_committee_contact"):
+                    return r.get("governance_committee_contact")
+    return None
+
+
+def _extract_prohibited_uses(source_dict: Dict[str, Any]) -> Optional[str]:
+    """Extract prohibited/discouraged uses."""
+    if source_dict.get("discouraged_uses"):
+        return _flatten_to_string(source_dict["discouraged_uses"])
+    return None
+
+
+def _extract_principal_investigator(source_dict: Dict[str, Any]) -> Optional[str]:
+    """Extract principal investigators from creators where principal_investigator=True."""
+    pi_names = []
+    if source_dict.get("creators"):
+        creators = source_dict["creators"]
+        if isinstance(creators, list):
+            for creator in creators:
+                if isinstance(creator, dict):
+                    if creator.get("principal_investigator"):
+                        person = creator.get("person")
+                        if isinstance(person, dict):
+                            name = person.get("name") or person.get("id")
+                            if name:
+                                pi_names.append(str(name))
+                        elif isinstance(person, str):
+                            pi_names.append(person)
+                        elif creator.get("name"):
+                            pi_names.append(str(creator.get("name")))
+                        elif creator.get("id"):
+                            pi_names.append(str(creator.get("id")))
+    return ", ".join(pi_names) if pi_names else None
+
+
+def _extract_contact_email(source_dict: Dict[str, Any]) -> Optional[str]:
+    """Extract contact email from ethical reviews contact_person."""
+    if source_dict.get("ethical_reviews"):
+        reviews = source_dict["ethical_reviews"]
+        if isinstance(reviews, list):
+            for review in reviews:
+                if isinstance(review, dict):
+                    contact = review.get("contact_person")
+                    if isinstance(contact, dict) and contact.get("email"):
+                        return contact.get("email")
+                    elif isinstance(contact, str):
+                        # It's just an ID/string reference
+                        return contact
+        elif isinstance(reviews, dict):
+            contact = reviews.get("contact_person")
+            if isinstance(contact, dict) and contact.get("email"):
+                return contact.get("email")
+            elif isinstance(contact, str):
+                return contact
+    return None
+
+
+def _extract_usage_info(source_dict: Dict[str, Any]) -> Optional[str]:
+    """Extract usage information from intended uses or existing uses."""
+    items = []
+    # Check for usage_notes in existing_uses or other use-related fields
+    if source_dict.get("existing_uses"):
+        uses = source_dict["existing_uses"]
+        if isinstance(uses, list):
+            for use in uses:
+                if isinstance(use, dict) and use.get("usage_notes"):
+                    items.append(str(use.get("usage_notes")))
+    if source_dict.get("purposes"):
+        purposes = source_dict["purposes"]
+        if isinstance(purposes, list):
+            for purpose in purposes:
+                if isinstance(purpose, dict) and purpose.get("usage_notes"):
+                    items.append(str(purpose.get("usage_notes")))
+    return " | ".join(items) if items else None
+
+
+def _extract_machine_annotation_tools(source_dict: Dict[str, Any]) -> Optional[List[str]]:
+    """Extract machine annotation tools information."""
+    items = []
+    if source_dict.get("machine_annotation_tools"):
+        tools_data = source_dict["machine_annotation_tools"]
+        if isinstance(tools_data, list):
+            for tool_obj in tools_data:
+                if isinstance(tool_obj, dict):
+                    # Extract tool names
+                    if tool_obj.get("tools"):
+                        tools = tool_obj.get("tools")
+                        if isinstance(tools, list):
+                            items.extend([str(t) for t in tools if t])
+                        elif tools:
+                            items.append(str(tools))
+        elif isinstance(tools_data, dict):
+            if tools_data.get("tools"):
+                tools = tools_data.get("tools")
+                if isinstance(tools, list):
+                    items.extend([str(t) for t in tools if t])
+                elif tools:
+                    items.append(str(tools))
+    return items if items else None
+
+
 # ============================================================================
 # Mapping Configurations
 # ============================================================================
@@ -270,23 +447,44 @@ DATASET_COLLECTION_TO_RELEASE_MAPPING = {
     "conditionsOfAccess": {"builder_func": _combine_license_terms},
     "conformsTo": {"source_key": "conforms_to"},
 
-    # RAI (Responsible AI) properties
+    # RAI (Responsible AI) properties - Data Lifecycle
     "rai:dataLimitations": {"builder_func": _combine_limitations},
-    "rai:dataBiases": {"builder_func": _combine_biases},
-    "rai:dataUseCases": {"builder_func": _combine_use_cases},
-    "rai:dataReleaseMaintenancePlan": {"builder_func": _combine_maintenance},
     "rai:dataCollection": {"builder_func": _combine_collection_info},
     "rai:dataCollectionType": {"builder_func": _combine_collection_mechanisms},
+    "rai:dataCollectionMissingData": {"builder_func": _extract_missing_data},
     "rai:dataCollectionRawData": {"source_key": "raw_sources", "parser": _flatten_to_string},
-    "rai:dataManipulationProtocol": {"source_key": "cleaning_strategies", "parser": _flatten_to_string},
-    "rai:dataPreprocessingProtocol": {"source_key": "preprocessing_strategies", "parser": _flatten_to_string},
+    "rai:dataCollectionTimeframe": {"builder_func": _extract_collection_timeframe},
+    "rai:dataPreprocessingProtocol": {"source_key": "preprocessing_strategies", "parser": _flatten_to_list},
+
+    # RAI - Data Labeling
     "rai:dataAnnotationProtocol": {"source_key": "labeling_strategies", "parser": _flatten_to_string},
-    "rai:personalSensitiveInformation": {"builder_func": _combine_sensitive_info},
+    "rai:dataAnnotationPlatform": {"source_key": None},  # GAP - no D4D mapping
+    "rai:dataAnnotationAnalysis": {"builder_func": _extract_annotation_analysis},
+    "rai:annotationsPerItem": {"builder_func": _extract_annotations_per_item},
+    "rai:machineAnnotationTools": {"builder_func": _extract_machine_annotation_tools},
+
+    # RAI - Safety & Fairness
+    "rai:dataBiases": {"builder_func": _combine_biases},
     "rai:dataSocialImpact": {"builder_func": _combine_social_impact},
+    "rai:personalSensitiveInformation": {"builder_func": _combine_sensitive_info},
+    "rai:dataUseCases": {"builder_func": _combine_use_cases},
+
+    # RAI - Compliance & Governance
+    "rai:dataManipulationProtocol": {"source_key": "cleaning_strategies", "parser": _flatten_to_string},
+    "rai:dataImputationProtocol": {"builder_func": _extract_imputation_protocol},
+    "rai:dataReleaseMaintenancePlan": {"builder_func": _combine_maintenance},
 
     # Additional metadata
     "funder": {"source_key": "funders", "parser": _flatten_to_string},
     "ethicalReview": {"source_key": "ethical_reviews", "parser": _flatten_to_string},
+    "citation": {"source_key": "citation"},
+    "principalInvestigator": {"builder_func": _extract_principal_investigator},
+    "contactEmail": {"builder_func": _extract_contact_email},
+    "usageInfo": {"builder_func": _extract_usage_info},
+    "confidentialityLevel": {"builder_func": _extract_confidentiality_level},
+    "humanSubject": {"builder_func": _extract_human_subject},
+    "governanceCommittee": {"builder_func": _extract_governance_committee},
+    "prohibitedUses": {"builder_func": _extract_prohibited_uses},
 }
 
 
@@ -322,21 +520,42 @@ DATASET_TO_SUBCRATE_MAPPING = {
     "conditionsOfAccess": {"builder_func": _combine_license_terms},
     "conformsTo": {"source_key": "conforms_to"},
 
-    # RAI (Responsible AI) properties
+    # RAI (Responsible AI) properties - Data Lifecycle
     "rai:dataLimitations": {"builder_func": _combine_limitations},
-    "rai:dataBiases": {"builder_func": _combine_biases},
-    "rai:dataUseCases": {"builder_func": _combine_use_cases},
-    "rai:dataReleaseMaintenancePlan": {"builder_func": _combine_maintenance},
     "rai:dataCollection": {"builder_func": _combine_collection_info},
     "rai:dataCollectionType": {"builder_func": _combine_collection_mechanisms},
+    "rai:dataCollectionMissingData": {"builder_func": _extract_missing_data},
     "rai:dataCollectionRawData": {"source_key": "raw_sources", "parser": _flatten_to_string},
-    "rai:dataManipulationProtocol": {"source_key": "cleaning_strategies", "parser": _flatten_to_string},
-    "rai:dataPreprocessingProtocol": {"source_key": "preprocessing_strategies", "parser": _flatten_to_string},
+    "rai:dataCollectionTimeframe": {"builder_func": _extract_collection_timeframe},
+    "rai:dataPreprocessingProtocol": {"source_key": "preprocessing_strategies", "parser": _flatten_to_list},
+
+    # RAI - Data Labeling
     "rai:dataAnnotationProtocol": {"source_key": "labeling_strategies", "parser": _flatten_to_string},
-    "rai:personalSensitiveInformation": {"builder_func": _combine_sensitive_info},
+    "rai:dataAnnotationPlatform": {"source_key": None},  # GAP - no D4D mapping
+    "rai:dataAnnotationAnalysis": {"builder_func": _extract_annotation_analysis},
+    "rai:annotationsPerItem": {"builder_func": _extract_annotations_per_item},
+    "rai:machineAnnotationTools": {"builder_func": _extract_machine_annotation_tools},
+
+    # RAI - Safety & Fairness
+    "rai:dataBiases": {"builder_func": _combine_biases},
     "rai:dataSocialImpact": {"builder_func": _combine_social_impact},
+    "rai:personalSensitiveInformation": {"builder_func": _combine_sensitive_info},
+    "rai:dataUseCases": {"builder_func": _combine_use_cases},
+
+    # RAI - Compliance & Governance
+    "rai:dataManipulationProtocol": {"source_key": "cleaning_strategies", "parser": _flatten_to_string},
+    "rai:dataImputationProtocol": {"builder_func": _extract_imputation_protocol},
+    "rai:dataReleaseMaintenancePlan": {"builder_func": _combine_maintenance},
 
     # Additional metadata
     "funder": {"source_key": "funders", "parser": _flatten_to_string},
     "ethicalReview": {"source_key": "ethical_reviews", "parser": _flatten_to_string},
+    "citation": {"source_key": "citation"},
+    "principalInvestigator": {"builder_func": _extract_principal_investigator},
+    "contactEmail": {"builder_func": _extract_contact_email},
+    "usageInfo": {"builder_func": _extract_usage_info},
+    "confidentialityLevel": {"builder_func": _extract_confidentiality_level},
+    "humanSubject": {"builder_func": _extract_human_subject},
+    "governanceCommittee": {"builder_func": _extract_governance_committee},
+    "prohibitedUses": {"builder_func": _extract_prohibited_uses},
 }
