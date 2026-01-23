@@ -2,7 +2,7 @@
 D4D to ROCrate conversion mappings and utility functions.
 
 This module provides the mapping configurations and parser functions needed
-to convert D4D format data (Data for Development) to ROCrate format.
+to convert D4D pydantic classes to ROCrate v1.2.
 """
 
 from typing import Dict, Any, Optional, List
@@ -129,98 +129,6 @@ def _combine_license_terms(source_dict: Dict[str, Any]) -> Optional[str]:
     return " | ".join(parts) if parts else None
 
 
-def _combine_limitations(source_dict: Dict[str, Any]) -> Optional[str]:
-    """Combine limitation-related fields."""
-    items = []
-    for key in ["discouraged_uses", "errata", "content_warnings"]:
-        if source_dict.get(key):
-            extracted = _flatten_to_string(source_dict[key])
-            if extracted:
-                items.append(extracted)
-    return " ".join(items) if items else None
-
-
-def _combine_biases(source_dict: Dict[str, Any]) -> Optional[str]:
-    """Combine bias-related fields."""
-    items = []
-    for key in ["anomalies", "subpopulations"]:
-        if source_dict.get(key):
-            extracted = _flatten_to_string(source_dict[key])
-            if extracted:
-                items.append(extracted)
-    return "; ".join(items) if items else None
-
-
-def _combine_use_cases(source_dict: Dict[str, Any]) -> Optional[str]:
-    """Combine use case-related fields."""
-    items = []
-    for key in ["purposes", "tasks", "existing_uses", "other_tasks"]:
-        if source_dict.get(key):
-            extracted = _flatten_to_string(source_dict[key])
-            if extracted:
-                items.append(extracted)
-    return " ".join(items) if items else None
-
-
-def _combine_maintenance(source_dict: Dict[str, Any]) -> Optional[str]:
-    """Combine maintenance-related fields with labels."""
-    parts = []
-    if source_dict.get("maintainers"):
-        extracted = _flatten_to_string(source_dict["maintainers"])
-        if extracted:
-            parts.append(f"Maintainers: {extracted}")
-    if source_dict.get("updates"):
-        extracted = _flatten_to_string(source_dict["updates"])
-        if extracted:
-            parts.append(f"Updates: {extracted}")
-    if source_dict.get("retention_limit"):
-        extracted = _flatten_to_string(source_dict["retention_limit"])
-        if extracted:
-            parts.append(f"Retention: {extracted}")
-    return " | ".join(parts) if parts else None
-
-
-def _combine_collection_info(source_dict: Dict[str, Any]) -> Optional[str]:
-    """Combine data collection information."""
-    items = []
-    if source_dict.get("acquisition_methods"):
-        extracted = _flatten_to_string(source_dict["acquisition_methods"])
-        if extracted:
-            items.append(extracted)
-    if source_dict.get("instances"):
-        instances = source_dict["instances"]
-        if isinstance(instances, list):
-            items.append(f"{len(instances)} instances")
-        else:
-            items.append("Instances documented")
-    return " ".join(items) if items else None
-
-
-def _combine_collection_mechanisms(source_dict: Dict[str, Any]) -> List[str]:
-    """Extract collection mechanisms as a list."""
-    items = []
-    if source_dict.get("collection_mechanisms"):
-        extracted = _flatten_to_list(source_dict["collection_mechanisms"])
-        if extracted:
-            items.extend(extracted)
-    return items if items else None
-
-
-def _combine_sensitive_info(source_dict: Dict[str, Any]) -> List[str]:
-    """Combine sensitive information fields."""
-    items = []
-    for key in ["confidential_elements", "sensitive_elements"]:
-        if source_dict.get(key):
-            extracted = _flatten_to_list(source_dict[key])
-            if extracted:
-                items.extend(extracted)
-    if source_dict.get("is_deidentified"):
-        deident = _flatten_to_string(source_dict["is_deidentified"])
-        if deident:
-            items.append(f"Deidentified: {deident}")
-    return items if items else None
-
-
 def _combine_social_impact(source_dict: Dict[str, Any]) -> Optional[str]:
     """Combine social impact-related fields."""
     items = []
@@ -252,27 +160,6 @@ def _extract_missing_data(source_dict: Dict[str, Any]) -> Optional[str]:
     return " ".join(items) if items else None
 
 
-def _extract_collection_timeframe(source_dict: Dict[str, Any]) -> Optional[List[str]]:
-    """Extract collection timeframe information."""
-    if source_dict.get("collection_timeframes"):
-        return _flatten_to_list(source_dict["collection_timeframes"])
-    return None
-
-
-def _extract_imputation_protocol(source_dict: Dict[str, Any]) -> Optional[str]:
-    """Extract imputation protocol information."""
-    if source_dict.get("imputation_protocols"):
-        return _flatten_to_string(source_dict["imputation_protocols"])
-    return None
-
-
-def _extract_annotation_analysis(source_dict: Dict[str, Any]) -> Optional[List[str]]:
-    """Extract annotation analysis information."""
-    if source_dict.get("annotation_analyses"):
-        return _flatten_to_list(source_dict["annotation_analyses"])
-    return None
-
-
 def _extract_annotations_per_item(source_dict: Dict[str, Any]) -> Optional[str]:
     """Extract annotations_per_item from labeling strategies."""
     items = []
@@ -286,12 +173,18 @@ def _extract_annotations_per_item(source_dict: Dict[str, Any]) -> Optional[str]:
             items.append(str(strategies.get("annotations_per_item")))
     return ", ".join(items) if items else None
 
-
-def _extract_human_subject(source_dict: Dict[str, Any]) -> Optional[str]:
-    """Extract human subject research information."""
-    if source_dict.get("human_subject_research"):
-        return _flatten_to_string(source_dict["human_subject_research"])
-    return None
+def _extract_annotations_platform(source_dict: Dict[str, Any]) -> Optional[str]:
+    """Extract annotations_platform from labeling strategies."""
+    items = []
+    if source_dict.get("labeling_strategies"):
+        strategies = source_dict["labeling_strategies"]
+        if isinstance(strategies, list):
+            for strategy in strategies:
+                if isinstance(strategy, dict) and strategy.get("data_annotation_platform"):
+                    items.append(str(strategy.get("data_annotation_platform")))
+        elif isinstance(strategies, dict) and strategies.get("data_annotation_platform"):
+            items.append(str(strategies.get("data_annotation_platform")))
+    return ", ".join(items) if items else None
 
 
 def _extract_confidentiality_level(source_dict: Dict[str, Any]) -> Optional[str]:
@@ -319,13 +212,6 @@ def _extract_governance_committee(source_dict: Dict[str, Any]) -> Optional[str]:
             for r in restrictions:
                 if isinstance(r, dict) and r.get("governance_committee_contact"):
                     return r.get("governance_committee_contact")
-    return None
-
-
-def _extract_prohibited_uses(source_dict: Dict[str, Any]) -> Optional[str]:
-    """Extract prohibited/discouraged uses."""
-    if source_dict.get("discouraged_uses"):
-        return _flatten_to_string(source_dict["discouraged_uses"])
     return None
 
 
@@ -374,50 +260,6 @@ def _extract_contact_email(source_dict: Dict[str, Any]) -> Optional[str]:
     return None
 
 
-def _extract_usage_info(source_dict: Dict[str, Any]) -> Optional[str]:
-    """Extract usage information from intended uses or existing uses."""
-    items = []
-    # Check for usage_notes in existing_uses or other use-related fields
-    if source_dict.get("existing_uses"):
-        uses = source_dict["existing_uses"]
-        if isinstance(uses, list):
-            for use in uses:
-                if isinstance(use, dict) and use.get("usage_notes"):
-                    items.append(str(use.get("usage_notes")))
-    if source_dict.get("purposes"):
-        purposes = source_dict["purposes"]
-        if isinstance(purposes, list):
-            for purpose in purposes:
-                if isinstance(purpose, dict) and purpose.get("usage_notes"):
-                    items.append(str(purpose.get("usage_notes")))
-    return " | ".join(items) if items else None
-
-
-def _extract_machine_annotation_tools(source_dict: Dict[str, Any]) -> Optional[List[str]]:
-    """Extract machine annotation tools information."""
-    items = []
-    if source_dict.get("machine_annotation_tools"):
-        tools_data = source_dict["machine_annotation_tools"]
-        if isinstance(tools_data, list):
-            for tool_obj in tools_data:
-                if isinstance(tool_obj, dict):
-                    # Extract tool names
-                    if tool_obj.get("tools"):
-                        tools = tool_obj.get("tools")
-                        if isinstance(tools, list):
-                            items.extend([str(t) for t in tools if t])
-                        elif tools:
-                            items.append(str(tools))
-        elif isinstance(tools_data, dict):
-            if tools_data.get("tools"):
-                tools = tools_data.get("tools")
-                if isinstance(tools, list):
-                    items.extend([str(t) for t in tools if t])
-                elif tools:
-                    items.append(str(tools))
-    return items if items else None
-
-
 # ============================================================================
 # Mapping Configurations
 # ============================================================================
@@ -448,31 +290,31 @@ DATASET_COLLECTION_TO_RELEASE_MAPPING = {
     "conformsTo": {"source_key": "conforms_to"},
 
     # RAI (Responsible AI) properties - Data Lifecycle
-    "rai:dataLimitations": {"builder_func": _combine_limitations},
-    "rai:dataCollection": {"builder_func": _combine_collection_info},
-    "rai:dataCollectionType": {"builder_func": _combine_collection_mechanisms},
+    "rai:dataLimitations": {"source_key": "known_limitations", "parser": _flatten_to_string},
+    "rai:dataCollection": {"source_key": "collection_mechanisms", "parser": _flatten_to_string},
+    "rai:dataCollectionType": {"source_key": "collection_mechanisms", "parser": _flatten_to_string},
     "rai:dataCollectionMissingData": {"builder_func": _extract_missing_data},
-    "rai:dataCollectionRawData": {"source_key": "raw_sources", "parser": _flatten_to_string},
-    "rai:dataCollectionTimeframe": {"builder_func": _extract_collection_timeframe},
+    "rai:dataCollectionRawData": {"source_key": "raw_data_sources", "parser": _flatten_to_string},
+    "rai:dataCollectionTimeframe": {"source_key": "collection_timeframes", "parser": _flatten_to_string},
     "rai:dataPreprocessingProtocol": {"source_key": "preprocessing_strategies", "parser": _flatten_to_list},
 
     # RAI - Data Labeling
     "rai:dataAnnotationProtocol": {"source_key": "labeling_strategies", "parser": _flatten_to_string},
-    "rai:dataAnnotationPlatform": {"source_key": None},  # GAP - no D4D mapping
-    "rai:dataAnnotationAnalysis": {"builder_func": _extract_annotation_analysis},
+    "rai:dataAnnotationPlatform": {"builder_func": _extract_annotations_platform},  
+    "rai:dataAnnotationProtocol": {"source_key": "annotation_analysis", "parser": _flatten_to_string},
     "rai:annotationsPerItem": {"builder_func": _extract_annotations_per_item},
-    "rai:machineAnnotationTools": {"builder_func": _extract_machine_annotation_tools},
+    "rai:machineAnnotationTools": {"source_key": "machine_annotation_tools", "parser": _flatten_to_string},
 
     # RAI - Safety & Fairness
-    "rai:dataBiases": {"builder_func": _combine_biases},
+    "rai:dataBiases": {"source_key": "known_biases", "parser": _flatten_to_string},
     "rai:dataSocialImpact": {"builder_func": _combine_social_impact},
-    "rai:personalSensitiveInformation": {"builder_func": _combine_sensitive_info},
-    "rai:dataUseCases": {"builder_func": _combine_use_cases},
+    "rai:personalSensitiveInformation":  {"source_key": "sensitive_elements", "parser": _flatten_to_string}, 
+    "rai:dataUseCases": {"source_key": "intended_uses", "parser": _flatten_to_string}, 
 
     # RAI - Compliance & Governance
     "rai:dataManipulationProtocol": {"source_key": "cleaning_strategies", "parser": _flatten_to_string},
-    "rai:dataImputationProtocol": {"builder_func": _extract_imputation_protocol},
-    "rai:dataReleaseMaintenancePlan": {"builder_func": _combine_maintenance},
+    "rai:dataImputationProtocol": {"source_key": "imputation_method", "parser": _flatten_to_string},
+    "rai:dataReleaseMaintenancePlan": {"source_key": "update_plan", "parser": _flatten_to_string},
 
     # Additional metadata
     "funder": {"source_key": "funders", "parser": _flatten_to_string},
@@ -480,11 +322,11 @@ DATASET_COLLECTION_TO_RELEASE_MAPPING = {
     "citation": {"source_key": "citation"},
     "principalInvestigator": {"builder_func": _extract_principal_investigator},
     "contactEmail": {"builder_func": _extract_contact_email},
-    "usageInfo": {"builder_func": _extract_usage_info},
     "confidentialityLevel": {"builder_func": _extract_confidentiality_level},
-    "humanSubject": {"builder_func": _extract_human_subject},
+    "humanSubject": {"source_key": "human_subject_research", "parser": _flatten_to_string},
     "governanceCommittee": {"builder_func": _extract_governance_committee},
-    "prohibitedUses": {"builder_func": _extract_prohibited_uses},
+    "prohibitedUses": {"source_key": "discouraged_uses", "parser": _flatten_to_string},
+    "evi:formats": {"source_key": "distribution_formats", "parser": _flatten_to_string},
 }
 
 
@@ -509,43 +351,36 @@ DATASET_TO_SUBCRATE_MAPPING = {
     "url": {"source_key": "page"},
     "contentUrl": {"source_key": "download_url"},
     "encodingFormat": {"source_key": "encoding", "parser": _format_enum_value},
-    "fileFormat": {"source_key": "format", "parser": _format_enum_value},
     "contentSize": {"source_key": "bytes", "parser": _parse_bytes_to_size_string},
-
-    # Checksums
-    "md5": {"source_key": "md5"},
-    "sha256": {"source_key": "sha256"},
-
-    # Access and conformance
     "conditionsOfAccess": {"builder_func": _combine_license_terms},
     "conformsTo": {"source_key": "conforms_to"},
 
     # RAI (Responsible AI) properties - Data Lifecycle
-    "rai:dataLimitations": {"builder_func": _combine_limitations},
-    "rai:dataCollection": {"builder_func": _combine_collection_info},
-    "rai:dataCollectionType": {"builder_func": _combine_collection_mechanisms},
+    "rai:dataLimitations": {"source_key": "known_limitations", "parser": _flatten_to_string},
+    "rai:dataCollection": {"source_key": "collection_mechanisms", "parser": _flatten_to_string},
+    "rai:dataCollectionType": {"source_key": "collection_mechanisms", "parser": _flatten_to_string},
     "rai:dataCollectionMissingData": {"builder_func": _extract_missing_data},
-    "rai:dataCollectionRawData": {"source_key": "raw_sources", "parser": _flatten_to_string},
-    "rai:dataCollectionTimeframe": {"builder_func": _extract_collection_timeframe},
+    "rai:dataCollectionRawData": {"source_key": "raw_data_sources", "parser": _flatten_to_string},
+    "rai:dataCollectionTimeframe": {"source_key": "collection_timeframes", "parser": _flatten_to_string},
     "rai:dataPreprocessingProtocol": {"source_key": "preprocessing_strategies", "parser": _flatten_to_list},
 
     # RAI - Data Labeling
     "rai:dataAnnotationProtocol": {"source_key": "labeling_strategies", "parser": _flatten_to_string},
-    "rai:dataAnnotationPlatform": {"source_key": None},  # GAP - no D4D mapping
-    "rai:dataAnnotationAnalysis": {"builder_func": _extract_annotation_analysis},
+    "rai:dataAnnotationPlatform": {"builder_func": _extract_annotations_platform},  
+    "rai:dataAnnotationProtocol": {"source_key": "annotation_analysis", "parser": _flatten_to_string},
     "rai:annotationsPerItem": {"builder_func": _extract_annotations_per_item},
-    "rai:machineAnnotationTools": {"builder_func": _extract_machine_annotation_tools},
+    "rai:machineAnnotationTools": {"source_key": "machine_annotation_tools", "parser": _flatten_to_string},
 
     # RAI - Safety & Fairness
-    "rai:dataBiases": {"builder_func": _combine_biases},
+    "rai:dataBiases": {"source_key": "known_biases", "parser": _flatten_to_string},
     "rai:dataSocialImpact": {"builder_func": _combine_social_impact},
-    "rai:personalSensitiveInformation": {"builder_func": _combine_sensitive_info},
-    "rai:dataUseCases": {"builder_func": _combine_use_cases},
+    "rai:personalSensitiveInformation":  {"source_key": "sensitive_elements", "parser": _flatten_to_string}, 
+    "rai:dataUseCases": {"source_key": "intended_uses", "parser": _flatten_to_string}, 
 
     # RAI - Compliance & Governance
     "rai:dataManipulationProtocol": {"source_key": "cleaning_strategies", "parser": _flatten_to_string},
-    "rai:dataImputationProtocol": {"builder_func": _extract_imputation_protocol},
-    "rai:dataReleaseMaintenancePlan": {"builder_func": _combine_maintenance},
+    "rai:dataImputationProtocol": {"source_key": "imputation_method", "parser": _flatten_to_string},
+    "rai:dataReleaseMaintenancePlan": {"source_key": "update_plan", "parser": _flatten_to_string},
 
     # Additional metadata
     "funder": {"source_key": "funders", "parser": _flatten_to_string},
@@ -553,9 +388,9 @@ DATASET_TO_SUBCRATE_MAPPING = {
     "citation": {"source_key": "citation"},
     "principalInvestigator": {"builder_func": _extract_principal_investigator},
     "contactEmail": {"builder_func": _extract_contact_email},
-    "usageInfo": {"builder_func": _extract_usage_info},
     "confidentialityLevel": {"builder_func": _extract_confidentiality_level},
-    "humanSubject": {"builder_func": _extract_human_subject},
+    "humanSubject": {"source_key": "human_subject_research", "parser": _flatten_to_string},
     "governanceCommittee": {"builder_func": _extract_governance_committee},
-    "prohibitedUses": {"builder_func": _extract_prohibited_uses},
+    "prohibitedUses": {"source_key": "discouraged_uses", "parser": _flatten_to_string},
+    "evi:formats": {"source_key": "distribution_formats", "parser": _flatten_to_string},
 }
