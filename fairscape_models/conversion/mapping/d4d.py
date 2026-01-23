@@ -1,50 +1,47 @@
+"""
+ROCrate to D4D conversion mappings and utility functions.
+
+This module provides the mapping configurations and parser functions needed
+to convert ROCrate format data to D4D (Data Sheets for Datasets) format.
+"""
+
+from typing import Dict, Any, Optional, List
 from datetime import datetime
 import re
-from typing import List, Dict, Any, Optional
-from pathlib import Path
-import json
 
-from fairscape_models.conversion.models.d4d import DatasetCollection, Dataset, FormatEnum
-from fairscape_models.rocrate import ROCrateV1_2
 
-def parse_authors_from_ro_crate(authors: Any) -> List[str]:
-    if not authors: return []
-    if isinstance(authors, str):
-        return [name.strip() for name in authors.replace(';', ',').split(',') if name.strip()]
-    elif isinstance(authors, list):
-        return [str(item) for item in authors]
-    return []
+# ============================================================================
+# Parser Functions - Type Conversions
+# ============================================================================
 
-def parse_funders_from_ro_crate(funders: Any) -> List[str]:
-    if not funders: return []
-    if isinstance(funders, str):
-        return [part.strip() for part in re.split(r'\.\s*|[;,]', funders) if part.strip()]
-    elif isinstance(funders, list):
-        return [str(item) for item in funders]
-    return []
+def _parse_iso_to_datetime(dt: Any) -> Optional[datetime]:
+    """Convert ISO format strings to datetime objects."""
+    if dt is None:
+        return None
+    if isinstance(dt, datetime):
+        return dt
+    if isinstance(dt, str):
+        # Try various formats
+        for fmt in ["%Y-%m-%dT%H:%M:%S", "%Y-%m-%d", "%m/%d/%Y"]:
+            try:
+                return datetime.strptime(dt.split(".")[0], fmt)
+            except ValueError:
+                continue
+    return None
 
-def parse_keywords_simple(keywords: Any) -> List[str]:
-    if not keywords: return []
+def _parse_keywords_to_list(keywords: Any) -> Optional[List[str]]:
+    """Convert keywords to list of strings."""
+    if not keywords:
+        return None
     if isinstance(keywords, str):
         return [kw.strip() for kw in re.split(r'[;,]', keywords) if kw.strip()]
     elif isinstance(keywords, list):
-        return [str(item) for item in keywords]
-    return []
+        return [str(item) for item in keywords if item]
+    return None
 
-def parse_related_publications(value_from_lookup: Any) -> List[str]:
-    if not value_from_lookup: return []
-    pubs = []
-    items_to_process = value_from_lookup if isinstance(value_from_lookup, list) else [value_from_lookup]
-    
-    for pub in items_to_process:
-        if isinstance(pub, dict):
-            citation = pub.get("citation") or pub.get("name") or pub.get("@id")
-            if citation: pubs.append(str(citation))
-        elif isinstance(pub, str) and pub.strip():
-            pubs.append(pub.strip())
-    return pubs
 
-def parse_file_size_to_bytes(size_value: Any) -> Optional[int]:
+def _parse_size_to_bytes(size_value: Any) -> Optional[int]:
+    """Convert human-readable size strings to bytes."""
     if size_value is None:
         return None
     if isinstance(size_value, int):
@@ -53,7 +50,7 @@ def parse_file_size_to_bytes(size_value: Any) -> Optional[int]:
         size_str = size_value.strip().lower()
         if size_str.isdigit():
             return int(size_str)
-        
+
         units = {
             'b': 1, 'byte': 1, 'bytes': 1,
             'kb': 1024, 'kilobyte': 1024, 'kilobytes': 1024,
@@ -61,7 +58,7 @@ def parse_file_size_to_bytes(size_value: Any) -> Optional[int]:
             'gb': 1024**3, 'gigabyte': 1024**3, 'gigabytes': 1024**3,
             'tb': 1024**4, 'terabyte': 1024**4, 'terabytes': 1024**4
         }
-        
+
         for unit, multiplier in units.items():
             if size_str.endswith(unit):
                 try:
@@ -71,176 +68,116 @@ def parse_file_size_to_bytes(size_value: Any) -> Optional[int]:
                     continue
     return None
 
-def from_additional_property(name: str, default: Optional[str] = None):
-    def _parser(prop_list: Any) -> Optional[str]:
-        if isinstance(prop_list, list):
-            for p in prop_list:
-                if isinstance(p, dict) and p.get("name") == name:
-                    val = p.get("value")
-                    return str(val) if val is not None else default
-        return default
-    return _parser
 
-def _build_datasets_from_subcrates(*, converter_instance, source_entity_model) -> List[Dataset]:
-    """Build Dataset objects from sub-crates, with sub-crate properties taking precedence."""
-    datasets = []
-    root_dict = source_entity_model.model_dump(by_alias=True)
-    
-    release_properties = {
-        "version": root_dict.get("version"),
-        "license": root_dict.get("license"),
-        "keywords": parse_keywords_simple(root_dict.get("keywords")),
-        "created_on": root_dict.get("datePublished"),
-        "issued": root_dict.get("datePublished"),
-        "publisher": root_dict.get("publisher"),
-        "doi": root_dict.get("identifier"),
-        "creators": parse_authors_from_ro_crate(root_dict.get("author")),
-        "funders": parse_funders_from_ro_crate(root_dict.get("funder")),
-        "purposes": root_dict.get("rai:dataUseCases"),
-        "tasks": root_dict.get("rai:dataLimitations"),
-        "ethical_reviews": root_dict.get("ethicalReview"),
-        "discouraged_uses": from_additional_property("Prohibited Uses")(root_dict.get("additionalProperty")),
-        "updates": root_dict.get("rai:dataReleaseMaintenancePlan"),
-        "sensitive_info": root_dict.get("rai:personalSensitiveInformation"),
-    }
-    
-    subcrate_entities = [
-        e for e in converter_instance.source_crate.metadataGraph
-        if hasattr(e, 'ro-crate-metadata') and e.guid != "ro-crate-metadata.json"
-    ]
-    
-    for subcrate_entity in subcrate_entities:
-        subcrate_dict = subcrate_entity.model_dump(by_alias=True)
-        metadata_path = getattr(subcrate_entity, 'ro-crate-metadata', None)
-        
-        dataset_args = {
-            "id": subcrate_dict.get("@id", f"subcrate-{len(datasets)}"),
-            "title": subcrate_dict.get("name", "Unnamed Subcrate"),
-            "description": subcrate_dict.get("description"),
-            "download_url": subcrate_dict.get("contentUrl"),
-            "path": subcrate_dict.get("contentUrl"),
-            "bytes": parse_file_size_to_bytes(subcrate_dict.get("contentSize")),
-            "md5": subcrate_dict.get("md5"),
-            **release_properties
-        }
-        
-        if metadata_path:
-            try:
-                with Path(metadata_path).open("r") as f:
-                    sub_crate_dict = json.load(f)
-                
-                sub_graph = sub_crate_dict.get("@graph", [])
-                
-                subcrate_root = None
-                for idx, entity in enumerate(sub_graph):
-                    if entity.get("@id") == "ro-crate-metadata.json":
-                        about_ref = entity.get("about", {})
-                        root_id = about_ref.get("@id") if isinstance(about_ref, dict) else about_ref
-                        if root_id:
-                            for e in sub_graph:
-                                if e.get("@id") == root_id:
-                                    subcrate_root = e
-                                    break
-                        break
-                
-                if subcrate_root:
-                    if subcrate_root.get("version"):
-                        dataset_args["version"] = subcrate_root.get("version")
-                    if subcrate_root.get("license"):
-                        dataset_args["license"] = subcrate_root.get("license")
-                    if subcrate_root.get("keywords"):
-                        dataset_args["keywords"] = parse_keywords_simple(subcrate_root.get("keywords"))
-                    if subcrate_root.get("datePublished"):
-                        date_str = subcrate_root.get("datePublished")
-                        parsed_date = datetime.strptime(date_str, "%m/%d/%Y" if "/" in date_str else "%Y-%m-%d")
-                        dataset_args["created_on"] = parsed_date
-                        dataset_args["issued"] = parsed_date
-                    if subcrate_root.get("publisher"):
-                        dataset_args["publisher"] = subcrate_root.get("publisher")
-                    if subcrate_root.get("identifier"):
-                        dataset_args["doi"] = subcrate_root.get("identifier")
-                    if subcrate_root.get("author"):
-                        dataset_args["creators"] = parse_authors_from_ro_crate(subcrate_root.get("author"))
-                    if subcrate_root.get("funder"):
-                        dataset_args["funders"] = parse_funders_from_ro_crate(subcrate_root.get("funder"))
-                    if subcrate_root.get("rai:dataUseCases"):
-                        dataset_args["purposes"] = subcrate_root.get("rai:dataUseCases")
-                    if subcrate_root.get("rai:dataLimitations"):
-                        dataset_args["tasks"] = subcrate_root.get("rai:dataLimitations")
-                    if subcrate_root.get("ethicalReview"):
-                        dataset_args["ethical_reviews"] = subcrate_root.get("ethicalReview")
-                    if subcrate_root.get("rai:dataReleaseMaintenancePlan"):
-                        dataset_args["updates"] = subcrate_root.get("rai:dataReleaseMaintenancePlan")
-                    if subcrate_root.get("rai:personalSensitiveInformation"):
-                        dataset_args["sensitive_info"] = subcrate_root.get("rai:personalSensitiveInformation")
-                    
-                    addl_props = subcrate_root.get("additionalProperty")
-                    if addl_props:
-                        prohibited_uses = from_additional_property("Prohibited Uses")(addl_props)
-                        if prohibited_uses:
-                            dataset_args["discouraged_uses"] = prohibited_uses
-                
-                sub_rocrate = ROCrateV1_2.model_validate(sub_crate_dict)
-                
-                formats = set()
-                for entity in sub_rocrate.metadataGraph:
-                    entity_dict = entity.model_dump(by_alias=True)
-                    entity_type = entity_dict.get("@type") or []
-                    if isinstance(entity_type, str):
-                        entity_type = [entity_type]
-                    
-                    if any(t in str(entity_type).lower() for t in ["dataset", "file"]):
-                        fmt = entity_dict.get("fileFormat") or entity_dict.get("format")
-                        if fmt:
-                            formats.add(str(fmt))
-                
-                if formats:
-                    for fmt in formats:
-                        try:
-                            dataset_args["format"] = FormatEnum(fmt)
-                            break
-                        except:
-                            pass
-            except Exception as e:
-                print(f"Could not parse subcrate metadata: {e}")
-        
-        dataset_args = {k: v for k, v in dataset_args.items() if v is not None}
-        
-        try:
-            datasets.append(Dataset(**dataset_args))
-        except Exception as e:
-            print(f"Error creating Dataset: {e}")
-            print(f"Args: {dataset_args}")
-    
-    return datasets
+def _string_to_list(value: Any) -> Optional[List[str]]:
+    """Convert a string to a single-item list, or return list as-is."""
+    if value is None:
+        return None
+    if isinstance(value, list):
+        return value
+    if isinstance(value, str):
+        return [value]
+    return [str(value)]
 
-D4D_DATASET_COLLECTION_MAPPING = {
+
+# ============================================================================
+# Builder Functions - Complex Field Extraction
+# ============================================================================
+
+
+
+# ============================================================================
+# Mapping Configuration
+# ============================================================================
+
+ROCRATE_TO_D4D_MAPPING = {
+    
+    #named thing
     "id": {"source_key": "@id"},
+    "name": {"source_key": "name"},
     "title": {"source_key": "name"},
     "description": {"source_key": "description"},
-    "version": {"source_key": "version"},
-    "license": {"source_key": "license"},
-    "keywords": {"source_key": "keywords", "parser": parse_keywords_simple},
-    "created_on": {"source_key": "datePublished"},
-    "issued": {"source_key": "datePublished"},
-    "publisher": {"source_key": "publisher"},
+    
+    #information
+    "compression": {"source_key": "evi:formats"},
+    "conforms_to": {"fixed_value": "D4D Schema"},  
+    "created_by": {"source_key": "author"},
+    "created_on": {"source_key": "dateCreated", "parser": _parse_iso_to_datetime},
     "doi": {"source_key": "identifier"},
     "download_url": {"source_key": "contentUrl"},
-    "resources": {"builder_func": _build_datasets_from_subcrates},
-}
+    "keywords": {"source_key": "keywords"},
+    "language": {"source_key": "language"},
+    "last_updated_on": {"source_key": "dateModified", "parser": _parse_iso_to_datetime},
+    "license": {"source_key": "license"},
+    "page": {"source_key": "url"},
+    "publisher": {"source_key": "publisher"},
+    "version": {"source_key": "version"},
+    "was_derived_from": {"source_key": "generatedBy"},
+   
+   
+    
 
-MAPPING_CONFIGURATION = {
-    "entity_map": {
-        ("ROCrateMetadataElem", "ROOT"): {
-            "target_class": DatasetCollection,
-            "mapping_def": D4D_DATASET_COLLECTION_MAPPING
-        },
-        
-        ("Dataset", "COMPONENT"): None,
-        ("Schema", "COMPONENT"): None,
-        ("Software", "COMPONENT"): None,
-        ("Computation", "COMPONENT"): None,
-    },
 
-    "assembly_instructions": []
+    # Dataset
+    
+    "bytes": {"source_key": "contentSize", "parser": _parse_size_to_bytes},
+    "encoding":  {"source_key": "evi:formats"},
+    "format": {"source_key": "evi:formats"},
+    "hash": {"source_key": "MD5"},
+    "md5": {"source_key": "MD5"},
+    "sha256": {"source_key": "sha256"},
+    
+    #media_type, path, external_resources, resources
+    
+    "purposes": {"source_key": "rai:dataUseCases"},
+    "tasks": {"source_key": "rai:dataUseCases"},
+    #addressing_gaps
+    "creators": {"source_key": "author"},
+    "funders": {"source_key": "funders"},
+    
+    #subsets, instances, anomalies
+    
+    "known_biases": {"source_key": "rai:dataBiases"},
+    "known_limitations": {"source_key": "rai:dataLimitations"},
+    
+    #confidential_elements, content_warnings, subpopulations
+    "sensitive_elements": {"source_key": "rai:personalSensitiveInformation"},
+    "aquisition_methods": {"source_key": "rai:dataCollection"},
+    "collection_mechanisms": {"source_key": "rai:dataCollection"},
+    
+    #sampling_strategies, data_collectors
+    
+    "collection_timeframes": {"source_key": "rai:dataCollectionTimeframe"},
+    "missing_data_documentation": {"source_key": "rai:dataCollectionMissingData"},
+    "raw_data_sources": {"source_key": "rai:dataCollectionRawData"},
+    "ethical_reviews": {"source_key": "ethicalReview"},
+
+    #data_protection_impacts
+    "human_subject_research": {"source_key": "humanSubject"},
+    
+    #informed_consent, participant_privacy, participant_compensation, vulnerable_populations
+    
+    "preprocessing_strategies": {"source_key": "rai:dataPreprocessingProtocol"},
+    
+    #cleaning_strategies
+    
+    "labeling_strategies": {"source_key": "rai:dataAnnotationProtocol"},
+    "raw_sources": {"source_key":"rai:dataCollectionRawData"},
+    "imputation_protocols": {"source_key":"rai:dataImputationProtocol"},
+    "annotation_analyses": {"source_key":"rai:dataAnnotationProtocol"},
+    "machine_annotation_tools": {"source_key":"rai:machineAnnotationTools"},    
+    
+    #existing_ueses, use_repostitory, other_tasks
+    
+    "future_use_impacts": {"source_key":"rai:dataSocialImpact"},
+    "discouraged_uses": {"source_key":"prohibitedUses"},
+    "intended_uses": {"source_key": "rai:dataUseCases"},
+    "prohibited_uses": {"source_key":"prohibitedUses"},
+    "distribution_formats": {"source_key":"evi:formats"},
+    "license_and_use_terms": {"source_key":"license"},
+    
+    #ip_restrictions, regional_restrictions, maintainers, errata, version_access, extension_mechanism, variables, is_deidentified, is_tabular
+    
+    "citation": {"source_key":"citation"},
+
 }

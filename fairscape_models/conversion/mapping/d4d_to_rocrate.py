@@ -360,7 +360,7 @@ DATASET_TO_SUBCRATE_MAPPING = {
     "rai:dataCollection": {"source_key": "collection_mechanisms", "parser": _flatten_to_string},
     "rai:dataCollectionType": {"source_key": "collection_mechanisms", "parser": _flatten_to_string},
     "rai:dataCollectionMissingData": {"builder_func": _extract_missing_data},
-    "rai:dataCollectionRawData": {"source_key": "raw_data_sources", "parser": _flatten_to_string},
+    "rai:dataCollectionRawData": {"source_key": "raw_sources", "parser": _flatten_to_string},
     "rai:dataCollectionTimeframe": {"source_key": "collection_timeframes", "parser": _flatten_to_string},
     "rai:dataPreprocessingProtocol": {"source_key": "preprocessing_strategies", "parser": _flatten_to_list},
 
