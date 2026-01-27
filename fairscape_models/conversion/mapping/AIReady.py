@@ -181,6 +181,33 @@ def _score_characterization(characterization: CharacterizationScore, root_data: 
             has_content=True,
             details=str(bias)[:200] + ("..." if len(str(bias)) > 200 else "")
         )
+        
+    missDataDoc = root_data.get("rai:dataCollectionMissingData", "")
+    if missDataDoc and str(missDataDoc).strip():
+        characterization.data_quality = SubCriterionScore(
+            has_content=True,
+            details=str(missDataDoc)[:200] + ("..." if len(str(missDataDoc)) > 200 else "")
+        )
+
+    schema_count = root_data.get("evi:schemaCount")
+
+    if schema_count is not None:
+       pass
+    else:
+        # Fall back to counting in metadata_graph (for backwards compatibility)
+        schema_count = 0
+
+        for entity in metadata_graph:
+            entity_type = _get_type(entity)
+
+            if "schema" in entity_type:
+                schema_count += 1
+    
+    if schema_count > 0:
+        characterization.standards = SubCriterionScore(
+            has_content=True,
+            details=f"{schema_count} schema(s) documented"
+        )
 
     # Check for aggregated metrics first
     total_size_bytes = root_data.get("evi:totalContentSizeBytes")
@@ -408,6 +435,12 @@ def _score_computability(computability: ComputabilityScore, root_data: Dict[str,
         computability.standardized = SubCriterionScore(
             has_content=True,
             details=f"Formats: {', '.join(fmt_list)}{suffix}"
+        )
+        
+    if root_data.get("publisher"):
+        computability.computationally_accessible = SubCriterionScore(
+            has_content=True,
+            details=f"Publisher: {root_data.get('publisher')}"
         )
 
 def _build_ai_ready_score(value: Any, *, converter_instance) -> AIReadyScore:

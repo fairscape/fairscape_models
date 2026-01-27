@@ -46,7 +46,7 @@ class CharacterizationScore(BaseModel):
         has_content=False, details="No statistical characterization available"
     ))
     standards: SubCriterionScore = Field(default_factory=lambda: SubCriterionScore(
-        has_content=True, details="This dataset adheres to the RO-Crate 1.2 and Croissant RAI 1.0 community standards."
+        has_content=False, details="No schemas provided for datasets."
     ))
     potential_sources_of_bias: SubCriterionScore = Field(default_factory=lambda: SubCriterionScore(
         has_content=False, details="No bias description provided"
@@ -99,7 +99,7 @@ class ComputabilityScore(BaseModel):
         has_content=False, details="No format information available"
     ))
     computationally_accessible: SubCriterionScore = Field(default_factory=lambda: SubCriterionScore(
-        has_content=True, details="Data is hosted in public repositories (e.g., NCBI, MassIVE, Dataverse) that support programmatic access."
+        has_content=False, details="No publisher provided."
     ))
     portable: SubCriterionScore = Field(default_factory=lambda: SubCriterionScore(
         has_content=True, details="The dataset is packaged as a self-contained RO-Crate, a standard designed for portability across systems."
