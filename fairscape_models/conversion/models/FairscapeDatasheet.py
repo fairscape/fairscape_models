@@ -74,6 +74,56 @@ class UseCasesSection(BaseModel):
         default=None, description="Versioning, maintainers, and deprecation policies"
     )
 
+    # Additional RAI fields
+    data_collection: Optional[str] = Field(
+        default=None, description="Description of data collection methodology"
+    )
+    data_collection_type: Optional[str] = Field(
+        default=None, description="Type of data collection"
+    )
+    data_collection_missing_data: Optional[str] = Field(
+        default=None, description="Description of missing data in collection"
+    )
+    data_collection_raw_data: Optional[str] = Field(
+        default=None, description="Description of raw data from collection"
+    )
+    data_collection_timeframe: Optional[str] = Field(
+        default=None, description="Timeframe of data collection"
+    )
+    data_imputation_protocol: Optional[str] = Field(
+        default=None, description="Protocol used for data imputation"
+    )
+    data_manipulation_protocol: Optional[str] = Field(
+        default=None, description="Protocol used for data manipulation"
+    )
+    data_preprocessing_protocol: Optional[str] = Field(
+        default=None, description="Protocol used for data preprocessing"
+    )
+    data_annotation_protocol: Optional[str] = Field(
+        default=None, description="Protocol used for data annotation"
+    )
+    data_annotation_platform: Optional[str] = Field(
+        default=None, description="Platform used for data annotation"
+    )
+    data_annotation_analysis: Optional[str] = Field(
+        default=None, description="Analysis of data annotations"
+    )
+    personal_sensitive_information: Optional[str] = Field(
+        default=None, description="Description of personal/sensitive information"
+    )
+    data_social_impact: Optional[str] = Field(
+        default=None, description="Social impact of the data"
+    )
+    annotations_per_item: Optional[str] = Field(
+        default=None, description="Number of annotations per item"
+    )
+    annotator_demographics: Optional[str] = Field(
+        default=None, description="Demographics of annotators"
+    )
+    machine_annotation_tools: Optional[str] = Field(
+        default=None, description="Machine tools used for annotation"
+    )
+
     model_config = ConfigDict(extra="allow")
 
 

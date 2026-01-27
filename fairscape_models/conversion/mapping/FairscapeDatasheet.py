@@ -112,9 +112,27 @@ OVERVIEW_MAPPING_CONFIGURATION = {
 USECASES_MAPPING = {
     "intended_use":          {"source_key": "rai:dataUseCases"},
     "limitations":           {"source_key": "rai:dataLimitations"},
-    "prohibited_uses":        {"source_key": "additionalProperty", "parser": from_additional_property("Prohibited Uses")}, 
+    "prohibited_uses":        {"source_key": "additionalProperty", "parser": from_additional_property("Prohibited Uses")},
     "potential_sources_of_bias": {"source_key": "rai:dataBiases"},
-    "maintenance_plan":      {"source_key": "rai:dataMaintenancePlan"},
+    "maintenance_plan":      {"source_key": "rai:dataReleaseMaintenancePlan"},
+
+    # Additional RAI fields
+    "data_collection":              {"source_key": "rai:dataCollection"},
+    "data_collection_type":         {"source_key": "rai:dataCollectionType", "parser": _list_to_str},
+    "data_collection_missing_data": {"source_key": "rai:dataCollectionMissingData"},
+    "data_collection_raw_data":     {"source_key": "rai:dataCollectionRawData"},
+    "data_collection_timeframe":    {"source_key": "rai:dataCollectionTimeframe", "parser": _list_to_str},
+    "data_imputation_protocol":     {"source_key": "rai:dataImputationProtocol"},
+    "data_manipulation_protocol":   {"source_key": "rai:dataManipulationProtocol"},
+    "data_preprocessing_protocol":  {"source_key": "rai:dataPreprocessingProtocol", "parser": _list_to_str},
+    "data_annotation_protocol":     {"source_key": "rai:dataAnnotationProtocol"},
+    "data_annotation_platform":     {"source_key": "rai:dataAnnotationPlatform", "parser": _list_to_str},
+    "data_annotation_analysis":     {"source_key": "rai:dataAnnotationAnalysis", "parser": _list_to_str},
+    "personal_sensitive_information": {"source_key": "rai:personalSensitiveInformation", "parser": _list_to_str},
+    "data_social_impact":           {"source_key": "rai:dataSocialImpact"},
+    "annotations_per_item":         {"source_key": "rai:annotationsPerItem"},
+    "annotator_demographics":       {"source_key": "rai:annotatorDemographics", "parser": _list_to_str},
+    "machine_annotation_tools":     {"source_key": "rai:machineAnnotationTools", "parser": _list_to_str},
 }
 
 USECASES_MAPPING_CONFIGURATION = {
