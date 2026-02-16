@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field, ConfigDict, model_validator
 from typing import Optional, List, Union
 
 from fairscape_models.fairscape_base import IdentifierValue
-from fairscape_models import __version__
+from fairscape_models._version import __version__
 
 class Activity(BaseModel):
     """Base class for Activity types (Computation, Annotation, Experiment)"""

@@ -18,7 +18,7 @@ from fairscape_models.model_card import ModelCard
 from fairscape_models.sample import Sample
 from fairscape_models.activity import Activity
 from fairscape_models.digital_object import DigitalObject
-from fairscape_models import __version__
+from fairscape_models._version import __version__
 
 class GenericMetadataElem(BaseModel):
     """Generic Metadata Element of an ROCrate"""

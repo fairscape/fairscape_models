@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional, List, Union
 from fairscape_models.fairscape_base import IdentifierValue
-from fairscape_models import __version__
+from fairscape_models._version import __version__
 
 class Instrument(BaseModel):
     guid: str = Field(alias="@id")

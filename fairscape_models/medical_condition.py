@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 from typing import Optional, List
 
 from fairscape_models.fairscape_base import IdentifierValue, IdentifierPropertyValue
-from fairscape_models import __version__
+from fairscape_models._version import __version__
 
 class MedicalCondition(BaseModel):
     """ Pydantic model for the Schema.org MedicalCondition datatype

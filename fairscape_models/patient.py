@@ -10,7 +10,7 @@ from typing import (
   Union
 )
 from fairscape_models.fairscape_base import IdentifierValue
-from fairscape_models import __version__
+from fairscape_models._version import __version__
 
 class Patient(BaseModel):
   guid: str = Field(alias="@id")

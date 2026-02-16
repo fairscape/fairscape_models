@@ -13,7 +13,7 @@ from pydantic import (
 import re
 from enum import Enum 
 from fairscape_models.fairscape_base import IdentifierValue, FairscapeEVIBaseModel
-from fairscape_models import __version__
+from fairscape_models._version import __version__
 
 # TODO switch to ENUM for better clarification
 class ItemTypeEnum(Enum):

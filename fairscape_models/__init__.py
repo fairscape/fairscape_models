@@ -13,6 +13,3 @@ from fairscape_models.rocrate import ROCrateV1_2, ROCrateMetadataElem, ROCrateMe
 from fairscape_models.sample import Sample
 from fairscape_models.model_card import ModelCard
 from fairscape_models.experiment import Experiment
-
-
-__version__ = "1.0.23"
