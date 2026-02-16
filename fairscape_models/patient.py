@@ -10,6 +10,7 @@ from typing import (
   Union
 )
 from fairscape_models.fairscape_base import IdentifierValue
+from fairscape_models import __version__
 
 class Patient(BaseModel):
   guid: str = Field(alias="@id")
@@ -26,3 +27,4 @@ class Patient(BaseModel):
   gender: Optional[str]
   birthDate: Optional[str] = Field(default=None)
   deathDate: Optional[str] = Field(default=None)
+  fairscapeVersion: str = __version__

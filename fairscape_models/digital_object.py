@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field, ConfigDict, model_validator
 from typing import Optional, List, Union
 
 from fairscape_models.fairscape_base import IdentifierValue
+from fairscape_models import __version__
 
 class DigitalObject(BaseModel):
     """Base class for DigitalObject types (Dataset, Software, MLModel)"""
@@ -16,6 +17,7 @@ class DigitalObject(BaseModel):
     contentUrl: Optional[Union[str, List[str]]] = Field(default=None)
     isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
     usedByComputation: Optional[List[IdentifierValue]] = Field(default=[])
+    fairscapeVersion: str = __version__
 
     # PROV-O fields (auto-populated)
     wasGeneratedBy: Optional[List[Union[str, IdentifierValue]]] = Field(default=[], alias="prov:wasGeneratedBy")

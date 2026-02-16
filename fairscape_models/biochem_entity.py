@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional, List, Union
 
 from fairscape_models.fairscape_base import IdentifierValue, IdentifierPropertyValue
+from fairscape_models import __version__
 
 class BioChemEntity(BaseModel):
     """ Pydantic model for the Schema.org BioChemEntity datatype
@@ -16,5 +17,6 @@ class BioChemEntity(BaseModel):
     usedBy: Optional[List[IdentifierValue]] = Field(default=[])
     description: Optional[str] = Field(default=None)
     isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
+    fairscapeVersion: str = __version__
     
     model_config = ConfigDict(extra="allow")

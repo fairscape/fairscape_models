@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional, List, Union, Dict
 from fairscape_models.fairscape_base import IdentifierValue
+from fairscape_models import __version__
 
 class Sample(BaseModel):
     guid: str = Field(alias="@id")
@@ -12,5 +13,6 @@ class Sample(BaseModel):
     contentUrl: Optional[Union[str, List[str]]] = Field(default=None)
     cellLineReference: Optional[IdentifierValue] = Field(default=None) 
     isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
+    fairscapeVersion: str = __version__
 
     model_config = ConfigDict(extra='allow')

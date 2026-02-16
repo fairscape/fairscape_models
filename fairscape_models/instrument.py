@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional, List, Union
 from fairscape_models.fairscape_base import IdentifierValue
+from fairscape_models import __version__
 
 class Instrument(BaseModel):
     guid: str = Field(alias="@id")
@@ -15,3 +16,4 @@ class Instrument(BaseModel):
     contentUrl: Optional[str] = Field(default=None)
     isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
     model_config = ConfigDict(extra="allow")
+    fairscapeVersion: str = __version__

@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field
 from typing import Optional, List
 
 from fairscape_models.fairscape_base import IdentifierValue, IdentifierPropertyValue
+from fairscape_models import __version__
 
 class MedicalCondition(BaseModel):
     """ Pydantic model for the Schema.org MedicalCondition datatype
@@ -15,4 +16,5 @@ class MedicalCondition(BaseModel):
     drug: Optional[List[IdentifierValue]] = Field(default=[])
     usedBy: Optional[List[IdentifierValue]] = Field(default=[])
     isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
-    description: str
+    description: str 
+    fairscapeVersion: str = __version__

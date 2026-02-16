@@ -13,6 +13,7 @@ from pydantic import (
 import re
 from enum import Enum 
 from fairscape_models.fairscape_base import IdentifierValue, FairscapeEVIBaseModel
+from fairscape_models import __version__
 
 # TODO switch to ENUM for better clarification
 class ItemTypeEnum(Enum):
@@ -76,5 +77,7 @@ class Schema(FairscapeEVIBaseModel):
     header: Optional[bool] = Field(default=True)
     examples: Optional[List[Dict]] = []
     isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
+    fairscapeVersion: str = __version__
+
 
     model_config = ConfigDict(extra='allow')
