@@ -133,6 +133,18 @@ class ROCrateMetadataElem(BaseModel):
     evi_total_entities: Optional[int] = Field(alias="evi:totalEntities", default=None)
     evi_formats: Optional[List[str]] = Field(alias="evi:formats", default=None)
 
+    def generateFileElem(self)->ROCrateMetadataFileElem:
+        return ROCrateMetadataFileElem.validate({
+            "@id": "ro-crate-metadata.json",
+            "@type": "CreativeWork",
+            "about": {
+                "@id": self.guid,
+                "@type": ["EVI:Dataset", "EVI:ROCrate"],
+                "name": self.name
+            },
+            "conformsTo": {"@id": "https://w3id.org/ro/crate/1.2"}
+        })
+
 
 class ROCrateDistribution(BaseModel):
     extractedROCrateBucket: Optional[str] = Field(default=None)
