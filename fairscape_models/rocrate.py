@@ -115,7 +115,6 @@ class ROCrateMetadataElem(BaseModel):
     rai_personal_sensitive_information: Optional[List[str]] = Field(alias="rai:personalSensitiveInformation", default=None)
     rai_data_social_impact: Optional[str] = Field(alias="rai:dataSocialImpact", default=None)
     rai_annotations_per_item: Optional[str] = Field(alias="rai:annotationsPerItem", default=None)
-    rai_annotator_demographics: Optional[List[str]] = Field(alias="rai:annotatorDemographics", default=None)
     rai_machine_annotation_tools: Optional[List[str]] = Field(alias="rai:machineAnnotationTools", default=None)
 
     # Aggregated metrics for AI-Ready scoring (roll-up properties from sub-crates)
