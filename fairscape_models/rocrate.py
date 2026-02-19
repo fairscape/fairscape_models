@@ -82,21 +82,46 @@ class ROCrateMetadataElem(BaseModel):
         ```
     """ 
     model_config = ConfigDict(extra="allow")
-    
+
+    # Core identity
     guid: str = Field(alias="@id")
     metadataType: List[str] = Field(alias="@type")
     name: str
     description: str
     keywords: List[str]
-    isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
     version: str
+    datePublished: Optional[str] = Field(default=None)
+
+    # relationships
+    isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
     hasPart: List[IdentifierValue]
+
+    # Attribution
     author: Union[str, List[str]]
-    dataLicense: Optional[str] = Field(alias="license")
+    publisher: Optional[str] = Field(default=None)
+    principalInvestigator: Optional[str] = Field(default=None)
+    funder: Optional[str] = Field(default=None)
+    contactEmail: Optional[str] = Field(default=None)
+    citation: Optional[str] = Field(default=None)
     associatedPublication: Optional[Union[str, List[str]]] = Field(default=None)
+    identifier: Optional[str] = Field(default=None)
+
+    # Licensing 
+    dataLicense: Optional[str] = Field(alias="license")
     conditionsOfAccess: Optional[str] = Field(default=None)
     copyrightNotice: Optional[str] = Field(default=None)
-    
+
+    # Content info
+    contentSize: Optional[str] = Field(default=None)
+    usageInfo: Optional[str] = Field(default=None)
+    hasSummaryStatistics: Optional[str] = Field(default=None)
+    additionalProperty: Optional[List[Dict[str, Any]]] = Field(default=None)
+
+    # Compliance / ethics
+    ethicalReview: Optional[str] = Field(default=None)
+    confidentialityLevel: Optional[str] = Field(default=None)
+
+    # RAI fields
     rai_data_limitations: Optional[str] = Field(alias="rai:dataLimitations", default=None)
     rai_data_biases: Optional[str] = Field(alias="rai:dataBiases", default=None)
     rai_data_use_cases: Optional[str] = Field(alias="rai:dataUseCases", default=None)
@@ -128,7 +153,45 @@ class ROCrateMetadataElem(BaseModel):
     evi_total_entities: Optional[int] = Field(alias="evi:totalEntities", default=None)
     evi_formats: Optional[List[str]] = Field(alias="evi:formats", default=None)
 
+    def get_aiready_warnings(self) -> List[str]:
+        """Return a list of warnings for properties recommended for AI-Ready scoring that are missing."""
+        warnings = []
 
+        # Fairness / Sustainability
+        if not self.identifier:
+            warnings.append("Missing 'identifier' (DOI) — affects Findability and Sustainability scoring")
+        if not self.dataLicense:
+            warnings.append("Missing 'license' — affects Reusability and Ethics scoring")
+
+        # Provenance
+        if not self.publisher and not self.principalInvestigator:
+            warnings.append("Missing 'publisher' or 'principalInvestigator' — affects Provenance and Computability scoring")
+
+        # Characterization
+        if not self.rai_data_biases:
+            warnings.append("Missing 'rai:dataBiases' — affects Characterization: potential_sources_of_bias")
+        if not self.rai_data_collection_missing_data:
+            warnings.append("Missing 'rai:dataCollectionMissingData' — affects Characterization: data_quality")
+        if not self.contentSize and not self.hasSummaryStatistics:
+            warnings.append("Missing 'contentSize' and 'hasSummaryStatistics' — affects Characterization: statistics")
+
+        # Pre-model explainability
+        if not self.rai_data_use_cases and not self.rai_data_limitations:
+            warnings.append("Missing 'rai:dataUseCases' and 'rai:dataLimitations' — affects Pre-model: fit_for_purpose")
+
+        # Ethics
+        if not self.rai_data_collection:
+            warnings.append("Missing 'rai:dataCollection' — affects Ethics: ethically_acquired")
+        if not self.ethicalReview:
+            warnings.append("Missing 'ethicalReview' — affects Ethics: ethically_managed")
+        if not self.confidentialityLevel:
+            warnings.append("Missing 'confidentialityLevel' — affects Ethics: secure")
+
+        # Sustainability
+        if not self.rai_data_release_maintenance_plan:
+            warnings.append("Missing 'rai:dataReleaseMaintenancePlan' — affects Sustainability: domain_appropriate")
+
+        return warnings
 
 
 class ROCrateDistribution(BaseModel):
@@ -137,7 +200,6 @@ class ROCrateDistribution(BaseModel):
     extractedObjectPath: Optional[List[str]] = Field(default=[])
     archivedObjectPath: Optional[str] = Field(default=None)
 
-    
 
 class ROCrateV1_2(BaseModel):
     context: Optional[Dict] = Field(alias="@context")
