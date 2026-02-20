@@ -153,6 +153,13 @@ class ROCrateMetadataElem(BaseModel):
     evi_total_entities: Optional[int] = Field(alias="evi:totalEntities", default=None)
     evi_formats: Optional[List[str]] = Field(alias="evi:formats", default=None)
 
+    #D4D Placeholders
+    addressingGaps : Optional[str] = Field(alias="d4d:addressingGaps", default=None)
+    dataAnomalies : Optional[str] = Field(alias="d4d:dataAnomalies", default=None)
+    contentWarning : Optional[str] = Field(alias="d4d:contentWarning", default=None)
+    informedConsent : Optional[str] = Field(alias="d4d:informedConsent", default=None)
+    atRiskPopulations : Optional[str] = Field(alias="d4d:atRiskPopulations", default=None)    
+    
     def get_aiready_warnings(self) -> List[str]:
         """Return a list of warnings for properties recommended for AI-Ready scoring that are missing."""
         warnings = []
