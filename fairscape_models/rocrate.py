@@ -114,7 +114,7 @@ class ROCrateMetadataElem(BaseModel):
     # Content info
     contentSize: Optional[str] = Field(default=None)
     usageInfo: Optional[str] = Field(default=None)
-    hasSummaryStatistics: Optional[str] = Field(default=None)
+    hasSummaryStatistics: Optional[Union[str, IdentifierValue]] = Field(default=None)
     additionalProperty: Optional[List[Dict[str, Any]]] = Field(default=None)
 
     # Compliance / ethics
