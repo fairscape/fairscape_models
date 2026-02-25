@@ -18,6 +18,7 @@ from fairscape_models.model_card import ModelCard
 from fairscape_models.sample import Sample
 from fairscape_models.activity import Activity
 from fairscape_models.digital_object import DigitalObject
+from fairscape_models._version import __version__
 
 class GenericMetadataElem(BaseModel):
     """Generic Metadata Element of an ROCrate"""
@@ -26,6 +27,7 @@ class GenericMetadataElem(BaseModel):
     isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
  
     model_config = ConfigDict(extra="allow")
+
 
 class ROCrateMetadataFileElem(BaseModel):
     """Metadata Element of an ROCrate cooresponding to the `ro-crate-metadata.json` file itself
@@ -49,6 +51,7 @@ class ROCrateMetadataFileElem(BaseModel):
     metadataType: Literal["CreativeWork"] = Field(alias="@type")
     conformsTo: IdentifierValue
     about: IdentifierValue
+    fairscapeVersion: str = __version__
 
 
 class ROCrateMetadataElem(BaseModel):
@@ -96,6 +99,7 @@ class ROCrateMetadataElem(BaseModel):
     associatedPublication: Optional[Union[str, List[str]]] = Field(default=None)
     conditionsOfAccess: Optional[str] = Field(default=None)
     copyrightNotice: Optional[str] = Field(default=None)
+    fairscapeVersion: str = __version__
     
     rai_data_limitations: Optional[str] = Field(alias="rai:dataLimitations", default=None)
     rai_data_biases: Optional[str] = Field(alias="rai:dataBiases", default=None)
@@ -128,7 +132,17 @@ class ROCrateMetadataElem(BaseModel):
     evi_total_entities: Optional[int] = Field(alias="evi:totalEntities", default=None)
     evi_formats: Optional[List[str]] = Field(alias="evi:formats", default=None)
 
-
+    def generateFileElem(self)->ROCrateMetadataFileElem:
+        return ROCrateMetadataFileElem.validate({
+            "@id": "ro-crate-metadata.json",
+            "@type": "CreativeWork",
+            "about": {
+                "@id": self.guid,
+                "@type": ["EVI:Dataset", "EVI:ROCrate"],
+                "name": self.name
+            },
+            "conformsTo": {"@id": "https://w3id.org/ro/crate/1.2"}
+        })
 
 
 class ROCrateDistribution(BaseModel):
@@ -137,7 +151,6 @@ class ROCrateDistribution(BaseModel):
     extractedObjectPath: Optional[List[str]] = Field(default=[])
     archivedObjectPath: Optional[str] = Field(default=None)
 
-    
 
 class ROCrateV1_2(BaseModel):
     context: Optional[Dict] = Field(alias="@context")
