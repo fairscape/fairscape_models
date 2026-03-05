@@ -18,6 +18,7 @@ from fairscape_models.model_card import ModelCard
 from fairscape_models.sample import Sample
 from fairscape_models.activity import Activity
 from fairscape_models.digital_object import DigitalObject
+from fairscape_models._version import __version__
 
 class GenericMetadataElem(BaseModel):
     """Generic Metadata Element of an ROCrate"""
@@ -26,6 +27,7 @@ class GenericMetadataElem(BaseModel):
     isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
  
     model_config = ConfigDict(extra="allow")
+
 
 class ROCrateMetadataFileElem(BaseModel):
     """Metadata Element of an ROCrate cooresponding to the `ro-crate-metadata.json` file itself
@@ -49,6 +51,7 @@ class ROCrateMetadataFileElem(BaseModel):
     metadataType: Literal["CreativeWork"] = Field(alias="@type")
     conformsTo: IdentifierValue
     about: IdentifierValue
+    fairscapeVersion: str = __version__
 
 
 class ROCrateMetadataElem(BaseModel):

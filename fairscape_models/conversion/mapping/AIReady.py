@@ -200,7 +200,7 @@ def _score_characterization(characterization: CharacterizationScore, root_data: 
         for entity in metadata_graph:
             entity_type = _get_type(entity)
 
-            if "schema" in entity_type:
+            if "Schema" in entity_type:
                 schema_count += 1
     
     if schema_count > 0:
