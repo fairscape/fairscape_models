@@ -336,6 +336,74 @@ def test_clean_identifiers_with_annotation():
     assert annotation.generated[0].guid == "ark:59852/test-output"
 
 
+def _minimal_rocrate_elem(**kwargs) -> ROCrateMetadataElem:
+    """Build a minimal ROCrateMetadataElem, overridable via kwargs."""
+    base = {
+        "@id": "ark:59852/test-crate",
+        "@type": ["Dataset", "https://w3id.org/EVI#ROCrate"],
+        "name": "Test", "description": "Test", "keywords": [],
+        "version": "1.0", "author": "tester", "license": None,
+        "hasPart": []
+    }
+    base.update(kwargs)
+    return ROCrateMetadataElem.model_validate(base)
+
+
+def test_get_aiready_warnings_all_missing():
+    """All recommended fields absent → all 9 warnings returned."""
+    elem = _minimal_rocrate_elem()
+    warnings = elem.get_aiready_warnings()
+    assert len(warnings) == 11
+    texts = "\n".join(warnings)
+    assert "identifier" in texts
+    assert "license" in texts
+    assert "publisher" in texts
+    assert "rai:dataBiases" in texts
+    assert "rai:dataCollectionMissingData" in texts
+    assert "contentSize" in texts
+    assert "rai:dataUseCases" in texts
+    assert "rai:dataCollection" in texts
+    assert "ethicalReview" in texts
+    assert "confidentialityLevel" in texts
+    assert "rai:dataReleaseMaintenancePlan" in texts
+
+
+def test_get_aiready_warnings_all_present():
+    """All recommended fields present → empty warnings list."""
+    elem = _minimal_rocrate_elem(**{
+        "identifier": "https://doi.org/10.1234/test",
+        "license": "MIT",
+        "publisher": "Test Publisher",
+        "rai:dataBiases": "None known",
+        "rai:dataCollectionMissingData": "No missing data",
+        "contentSize": "1GB",
+        "rai:dataUseCases": "Training ML models",
+        "rai:dataCollection": "Prospective study",
+        "ethicalReview": "IRB approved",
+        "confidentialityLevel": "Public",
+        "rai:dataReleaseMaintenancePlan": "Annual updates",
+    })
+    warnings = elem.get_aiready_warnings()
+    assert warnings == []
+
+
+def test_get_aiready_warnings_partial():
+    """publisher present suppresses that warning; others still fire."""
+    elem = _minimal_rocrate_elem(publisher="UCSD")
+    warnings = elem.get_aiready_warnings()
+    texts = "\n".join(warnings)
+    assert "publisher" not in texts
+    assert "identifier" in texts
+
+
+def test_get_aiready_warnings_missing_license():
+    """No license → license warning fires."""
+    elem = _minimal_rocrate_elem(**{"license": None})
+    warnings = elem.get_aiready_warnings()
+    texts = "\n".join(warnings)
+    assert "license" in texts
+
+
 def test_clean_identifiers_with_experiment():
     """Test cleanIdentifiers with Experiment elements."""
     data = {

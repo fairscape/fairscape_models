@@ -76,16 +76,16 @@ OVERVIEW_MAPPING: Dict[str, Dict[str, Any]] = {
     "funding":               {"source_key": "funder", "parser": _as_list_str},
     "keywords":              {"source_key": "keywords"},
 
-    # human-subjects & governance (via additionalProperty)
-    "human_subject":               {"source_key": "additionalProperty", "parser": from_additional_property("Human Subject")},
-    "human_subject_research":      {"source_key": "additionalProperty", "parser": from_additional_property("Human Subject Research", "")},
-    "human_subject_exemptions":    {"source_key": "additionalProperty", "parser": from_additional_property("Human Subjects Exemptions", "")},
-    "deidentified_samples":        {"source_key": "additionalProperty", "parser": from_additional_property("De-identified Samples", "")},
-    "fda_regulated":               {"source_key": "additionalProperty", "parser": from_additional_property("FDA Regulated", "")},
-    "irb":                         {"source_key": "additionalProperty", "parser": from_additional_property("IRB", "")},
-    "irb_protocol_id":             {"source_key": "additionalProperty", "parser": from_additional_property("IRB Protocol ID", "")},
-    "data_governance":             {"source_key": "additionalProperty", "parser": from_additional_property("Data Governance Committee")},
-    "completeness":                {"source_key": "additionalProperty", "parser": from_additional_property("Completeness")},
+    # human-subjects & governance — top-level fields with additionalProperty fallback
+    "human_subject":            {"source_key": "humanSubjects",          "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("Human Subject")},
+    "human_subject_research":   {"source_key": "humanSubjectResearch",   "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("Human Subject Research", "")},
+    "human_subject_exemptions": {"source_key": "humanSubjectExemption",  "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("Human Subjects Exemptions", "")},
+    "deidentified_samples":     {"source_key": "deidentified",           "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("De-identified Samples", "")},
+    "fda_regulated":            {"source_key": "fdaRegulated",           "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("FDA Regulated", "")},
+    "irb":                      {"source_key": "irb",                    "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("IRB", "")},
+    "irb_protocol_id":          {"source_key": "irbProtocolId",          "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("IRB Protocol ID", "")},
+    "data_governance":          {"source_key": "dataGovernanceCommittee","fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("Data Governance Committee")},
+    "completeness":             {"source_key": "completeness",           "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("Completeness")},
 
     # related pubs
     "related_publications":        {"source_key": "associatedPublication", "parser": _as_list_str},
@@ -112,7 +112,7 @@ OVERVIEW_MAPPING_CONFIGURATION = {
 USECASES_MAPPING = {
     "intended_use":          {"source_key": "rai:dataUseCases"},
     "limitations":           {"source_key": "rai:dataLimitations"},
-    "prohibited_uses":        {"source_key": "additionalProperty", "parser": from_additional_property("Prohibited Uses")},
+    "prohibited_uses":        {"source_key": "prohibitedUses", "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("Prohibited Uses")},
     "potential_sources_of_bias": {"source_key": "rai:dataBiases"},
     "maintenance_plan":      {"source_key": "rai:dataReleaseMaintenancePlan"},
 
