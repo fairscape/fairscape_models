@@ -120,6 +120,16 @@ class ROCrateMetadataElem(BaseModel):
     # Compliance / ethics
     ethicalReview: Optional[str] = Field(default=None)
     confidentialityLevel: Optional[str] = Field(default=None)
+    irb: Optional[str] = Field(default=None)
+    irbProtocolId: Optional[str] = Field(default=None)
+    humanSubjectExemption: Optional[str] = Field(default=None)
+    fdaRegulated: Optional[bool] = Field(default=None)
+    deidentified: Optional[bool] = Field(default=None)
+    humanSubjects: Optional[str] = Field(alias="humanSubjects", default=None)
+    humanSubjectResearch: Optional[str] = Field(default=None)
+    dataGovernanceCommittee: Optional[str] = Field(default=None)
+    completeness: Optional[str] = Field(alias="completeness", default=None)
+    prohibitedUses: Optional[str] = Field(alias="prohibitedUses", default=None)
 
     # RAI fields
     rai_data_limitations: Optional[str] = Field(alias="rai:dataLimitations", default=None)
@@ -159,7 +169,7 @@ class ROCrateMetadataElem(BaseModel):
     contentWarning : Optional[str] = Field(alias="d4d:contentWarning", default=None)
     informedConsent : Optional[str] = Field(alias="d4d:informedConsent", default=None)
     atRiskPopulations : Optional[str] = Field(alias="d4d:atRiskPopulations", default=None)    
-    
+
     def get_aiready_warnings(self) -> List[str]:
         """Return a list of warnings for properties recommended for AI-Ready scoring that are missing."""
         warnings = []

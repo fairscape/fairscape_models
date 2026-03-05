@@ -62,6 +62,13 @@ class ROCToTargetConverter:
                 value = source_dict.get(spec["source_key"])
                 if "parser" in spec and value is not None:
                     value = spec["parser"](value)
+                # Backward compat fallback (e.g., additionalProperty)
+                if value is None and "fallback_source_key" in spec:
+                    fallback_value = source_dict.get(spec["fallback_source_key"])
+                    if fallback_value is not None and "fallback_parser" in spec:
+                        value = spec["fallback_parser"](fallback_value)
+                    elif fallback_value is not None:
+                        value = fallback_value
             if value is not None:
                 target_args[target_key] = value
         return target_args

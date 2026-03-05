@@ -310,58 +310,60 @@ def _score_ethics(ethics: EthicsScore, root_data: Dict[str, Any]):
     collection = root_data.get("rai:dataCollection", "")
     if collection and str(collection).strip():
         details.append(f"Data collection: {collection}")
-    
-    addl_props = root_data.get("additionalProperty", [])
-    if isinstance(addl_props, list):
-        for prop in addl_props:
+
+    hs_val = root_data.get("humanSubjects")
+    if not hs_val:
+        for prop in (root_data.get("additionalProperty") or []):
             if isinstance(prop, dict) and prop.get("name") == "Human Subject":
                 hs_val = prop.get("value")
-                if hs_val:
-                    details.append(f"Human subject info: {hs_val}")
-                    break
-    
+                break
+    if hs_val:
+        details.append(f"Human subject info: {hs_val}")
+
     if details:
         ethics.ethically_acquired = SubCriterionScore(
             has_content=True,
             details=", ".join(details)
         )
-    
+
     details = []
     ethical_review = root_data.get("ethicalReview", "")
     if ethical_review and str(ethical_review).strip():
         details.append(f"Ethical review: {ethical_review}")
-    
-    if isinstance(addl_props, list):
-        for prop in addl_props:
+
+    gov_val = root_data.get("dataGovernanceCommittee")
+    if not gov_val:
+        for prop in (root_data.get("additionalProperty") or []):
             if isinstance(prop, dict) and prop.get("name") == "Data Governance Committee":
                 gov_val = prop.get("value")
-                if gov_val:
-                    details.append(f"Governance: {gov_val}")
-                    break
-    
+                break
+    if gov_val:
+        details.append(f"Governance: {gov_val}")
+
     if details:
         ethics.ethically_managed = SubCriterionScore(
             has_content=True,
             details=", ".join(details)
         )
-    
+
     details = []
     license_val = root_data.get("license", "")
     if license_val:
         details.append(f"License: {license_val}")
-    
+
     psi = root_data.get("rai:personalSensitiveInformation", "")
     if psi and str(psi).strip():
         details.append(f"Sensitive info: {psi}")
-    
-    if isinstance(addl_props, list):
-        for prop in addl_props:
+
+    pu_val = root_data.get("prohibitedUses")
+    if not pu_val:
+        for prop in (root_data.get("additionalProperty") or []):
             if isinstance(prop, dict) and prop.get("name") == "Prohibited Uses":
                 pu_val = prop.get("value")
-                if pu_val:
-                    details.append(f"Prohibited uses: {pu_val}")
-                    break
-    
+                break
+    if pu_val:
+        details.append(f"Prohibited uses: {pu_val}")
+
     if details:
         ethics.ethically_disseminated = SubCriterionScore(
             has_content=True,
@@ -397,17 +399,17 @@ def _score_sustainability(sustainability: SustainabilityScore, root_data: Dict[s
             details="Maintenance plan: " + maint
         )
     
-    addl_props = root_data.get("additionalProperty", [])
-    if isinstance(addl_props, list):
-        for prop in addl_props:
+    gov_val = root_data.get("dataGovernanceCommittee")
+    if not gov_val:
+        for prop in (root_data.get("additionalProperty") or []):
             if isinstance(prop, dict) and prop.get("name") == "Data Governance Committee":
                 gov_val = prop.get("value")
-                if gov_val:
-                    sustainability.well_governed = SubCriterionScore(
-                        has_content=True,
-                        details=f"Governance committee: {gov_val}"
-                    )
-                    break
+                break
+    if gov_val:
+        sustainability.well_governed = SubCriterionScore(
+            has_content=True,
+            details=f"Governance committee: {gov_val}"
+        )
 
 def _score_computability(computability: ComputabilityScore, root_data: Dict[str, Any], metadata_graph: List[Dict]):
     """Score Computability criteria."""
