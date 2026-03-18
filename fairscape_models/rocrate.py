@@ -20,6 +20,35 @@ from fairscape_models.activity import Activity
 from fairscape_models.digital_object import DigitalObject
 from fairscape_models._version import __version__
 
+class ContactPoint(BaseModel):
+    """Schema.org ContactPoint for structured contact information."""
+    metadataType: str = Field(default="ContactPoint", alias="@type")
+    contactType: Optional[str] = Field(default=None)
+    email: Optional[str] = Field(default=None)
+    telephone: Optional[str] = Field(default=None)
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+
+class PostalAddress(BaseModel):
+    """Schema.org PostalAddress for structured address information."""
+    metadataType: str = Field(default="PostalAddress", alias="@type")
+    streetAddress: Optional[str] = Field(default=None)
+    addressLocality: Optional[str] = Field(default=None)
+    addressRegion: Optional[str] = Field(default=None)
+    postalCode: Optional[str] = Field(default=None)
+    addressCountry: Optional[str] = Field(default=None)
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+
+class IRB(BaseModel):
+    """Institutional Review Board with structured contact and address info."""
+    metadataType: str = Field(default="IRB", alias="@type")
+    name: str
+    contactPoint: Optional[ContactPoint] = Field(default=None)
+    address: Optional[PostalAddress] = Field(default=None)
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+
 class GenericMetadataElem(BaseModel):
     """Generic Metadata Element of an ROCrate"""
     guid: str = Field(alias="@id")
@@ -123,7 +152,7 @@ class ROCrateMetadataElem(BaseModel):
     # Compliance / ethics
     ethicalReview: Optional[str] = Field(default=None)
     confidentialityLevel: Optional[str] = Field(default=None)
-    irb: Optional[str] = Field(default=None)
+    irb: Optional[Union[str, IRB]] = Field(default=None)
     irbProtocolId: Optional[str] = Field(default=None)
     humanSubjectExemption: Optional[str] = Field(default=None)
     fdaRegulated: Optional[bool] = Field(default=None)
@@ -131,6 +160,11 @@ class ROCrateMetadataElem(BaseModel):
     humanSubjects: Optional[str] = Field(alias="humanSubjects", default=None)
     humanSubjectResearch: Optional[str] = Field(default=None)
     dataGovernanceCommittee: Optional[str] = Field(default=None)
+    
+    # Checksums
+    md5: Optional[str] = Field(default=None, description="MD5 checksum of the digital object content")
+    hash: Optional[str] = Field(default=None, description="Hash of the digital object content (if not MD5)")
+    sha256: Optional[str] = Field(default=None, description="SHA-256 checksum of the digital object content")
 
 
     # RAI fields
