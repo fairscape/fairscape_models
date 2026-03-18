@@ -17,6 +17,9 @@ class DigitalObject(BaseModel):
     contentUrl: Optional[Union[str, List[str]]] = Field(default=None)
     isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
     usedByComputation: Optional[List[IdentifierValue]] = Field(default=[])
+    md5: Optional[str] = Field(default=None, description="MD5 checksum of the digital object content")
+    hash: Optional[str] = Field(default=None, description="Hash of the digital object content (if not MD5)")
+    sha256: Optional[str] = Field(default=None, description="SHA-256 checksum of the digital object content")
     fairscapeVersion: str = __version__
 
     # PROV-O fields (auto-populated)

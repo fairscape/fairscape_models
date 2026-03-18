@@ -295,7 +295,7 @@ def _score_pre_model(pre_model: PreModelExplainabilityScore, root_data: Dict[str
 
             if "Dataset" in entity_type or "Software" in entity_type or "ROCrate" in entity_type:
                 total += 1
-                if entity.get("md5") or entity.get("MD5"):
+                if entity.get("md5") or entity.get("MD5" or "") or entity.get("sha256") or entity.get("SHA256" or "") or entity.get("hash") or entity.get("hash" or ""):
                     with_checksum += 1
     
     if total > 0 and with_checksum > 0:
