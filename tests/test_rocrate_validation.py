@@ -8,7 +8,10 @@ from fairscape_models.rocrate import (
     ROCrateMetadataElem,
     GenericMetadataElem,
     BioChemEntity,
-    MedicalCondition
+    MedicalCondition,
+    IRB,
+    ContactPoint,
+    PostalAddress,
 )
 from fairscape_models.dataset import Dataset
 from fairscape_models.software import Software
@@ -447,3 +450,292 @@ def test_clean_identifiers_with_experiment():
     assert experiment.usedTreatment[0].guid == "ark:59852/test-treatment"
     assert experiment.usedStain[0].guid == "ark:59852/test-stain"
     assert experiment.generated[0].guid == "ark:59852/test-result"
+
+
+# ── IRB class tests ─────────────────────────────────────────────────────
+
+class TestContactPoint:
+    """Tests for the ContactPoint model."""
+
+    def test_defaults(self):
+        cp = ContactPoint()
+        assert cp.metadataType == "ContactPoint"
+        assert cp.contactType is None
+        assert cp.email is None
+        assert cp.telephone is None
+
+    def test_full(self):
+        cp = ContactPoint(
+            contactType="IRB Reliance and Compliance",
+            email="irbreliance@mgb.org",
+            telephone="+1-857-282-1900",
+        )
+        assert cp.contactType == "IRB Reliance and Compliance"
+        assert cp.email == "irbreliance@mgb.org"
+        assert cp.telephone == "+1-857-282-1900"
+
+    def test_alias_serialization(self):
+        cp = ContactPoint(email="test@example.com")
+        dumped = cp.model_dump(by_alias=True)
+        assert dumped["@type"] == "ContactPoint"
+        assert "metadataType" not in dumped
+
+    def test_from_dict_with_alias(self):
+        cp = ContactPoint.model_validate({
+            "@type": "ContactPoint",
+            "email": "test@example.com",
+        })
+        assert cp.metadataType == "ContactPoint"
+        assert cp.email == "test@example.com"
+
+    def test_extra_fields_allowed(self):
+        cp = ContactPoint.model_validate({
+            "email": "test@example.com",
+            "url": "https://example.com",
+        })
+        assert cp.email == "test@example.com"
+
+
+class TestPostalAddress:
+    """Tests for the PostalAddress model."""
+
+    def test_defaults(self):
+        addr = PostalAddress()
+        assert addr.metadataType == "PostalAddress"
+        assert addr.streetAddress is None
+        assert addr.addressLocality is None
+        assert addr.addressRegion is None
+        assert addr.postalCode is None
+        assert addr.addressCountry is None
+
+    def test_full(self):
+        addr = PostalAddress(
+            streetAddress="399 Revolution Drive, Suite 710",
+            addressLocality="Somerville",
+            addressRegion="MA",
+            postalCode="02145",
+            addressCountry="US",
+        )
+        assert addr.streetAddress == "399 Revolution Drive, Suite 710"
+        assert addr.addressLocality == "Somerville"
+        assert addr.addressRegion == "MA"
+        assert addr.postalCode == "02145"
+        assert addr.addressCountry == "US"
+
+    def test_alias_serialization(self):
+        addr = PostalAddress(addressLocality="Boston")
+        dumped = addr.model_dump(by_alias=True)
+        assert dumped["@type"] == "PostalAddress"
+
+    def test_from_dict_with_alias(self):
+        addr = PostalAddress.model_validate({
+            "@type": "PostalAddress",
+            "addressLocality": "Boston",
+            "addressRegion": "MA",
+        })
+        assert addr.addressLocality == "Boston"
+        assert addr.addressRegion == "MA"
+
+
+class TestIRB:
+    """Tests for the IRB model."""
+
+    def test_minimal(self):
+        irb = IRB(name="Test IRB")
+        assert irb.metadataType == "IRB"
+        assert irb.name == "Test IRB"
+        assert irb.contactPoint is None
+        assert irb.address is None
+
+    def test_name_required(self):
+        with pytest.raises(ValidationError, match="name"):
+            IRB.model_validate({})
+
+    def test_full_mgb_irb(self):
+        """Full MGB IRB example from requirements."""
+        irb = IRB(
+            name="Mass General Brigham Institutional Review Board (MGB IRB)",
+            contactPoint=ContactPoint(
+                contactType="IRB Reliance and Compliance",
+                email="irbreliance@mgb.org",
+                telephone="+1-857-282-1900",
+            ),
+            address=PostalAddress(
+                streetAddress="399 Revolution Drive, Suite 710",
+                addressLocality="Somerville",
+                addressRegion="MA",
+                postalCode="02145",
+                addressCountry="US",
+            ),
+        )
+        assert irb.name == "Mass General Brigham Institutional Review Board (MGB IRB)"
+        assert irb.contactPoint.email == "irbreliance@mgb.org"
+        assert irb.contactPoint.telephone == "+1-857-282-1900"
+        assert irb.contactPoint.contactType == "IRB Reliance and Compliance"
+        assert irb.address.streetAddress == "399 Revolution Drive, Suite 710"
+        assert irb.address.addressLocality == "Somerville"
+        assert irb.address.postalCode == "02145"
+
+    def test_alias_serialization(self):
+        irb = IRB(name="Test IRB")
+        dumped = irb.model_dump(by_alias=True)
+        assert dumped["@type"] == "IRB"
+        assert dumped["name"] == "Test IRB"
+
+    def test_from_dict_with_alias(self):
+        irb = IRB.model_validate({
+            "@type": "IRB",
+            "name": "Test IRB",
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "email": "test@example.com",
+            },
+        })
+        assert irb.name == "Test IRB"
+        assert irb.contactPoint.email == "test@example.com"
+
+    def test_nested_roundtrip(self):
+        """Serialize to dict and back — full nested structure survives."""
+        irb = IRB(
+            name="MGB IRB",
+            contactPoint=ContactPoint(email="irb@mgb.org", telephone="+1-555-0100"),
+            address=PostalAddress(addressLocality="Somerville", addressRegion="MA"),
+        )
+        dumped = irb.model_dump(by_alias=True)
+        restored = IRB.model_validate(dumped)
+        assert restored.name == irb.name
+        assert restored.contactPoint.email == irb.contactPoint.email
+        assert restored.contactPoint.telephone == irb.contactPoint.telephone
+        assert restored.address.addressLocality == irb.address.addressLocality
+        assert restored.address.addressRegion == irb.address.addressRegion
+
+    def test_extra_fields_allowed(self):
+        irb = IRB.model_validate({
+            "name": "Test IRB",
+            "irbNumber": "IRB-2024-001",
+        })
+        assert irb.name == "Test IRB"
+
+
+class TestROCrateMetadataElemIRB:
+    """Tests for IRB as a property on ROCrateMetadataElem."""
+
+    def test_irb_as_string(self):
+        elem = _minimal_rocrate_elem(irb="MGB IRB")
+        assert elem.irb == "MGB IRB"
+
+    def test_irb_as_none(self):
+        elem = _minimal_rocrate_elem()
+        assert elem.irb is None
+
+    def test_irb_as_structured_class(self):
+        elem = _minimal_rocrate_elem(irb={
+            "@type": "IRB",
+            "name": "Mass General Brigham IRB",
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "IRB Reliance and Compliance",
+                "email": "irbreliance@mgb.org",
+                "telephone": "+1-857-282-1900",
+            },
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "399 Revolution Drive, Suite 710",
+                "addressLocality": "Somerville",
+                "addressRegion": "MA",
+                "postalCode": "02145",
+                "addressCountry": "US",
+            },
+        })
+        assert isinstance(elem.irb, IRB)
+        assert elem.irb.name == "Mass General Brigham IRB"
+        assert elem.irb.contactPoint.email == "irbreliance@mgb.org"
+        assert elem.irb.address.addressLocality == "Somerville"
+
+    def test_irb_structured_serialization(self):
+        """Structured IRB round-trips through ROCrateMetadataElem."""
+        elem = _minimal_rocrate_elem(irb={
+            "@type": "IRB",
+            "name": "Test IRB",
+            "contactPoint": {"@type": "ContactPoint", "email": "irb@test.edu"},
+        })
+        dumped = elem.model_dump(by_alias=True)
+        irb_data = dumped["irb"]
+        assert irb_data["@type"] == "IRB"
+        assert irb_data["name"] == "Test IRB"
+        assert irb_data["contactPoint"]["email"] == "irb@test.edu"
+
+    def test_irb_string_serialization(self):
+        """String IRB round-trips through ROCrateMetadataElem."""
+        elem = _minimal_rocrate_elem(irb="Simple IRB Name")
+        dumped = elem.model_dump(by_alias=True)
+        assert dumped["irb"] == "Simple IRB Name"
+
+    def test_irb_in_full_rocrate(self):
+        """IRB class works inside a full ROCrate validation."""
+        data = {
+            "@context": {},
+            "@graph": [
+                {
+                    "@id": "ro-crate-metadata.json",
+                    "@type": "CreativeWork",
+                    "conformsTo": {"@id": "https://w3id.org/ro/crate/1.1"},
+                    "about": {"@id": "ark:59852/irb-crate"},
+                },
+                {
+                    "@id": "ark:59852/irb-crate",
+                    "@type": ["Dataset", "https://w3id.org/EVI#ROCrate"],
+                    "name": "IRB Test Crate",
+                    "description": "Crate with structured IRB",
+                    "keywords": [],
+                    "version": "1.0",
+                    "author": "tester",
+                    "license": "MIT",
+                    "hasPart": [],
+                    "irb": {
+                        "@type": "IRB",
+                        "name": "MGB IRB",
+                        "contactPoint": {
+                            "@type": "ContactPoint",
+                            "email": "irb@mgb.org",
+                        },
+                    },
+                    "irbProtocolId": "2024-P000123",
+                },
+            ],
+        }
+        rocrate = ROCrateV1_2.model_validate(data)
+        meta = rocrate.getCrateMetadata()
+        assert isinstance(meta.irb, IRB)
+        assert meta.irb.name == "MGB IRB"
+        assert meta.irb.contactPoint.email == "irb@mgb.org"
+        assert meta.irbProtocolId == "2024-P000123"
+
+    def test_irb_string_in_full_rocrate(self):
+        """String IRB still works inside a full ROCrate."""
+        data = {
+            "@context": {},
+            "@graph": [
+                {
+                    "@id": "ro-crate-metadata.json",
+                    "@type": "CreativeWork",
+                    "conformsTo": {"@id": "https://w3id.org/ro/crate/1.1"},
+                    "about": {"@id": "ark:59852/irb-crate"},
+                },
+                {
+                    "@id": "ark:59852/irb-crate",
+                    "@type": ["Dataset", "https://w3id.org/EVI#ROCrate"],
+                    "name": "IRB Test Crate",
+                    "description": "Crate with string IRB",
+                    "keywords": [],
+                    "version": "1.0",
+                    "author": "tester",
+                    "license": "MIT",
+                    "hasPart": [],
+                    "irb": "Mass General Brigham IRB",
+                },
+            ],
+        }
+        rocrate = ROCrateV1_2.model_validate(data)
+        meta = rocrate.getCrateMetadata()
+        assert meta.irb == "Mass General Brigham IRB"
