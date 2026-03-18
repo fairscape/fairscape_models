@@ -131,8 +131,7 @@ class ROCrateMetadataElem(BaseModel):
     humanSubjects: Optional[str] = Field(alias="humanSubjects", default=None)
     humanSubjectResearch: Optional[str] = Field(default=None)
     dataGovernanceCommittee: Optional[str] = Field(default=None)
-    completeness: Optional[str] = Field(alias="completeness", default=None)
-    prohibitedUses: Optional[str] = Field(alias="prohibitedUses", default=None)
+
 
     # RAI fields
     rai_data_limitations: Optional[str] = Field(alias="rai:dataLimitations", default=None)
@@ -154,6 +153,8 @@ class ROCrateMetadataElem(BaseModel):
     rai_data_social_impact: Optional[str] = Field(alias="rai:dataSocialImpact", default=None)
     rai_annotations_per_item: Optional[str] = Field(alias="rai:annotationsPerItem", default=None)
     rai_machine_annotation_tools: Optional[List[str]] = Field(alias="rai:machineAnnotationTools", default=None)
+    completeness: Optional[str] = Field(alias="completeness", default=None)
+    prohibitedUses: Optional[str] = Field(alias="prohibitedUses", default=None)
 
     # Aggregated metrics for AI-Ready scoring (roll-up properties from sub-crates)
     evi_dataset_count: Optional[int] = Field(alias="evi:datasetCount", default=None)
