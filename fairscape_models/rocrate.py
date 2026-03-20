@@ -2,7 +2,7 @@ import urllib.parse
 from typing import Any, Dict, List, Literal, Optional, Union
 from pydantic import BaseModel, Field, ConfigDict, model_validator
 
-from fairscape_models.fairscape_base import IdentifierValue
+from fairscape_models.fairscape_base import IdentifierValue, DEFAULT_CONTEXT
 from fairscape_models.schema import Schema
 from fairscape_models.biochem_entity import BioChemEntity
 from fairscape_models.medical_condition import MedicalCondition
@@ -222,7 +222,7 @@ class ROCrateDistribution(BaseModel):
 
 
 class ROCrateV1_2(BaseModel):
-    context: Optional[Dict] = Field(alias="@context")
+    context: Optional[Dict] = Field(alias="@context", default=DEFAULT_CONTEXT)
     metadataGraph: List[Union[
         Dataset,
         Software,
