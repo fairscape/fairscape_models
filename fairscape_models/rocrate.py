@@ -173,6 +173,20 @@ class ROCrateMetadataElem(BaseModel):
     informedConsent : Optional[str] = Field(alias="d4d:informedConsent", default=None)
     atRiskPopulations : Optional[str] = Field(alias="d4d:atRiskPopulations", default=None)    
 
+    def generateFileElem(self) -> ROCrateMetadataFileElem:
+        """ Given an ROCrate Element create an appropriate ROCrateMetadataFileElem
+        """
+        return ROCrateMetadataFileElem.model_validate({
+            "@id": "ro-crate-metadata.json",
+            "@type": "CreativeWork",
+            "conformsTo": {
+                "@id": "https://w3id.org/ro/crate/1.2"
+            },
+            "about": {
+                "@id": self.guid
+            }
+        })
+
     def get_aiready_warnings(self) -> List[str]:
         """Return a list of warnings for properties recommended for AI-Ready scoring that are missing."""
         warnings = []
