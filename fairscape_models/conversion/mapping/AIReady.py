@@ -284,7 +284,11 @@ def _score_pre_model(pre_model: PreModelExplainabilityScore, root_data: Dict[str
     if total_entities is not None:
         # Use pre-aggregated checksum data
         total = total_entities
-        with_checksum = entities_with_checksums
+        
+        if entities_with_checksums is not None:
+            with_checksum = entities_with_checksums
+        else:
+            with_checksum = 0
     else:
         # Fall back to counting in metadata_graph
         total = 0

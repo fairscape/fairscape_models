@@ -54,13 +54,14 @@ class CroissantSource(BaseModel):
 class CroissantReferences(BaseModel):
     file_object: Optional[CroissantIdentifier] = Field(default=None, alias="fileObject")
     column: Optional[str] = Field(default=None)
+    field: Optional[CroissantIdentifier] = Field(default=None, alias="field")
 
 class CroissantField(BaseModel):
     id: Optional[str] = Field(default=None, alias="@id")
     type: str = Field(default="cr:Field", alias="@type")
     name: str
     description: Optional[str] = None
-    data_type: str = Field(alias="dataType")
+    data_type: Union[str, List[str]] = Field(alias="dataType")
     source: Optional[CroissantSource] = None
     references: Optional[CroissantReferences] = None
     sub_field: Optional[List['CroissantField']] = Field(default=None, alias="subField")
