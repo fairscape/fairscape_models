@@ -1,5 +1,5 @@
 from typing import Any, Dict, List, Optional, Union, Callable, Tuple
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, model_validator
 
 ##########################################################################
 # --- Main Document Subsections ------------------------------------------
@@ -40,10 +40,10 @@ class OverviewSection(BaseModel):
     human_subject: Optional[str] = None
     human_subject_research: Optional[str] = None
     human_subject_exemptions: Optional[str] = None
-    deidentified_samples: Optional[str] = None
-    fda_regulated: Optional[str] = None
+    deidentified_samples: Optional[Union[str, bool]] = None
+    fda_regulated: Optional[Union[str, bool]] = None
     confidentiality_level: Optional[str] = None
-    irb: Optional[str] = None
+    irb: Optional[Union[str, Dict[str, Any]]] = None
     irb_protocol_id: Optional[str] = None
     
     ethical_review: Optional[str] = None

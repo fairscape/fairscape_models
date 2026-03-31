@@ -38,6 +38,20 @@ def from_additional_property(name: str, default: Optional[str] = None):
         return default
     return _parser
 
+def _bool_to_yes_no(value: Any) -> str:
+    """Convert a boolean to 'Yes'/'No' string for display."""
+    if isinstance(value, bool):
+        return "Yes" if value else "No"
+    return str(value)
+
+def _irb_passthrough(value: Any) -> Any:
+    """Pass IRB value through as-is — string or dict (structured IRB)."""
+    if isinstance(value, dict):
+        return value
+    if isinstance(value, str):
+        return value
+    return None
+
 def _extract_id(value: Any) -> Optional[str]:
     if isinstance(value, dict):
         return value.get("@id")
@@ -80,9 +94,9 @@ OVERVIEW_MAPPING: Dict[str, Dict[str, Any]] = {
     "human_subject":            {"source_key": "humanSubjects",          "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("Human Subject")},
     "human_subject_research":   {"source_key": "humanSubjectResearch",   "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("Human Subject Research", "")},
     "human_subject_exemptions": {"source_key": "humanSubjectExemption",  "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("Human Subjects Exemptions", "")},
-    "deidentified_samples":     {"source_key": "deidentified",           "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("De-identified Samples", "")},
-    "fda_regulated":            {"source_key": "fdaRegulated",           "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("FDA Regulated", "")},
-    "irb":                      {"source_key": "irb",                    "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("IRB", "")},
+    "deidentified_samples":     {"source_key": "deidentified", "parser": _bool_to_yes_no, "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("De-identified Samples", "")},
+    "fda_regulated":            {"source_key": "fdaRegulated", "parser": _bool_to_yes_no, "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("FDA Regulated", "")},
+    "irb":                      {"source_key": "irb", "parser": _irb_passthrough, "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("IRB", "")},
     "irb_protocol_id":          {"source_key": "irbProtocolId",          "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("IRB Protocol ID", "")},
     "data_governance":          {"source_key": "dataGovernanceCommittee","fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("Data Governance Committee")},
     "completeness":             {"source_key": "completeness",           "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("Completeness")},

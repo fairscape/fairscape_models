@@ -14,6 +14,7 @@ class Computation(Activity):
     usedSoftware: Optional[List[IdentifierValue]] = Field(default=[])
     usedMLModel: Optional[List[IdentifierValue]] = Field(default=[])
     usedDataset: Optional[List[IdentifierValue]] = Field(default=[])
+    annotatedBy: Optional[List[IdentifierValue]] = Field(default=[], alias="evi:annotatedBy")
 
     @model_validator(mode='after')
     def populate_prov_fields(self):

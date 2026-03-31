@@ -23,6 +23,8 @@ SOFTWARE_TYPE = "Software"
 MLMODEL_TYPE = "MLModel"
 COMPUTATION_TYPE = "Computation"
 ANNOTATION_TYPE = "Annotation"
+ANNOTATED_COMPUTATION_TYPE = "AnnotatedComputation"
+ANNOTATED_EVIDENCE_GRAPH_TYPE = "AnnotatedEvidenceGraph"
 ROCRATE_TYPE = "ROCrate"
 
 # TODO get from config
@@ -51,6 +53,10 @@ DEFAULT_CONTEXT = {
         "@id": "https://w3id.org/EVI#generated",
         "@type": "@id"
     },
+    "annotates": {
+        "@id": "https://w3id.org/EVI#annotates",
+        "@type": "@id"
+    },
     "hasDistribution": {
         "@id": "https://w3id.org/EVI#hasDistribution",
         "@type": "@id"
@@ -65,6 +71,8 @@ class ClassType(str, Enum):
     ANNOTATION = 'Annotation'
     SCHEMA = 'Schema'
     EVIDENCE_GRAPH = 'EvidenceGraph'
+    ANNOTATED_COMPUTATION = 'AnnotatedComputation'
+    ANNOTATED_EVIDENCE_GRAPH = 'AnnotatedEvidenceGraph'
     ROCRATE = 'ROCrate' #TODO: Add ROCrate concept to EVI ontology and publish a new version
 
 def normalize_class_type(value: Union[str, ClassType]) -> ClassType:
