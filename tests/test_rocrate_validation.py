@@ -739,3 +739,13 @@ class TestROCrateMetadataElemIRB:
         rocrate = ROCrateV1_2.model_validate(data)
         meta = rocrate.getCrateMetadata()
         assert meta.irb == "Mass General Brigham IRB"
+
+
+def test_generate_file_elem():
+    """Test that generateFileElem returns a valid ROCrateMetadataFileElem."""
+    from fairscape_models.rocrate import ROCrateMetadataFileElem
+    elem = _minimal_rocrate_elem()
+    file_elem = elem.generateFileElem()
+    assert isinstance(file_elem, ROCrateMetadataFileElem)
+    assert file_elem.guid == "ro-crate-metadata.json"
+    assert file_elem.about.guid == elem.guid

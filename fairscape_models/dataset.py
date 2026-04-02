@@ -64,6 +64,8 @@ class Dataset(DigitalObject):
     @model_validator(mode='after')
     def populate_prov_fields(self):
         """Auto-populate PROV-O fields from EVI fields"""
+        self.metadataType = ['prov:Entity', "https://w3id.org/EVI#Dataset"]
+
         # Map generatedBy → prov:wasGeneratedBy
         if self.generatedBy:
             if isinstance(self.generatedBy, list):

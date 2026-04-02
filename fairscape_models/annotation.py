@@ -14,6 +14,8 @@ class Annotation(Activity):
     @model_validator(mode='after')
     def populate_prov_fields(self):
         """Auto-populate PROV-O fields from EVI fields"""
+        self.metadataType = ["https://w3id.org/EVI#Annotation"]
+
         # Map usedDataset to prov:used (preserving their types)
         if self.usedDataset:
             self.used = self.usedDataset

@@ -17,6 +17,8 @@ class Experiment(Activity):
     @model_validator(mode='after')
     def populate_prov_fields(self):
         """Auto-populate PROV-O fields from EVI fields"""
+        self.metadataType = ['prov:Activity', "https://w3id.org/EVI#Experiment"]
+
         # Aggregate all inputs into prov:used
         used_items = []
         if self.usedInstrument:

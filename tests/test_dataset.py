@@ -89,3 +89,41 @@ def test_dataset_edge_case_empty_author():
 
     # Should hit the else clause and set wasAttributedTo to empty list
     assert dataset.wasAttributedTo == []
+
+
+def test_dataset_default_fields_present_in_json(dataset_minimal_data):
+    """Fields with non-None defaults appear in serialized JSON even when not explicitly provided."""
+    from fairscape_models.fairscape_base import DATASET_TYPE
+    dataset = Dataset.model_validate(dataset_minimal_data)
+    output = dataset.model_dump(by_alias=True, exclude_none=True)
+
+    # version has default "0.1.0"
+    assert "version" in output
+    assert output["version"] == "0.1.0"
+
+    # fairscapeVersion is always injected from _version
+    assert "fairscapeVersion" in output
+
+    # additionalType defaults to DATASET_TYPE
+    assert "additionalType" in output
+    assert output["additionalType"] == DATASET_TYPE
+
+    # empty-list defaults still serialize
+    assert "isPartOf" in output
+    assert output["isPartOf"] == []
+
+
+def test_dataset_null_optional_fields_absent_from_json(dataset_minimal_data):
+    """Optional fields left as None are excluded when serializing with exclude_none=True."""
+    dataset = Dataset.model_validate(dataset_minimal_data)
+    output = dataset.model_dump(by_alias=True, exclude_none=True)
+
+    for null_field in ("associatedPublication", "additionalDocumentation", "contentUrl", "md5", "hash", "sha256"):
+        assert null_field not in output, f"expected {null_field!r} to be absent when None"
+
+
+def test_dataset_custom_type_overwritten_by_validator(dataset_minimal_data):
+    """A caller-supplied @type is always replaced by the model validator."""
+    dataset_minimal_data["@type"] = "CustomType"
+    dataset = Dataset.model_validate(dataset_minimal_data)
+    assert dataset.metadataType == ["prov:Entity", "https://w3id.org/EVI#Dataset"]

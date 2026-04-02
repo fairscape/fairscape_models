@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, model_validator
 from typing import Optional, List, Union, Dict
 from fairscape_models.fairscape_base import IdentifierValue
 from fairscape_models._version import __version__
@@ -16,3 +16,8 @@ class Sample(BaseModel):
     fairscapeVersion: str = __version__
 
     model_config = ConfigDict(extra='allow')
+
+    @model_validator(mode='after')
+    def populate_prov_fields(self):
+        self.metadataType = ['prov:Entity', "https://w3id.org/EVI#Sample"]
+        return self
