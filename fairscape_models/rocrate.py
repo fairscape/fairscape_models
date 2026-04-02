@@ -116,97 +116,160 @@ class ROCrateMetadataElem(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     # Core identity
-    guid: str = Field(alias="@id")
-    metadataType: List[str] = Field(alias="@type")
-    name: str
-    description: str
-    keywords: List[str]
-    version: str
-    datePublished: Optional[str] = Field(default=None)
+    guid: str = Field(alias="@id", description="Persistent unique identifier for this RO-Crate (ARK, DOI, URL, etc.).")
+    metadataType: List[str] = Field(alias="@type", description="RO-Crate type list; always includes 'Dataset' and 'https://w3id.org/EVI#ROCrate'.")
+    name: str = Field(description="A human-readable name for the dataset.")
+    description: str = Field(description="A human-readable description of the dataset.")
+    keywords: List[str] = Field(description="Keywords or tags describing the dataset, used for discovery and search.")
+    version: str = Field(description="Version string for this release of the dataset (e.g. '1.0', '2.3.1').")
+    datePublished: Optional[str] = Field(default=None, description="Date the dataset was published or made publicly available (ISO 8601).")
 
-    # relationships
-    isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
-    hasPart: List[IdentifierValue]
+    # Relationships
+    isPartOf: Optional[List[IdentifierValue]] = Field(default=[], description="Parent organization(s) or project(s) this crate belongs to, referenced by identifier.")
+    hasPart: List[IdentifierValue] = Field(description="Dataset, Software, Computation, and other entities that are part of this RO-Crate, referenced by identifier.")
 
-    # Attribution
-    author: Union[str, List[str]]
-    publisher: Optional[str] = Field(default=None)
-    principalInvestigator: Optional[str] = Field(default=None)
-    funder: Optional[str] = Field(default=None)
-    contactEmail: Optional[str] = Field(default=None)
-    citation: Optional[str] = Field(default=None)
-    associatedPublication: Optional[Union[str, List[str]]] = Field(default=None)
-    identifier: Optional[str] = Field(default=None)
+    # Attribution — D4D_Motivation: Creator, FundingMechanism
+    author: Union[str, List[str]] = Field(description="Who created the dataset (e.g. which team, research group) and on behalf of which entity (e.g. company, institution, organization).")
+    publisher: Optional[str] = Field(default=None, description="Organization or person responsible for publishing or distributing the dataset.")
+    principalInvestigator: Optional[str] = Field(default=None, description="A key individual (Principal Investigator) responsible for or overseeing dataset creation.")
+    funder: Optional[str] = Field(default=None, description="Who funded the creation of the dataset? Include grant names and numbers where applicable.")
+    contactEmail: Optional[str] = Field(default=None, description="Email address for questions or correspondence about the dataset.")
+    citation: Optional[str] = Field(default=None, description="Preferred citation string for this dataset.")
+    associatedPublication: Optional[Union[str, List[str]]] = Field(default=None, description="Publication(s) associated with or describing this dataset.")
+    identifier: Optional[str] = Field(default=None, description="DOI or other external persistent identifier for the dataset (used for Findability and Sustainability scoring).")
 
-    # Licensing 
-    dataLicense: Optional[str] = Field(alias="license")
-    conditionsOfAccess: Optional[str] = Field(default=None)
-    copyrightNotice: Optional[str] = Field(default=None)
+    # Licensing — D4D_Data_Governance: LicenseAndUseTerms
+    dataLicense: Optional[str] = Field(alias="license", description="Will the dataset be distributed under a copyright or other IP license? Provide a link to or copy of the license terms (e.g. CC BY 4.0, MIT).")
+    conditionsOfAccess: Optional[str] = Field(default=None, description="Terms and conditions governing access to and use of this dataset, including any data use agreements required.")
+    copyrightNotice: Optional[str] = Field(default=None, description="Copyright statement for the dataset, including year and rights holder.")
 
     # Content info
-    contentSize: Optional[str] = Field(default=None)
-    usageInfo: Optional[str] = Field(default=None)
-    hasSummaryStatistics: Optional[Union[str, IdentifierValue]] = Field(default=None)
-    additionalProperty: Optional[List[Dict[str, Any]]] = Field(default=None)
+    contentSize: Optional[str] = Field(default=None, description="Total size of the dataset content (e.g. '2.4 GB', '150 MB'). Used in AI-Ready Characterization scoring.")
+    usageInfo: Optional[str] = Field(default=None, description="Additional usage information or instructions for working with this dataset.")
+    hasSummaryStatistics: Optional[Union[str, IdentifierValue]] = Field(default=None, description="Reference to a summary statistics entity describing distributions, counts, and key statistics for this dataset.")
+    additionalProperty: Optional[List[Dict[str, Any]]] = Field(default=None, description="Additional schema.org PropertyValue entries for metadata not covered by other fields (e.g. [{\"name\": \"Human Subject\", \"value\": \"Yes\"}]).")
 
-    # Compliance / ethics
-    ethicalReview: Optional[str] = Field(default=None)
-    confidentialityLevel: Optional[str] = Field(default=None)
-    irb: Optional[Union[str, IRB]] = Field(default=None)
-    irbProtocolId: Optional[str] = Field(default=None)
-    humanSubjectExemption: Optional[str] = Field(default=None)
-    fdaRegulated: Optional[bool] = Field(default=None)
-    deidentified: Optional[bool] = Field(default=None)
-    humanSubjects: Optional[str] = Field(alias="humanSubjects", default=None)
-    humanSubjectResearch: Optional[str] = Field(default=None)
-    dataGovernanceCommittee: Optional[str] = Field(default=None)
-    
+    # Compliance / ethics — D4D_Ethics, D4D_Human, D4D_Data_Governance
+    ethicalReview: Optional[str] = Field(default=None, description="Were any ethical or compliance review processes conducted (e.g. by an Institutional Review Board)? If so, describe the process, frequency of review, and outcomes. Or provide a contact for ethical review information.")
+    confidentialityLevel: Optional[str] = Field(default=None, description="HL7 Confidentiality code indicating the level of confidentiality or sensitivity of the dataset (e.g. 'normal', 'restricted', 'very restricted').")
+    irb: Optional[Union[str, IRB]] = Field(default=None, description="Institutional Review Board (IRB) information — approval status, approving institution, and contact details.")
+    irbProtocolId: Optional[str] = Field(default=None, description="IRB protocol identifier number assigned by the reviewing institution.")
+    humanSubjectExemption: Optional[str] = Field(default=None, description="If human subjects research qualifies for exemption from full IRB review, the applicable exemption category (e.g. 45 CFR 46 Exemption 4).")
+    fdaRegulated: Optional[bool] = Field(default=None, description="Whether this dataset is subject to FDA regulations (e.g. clinical trial data, medical device data).")
+    deidentified: Optional[bool] = Field(default=None, description="Whether the dataset has been de-identified to remove or obscure personally identifiable information.")
+    humanSubjects: Optional[str] = Field(alias="humanSubjects", default=None, description="Does this dataset involve human subjects? Indicate Yes/No and describe the nature of human subjects involvement.")
+    humanSubjectResearch: Optional[str] = Field(default=None, description="Does this dataset involve human subjects? Indicate Yes/No and describe the nature of human subjects involvement.")
+    dataGovernanceCommittee: Optional[str] = Field(default=None, description="Name or contact for the data governance committee responsible for oversight, access control, and policy enforcement for this dataset.")
+
     # Checksums
     md5: Optional[str] = Field(default=None, description="MD5 checksum of the digital object content")
     hash: Optional[str] = Field(default=None, description="Hash of the digital object content (if not MD5)")
     sha256: Optional[str] = Field(default=None, description="SHA-256 checksum of the digital object content")
 
 
-    # RAI fields
-    rai_data_limitations: Optional[str] = Field(alias="rai:dataLimitations", default=None)
-    rai_data_biases: Optional[str] = Field(alias="rai:dataBiases", default=None)
-    rai_data_use_cases: Optional[str] = Field(alias="rai:dataUseCases", default=None)
-    rai_data_release_maintenance_plan: Optional[str] = Field(alias="rai:dataReleaseMaintenancePlan", default=None)
-    rai_data_collection: Optional[str] = Field(alias="rai:dataCollection", default=None)
-    rai_data_collection_type: Optional[List[str]] = Field(alias="rai:dataCollectionType", default=None)
-    rai_data_collection_missing_data: Optional[str] = Field(alias="rai:dataCollectionMissingData", default=None)
-    rai_data_collection_raw_data: Optional[str] = Field(alias="rai:dataCollectionRawData", default=None)
-    rai_data_collection_timeframe: Optional[List[str]] = Field(alias="rai:dataCollectionTimeframe", default=None)
-    rai_data_imputation_protocol: Optional[str] = Field(alias="rai:dataImputationProtocol", default=None)
-    rai_data_manipulation_protocol: Optional[str] = Field(alias="rai:dataManipulationProtocol", default=None)
-    rai_data_preprocessing_protocol: Optional[List[str]] = Field(alias="rai:dataPreprocessingProtocol", default=None)
-    rai_data_annotation_protocol: Optional[str] = Field(alias="rai:dataAnnotationProtocol", default=None)
-    rai_data_annotation_platform: Optional[List[str]] = Field(alias="rai:dataAnnotationPlatform", default=None)
-    rai_data_annotation_analysis: Optional[List[str]] = Field(alias="rai:dataAnnotationAnalysis", default=None)
-    rai_personal_sensitive_information: Optional[List[str]] = Field(alias="rai:personalSensitiveInformation", default=None)
-    rai_data_social_impact: Optional[str] = Field(alias="rai:dataSocialImpact", default=None)
-    rai_annotations_per_item: Optional[str] = Field(alias="rai:annotationsPerItem", default=None)
-    rai_machine_annotation_tools: Optional[List[str]] = Field(alias="rai:machineAnnotationTools", default=None)
-    completeness: Optional[str] = Field(alias="completeness", default=None)
-    prohibitedUses: Optional[str] = Field(alias="prohibitedUses", default=None)
+    # RAI fields (Croissant RAI 1.0 — http://mlcommons.org/croissant/RAI/1.0)
+    # Descriptions drawn from the D4D schema (data-sheets-schema) exact_mappings where available.
+    rai_data_limitations: Optional[str] = Field(
+        alias="rai:dataLimitations", default=None,
+        description="Documents known limitations of the dataset that may affect its use or interpretation — data generalization limits (e.g. related to data distribution, data quality issues, or data sources) and non-recommended uses. Distinct from biases (systematic errors) and anomalies (data quality issues). (rai:dataLimitations)"
+    )
+    rai_data_biases: Optional[str] = Field(
+        alias="rai:dataBiases", default=None,
+        description="Documents known biases present in the dataset — systematic errors or prejudices that may affect the representativeness or fairness of the data. Distinct from anomalies (data quality issues) and limitations (scope constraints). (rai:dataBiases)"
+    )
+    rai_data_use_cases: Optional[str] = Field(
+        alias="rai:dataUseCases", default=None,
+        description="Explicit statement of intended uses for this dataset, focusing on positive, recommended applications. Recommended use categories: Training, Testing, Validation, Development or Production Use, Fine Tuning, others. Include usage guidelines and caveats. (rai:dataUseCases)"
+    )
+    rai_data_release_maintenance_plan: Optional[str] = Field(
+        alias="rai:dataReleaseMaintenancePlan", default=None,
+        description="Will the dataset be updated (e.g. to correct labeling errors, add new instances, delete instances)? If so, how often, by whom, and how will updates be communicated? Covers versioning timeframe, maintainers, and deprecation policies. (rai:dataReleaseMaintenancePlan)"
+    )
+    rai_data_collection: Optional[str] = Field(
+        alias="rai:dataCollection", default=None,
+        description="What mechanisms or procedures were used to collect the data (e.g. hardware sensors, manual curation, software APIs)? Also covers how these mechanisms were validated. (rai:dataCollection)"
+    )
+    rai_data_collection_type: Optional[List[str]] = Field(
+        alias="rai:dataCollectionType", default=None,
+        description="Data collection type(s). Recommended values: Surveys, Secondary Data Analysis, Physical Data Collection, Direct Measurement, Document Analysis, Manual Human Curator, Software Collection, Experiments, Web Scraping, Web API, Focus Groups, Self-Reporting, Customer Feedback Data, User-Generated Content Data, Passive Data Collection, Others. (rai:dataCollectionType)"
+    )
+    rai_data_collection_missing_data: Optional[str] = Field(
+        alias="rai:dataCollectionMissingData", default=None,
+        description="Documentation of missing data in the dataset, including patterns (e.g. MCAR, MAR, MNAR), known or suspected causes (e.g. sensor failures, participant dropout, privacy constraints), and strategies used to handle missing values. (rai:dataCollectionMissingData)"
+    )
+    rai_data_collection_raw_data: Optional[str] = Field(
+        alias="rai:dataCollectionRawData", default=None,
+        description="Description of raw data sources before preprocessing, cleaning, or labeling. Documents where the original data comes from and how it can be accessed. (rai:dataCollectionRawData)"
+    )
+    rai_data_collection_timeframe: Optional[List[str]] = Field(
+        alias="rai:dataCollectionTimeframe", default=None,
+        description="Over what timeframe was the data collected, and does this timeframe match the creation timeframe of the underlying data? Provide start and end dates where possible. (rai:dataCollectionTimeframe)"
+    )
+    rai_data_imputation_protocol: Optional[str] = Field(
+        alias="rai:dataImputationProtocol", default=None,
+        description="Description of data imputation methodology, including techniques used to handle missing values (e.g. mean/median imputation, forward fill, model-based imputation) and rationale for chosen approaches. (rai:dataImputationProtocol)"
+    )
+    rai_data_manipulation_protocol: Optional[str] = Field(
+        alias="rai:dataManipulationProtocol", default=None,
+        description="Was any cleaning of the data done (e.g. removal of instances, processing of missing values, deduplication, filtering)? If so, describe the cleaning procedures applied. (rai:dataManipulationProtocol)"
+    )
+    rai_data_preprocessing_protocol: Optional[List[str]] = Field(
+        alias="rai:dataPreprocessingProtocol", default=None,
+        description="Was any preprocessing of the data done (e.g. discretization or bucketing, tokenization, feature extraction, normalization)? Describe the steps required to bring collected data to a state that can be processed by an ML model or algorithm. (rai:dataPreprocessingProtocol)"
+    )
+    rai_data_annotation_protocol: Optional[str] = Field(
+        alias="rai:dataAnnotationProtocol", default=None,
+        description="Annotation methodology, tasks, and protocols followed during labeling. Includes annotation guidelines, quality control procedures, task definitions, workforce type, annotation characteristics, and label distributions. (rai:dataAnnotationProtocol)"
+    )
+    rai_data_annotation_platform: Optional[List[str]] = Field(
+        alias="rai:dataAnnotationPlatform", default=None,
+        description="Platform or tool used for annotation (e.g. Label Studio, Prodigy, Amazon Mechanical Turk, custom annotation tool). (rai:dataAnnotationPlatform)"
+    )
+    rai_data_annotation_analysis: Optional[List[str]] = Field(
+        alias="rai:dataAnnotationAnalysis", default=None,
+        description="Analysis of annotation quality, inter-annotator agreement metrics (e.g. Cohen's kappa, Fleiss' kappa), and systematic patterns in disagreements between annotators of different socio-demographic groups. Covers how final dataset labels relate to individual annotator responses. (rai:dataAnnotationAnalysis)"
+    )
+    rai_personal_sensitive_information: Optional[List[str]] = Field(
+        alias="rai:personalSensitiveInformation", default=None,
+        description="Does the dataset contain data that might be considered sensitive (e.g. race, sexual orientation, religion, biometrics)? List sensitive attribute types present: Gender, Socio-economic status, Geography, Language, Age, Culture, Experience or Seniority, others. (rai:personalSensitiveInformation)"
+    )
+    rai_data_social_impact: Optional[str] = Field(
+        alias="rai:dataSocialImpact", default=None,
+        description="Is there anything about the dataset's composition or collection that might impact future uses or create risks/harm (e.g. unfair treatment, legal or financial risks)? Describe potential impacts and any mitigation strategies. (rai:dataSocialImpact)"
+    )
+    rai_annotations_per_item: Optional[str] = Field(
+        alias="rai:annotationsPerItem", default=None,
+        description="Number of annotations collected per data item. Multiple annotations per item enable calculation of inter-annotator agreement. (rai:annotationsPerItem)"
+    )
+    rai_annotator_demographics: Optional[List[str]] = Field(
+        alias="rai:annotatorDemographics", default=None,
+        description="Demographic information about annotators, if available and relevant (e.g. geographic location, language background, expertise level, age group, gender). (rai:annotatorDemographics)"
+    )
+    rai_machine_annotation_tools: Optional[List[str]] = Field(
+        alias="rai:machineAnnotationTools", default=None,
+        description="Automated or machine-learning-based annotation tools used in dataset creation, including NLP pipelines, computer vision models, or other automated labeling systems. Format each entry as 'ToolName version' (e.g. 'spaCy 3.5.0'). (rai:machineAnnotationTools)"
+    )
+    completeness: Optional[str] = Field(alias="completeness", default=None, description="Assessment of how complete the dataset is relative to its intended scope (e.g. percentage of expected records present, known gaps).")
+    prohibitedUses: Optional[str] = Field(alias="prohibitedUses", default=None, description="Explicit statement of prohibited or forbidden uses for this dataset — uses that are not permitted by license, ethics, or policy. Stronger than discouraged uses.")
 
-    # Aggregated metrics for AI-Ready scoring (roll-up properties from sub-crates)
-    evi_dataset_count: Optional[int] = Field(alias="evi:datasetCount", default=None)
-    evi_computation_count: Optional[int] = Field(alias="evi:computationCount", default=None)
-    evi_software_count: Optional[int] = Field(alias="evi:softwareCount", default=None)
-    evi_schema_count: Optional[int] = Field(alias="evi:schemaCount", default=None)
-    evi_total_content_size_bytes: Optional[int] = Field(alias="evi:totalContentSizeBytes", default=None)
-    evi_entities_with_summary_stats: Optional[int] = Field(alias="evi:entitiesWithSummaryStats", default=None)
-    evi_entities_with_checksums: Optional[int] = Field(alias="evi:entitiesWithChecksums", default=None)
-    evi_total_entities: Optional[int] = Field(alias="evi:totalEntities", default=None)
-    evi_formats: Optional[List[str]] = Field(alias="evi:formats", default=None)
+    # Aggregated metrics for AI-Ready scoring (roll-up properties from release-level sub-crates)
+    evi_dataset_count: Optional[int] = Field(alias="evi:datasetCount", default=None, description="Pre-aggregated count of Dataset entities across all sub-crates. Used in AI-Ready Provenance scoring in place of counting entities at query time.")
+    evi_computation_count: Optional[int] = Field(alias="evi:computationCount", default=None, description="Pre-aggregated count of Computation and Experiment entities across all sub-crates. Used in AI-Ready Provenance scoring.")
+    evi_software_count: Optional[int] = Field(alias="evi:softwareCount", default=None, description="Pre-aggregated count of Software entities across all sub-crates. Used in AI-Ready Provenance scoring.")
+    evi_schema_count: Optional[int] = Field(alias="evi:schemaCount", default=None, description="Pre-aggregated count of Schema entities across all sub-crates. Used in AI-Ready Characterization scoring.")
+    evi_total_content_size_bytes: Optional[int] = Field(alias="evi:totalContentSizeBytes", default=None, description="Pre-aggregated total content size in bytes across all sub-crate datasets. Used in AI-Ready Characterization scoring.")
+    evi_entities_with_summary_stats: Optional[int] = Field(alias="evi:entitiesWithSummaryStats", default=None, description="Pre-aggregated count of entities that have hasSummaryStatistics set. Used in AI-Ready Characterization scoring.")
+    evi_entities_with_checksums: Optional[int] = Field(alias="evi:entitiesWithChecksums", default=None, description="Pre-aggregated count of entities that have md5, sha256, or hash set. Used with evi:totalEntities to compute checksum coverage percentage.")
+    evi_total_entities: Optional[int] = Field(alias="evi:totalEntities", default=None, description="Pre-aggregated total count of Dataset and Software entities. Used as denominator for checksum coverage in AI-Ready Pre-Model Explainability scoring.")
+    evi_formats: Optional[List[str]] = Field(alias="evi:formats", default=None, description="Pre-aggregated list of unique file format values (up to 5) across all entities. Used in AI-Ready Computability scoring.")
+    evi_proccesed: Optional[bool] = Field(alias="evi:processed", default=None, description="Flag indicating whether this release-level RO-Crate has been processed and aggregated metrics computed.")
 
-    #D4D Placeholders
-    addressingGaps : Optional[str] = Field(alias="d4d:addressingGaps", default=None)
-    dataAnomalies : Optional[str] = Field(alias="d4d:dataAnomalies", default=None)
-    contentWarning : Optional[str] = Field(alias="d4d:contentWarning", default=None)
-    informedConsent : Optional[str] = Field(alias="d4d:informedConsent", default=None)
-    atRiskPopulations : Optional[str] = Field(alias="d4d:atRiskPopulations", default=None)    
+    # D4D Placeholders — flat string versions of D4D_Motivation / D4D_Composition / D4D_Human classes
+    addressingGaps: Optional[str] = Field(alias="d4d:addressingGaps", default=None, description="Was there a specific knowledge or resource gap that needed to be filled by creation of this dataset? (D4D_Motivation: AddressingGap)")
+    dataAnomalies: Optional[str] = Field(alias="d4d:dataAnomalies", default=None, description="Are there any errors, sources of noise, or redundancies in the dataset? (D4D_Composition: DataAnomaly)")
+    contentWarning: Optional[str] = Field(alias="d4d:contentWarning", default=None, description="Does the dataset contain any data that might be offensive, insulting, threatening, or otherwise anxiety-provoking if viewed directly? (D4D_Composition: ContentWarning)")
+    informedConsent: Optional[str] = Field(alias="d4d:informedConsent", default=None, description="Details about informed consent procedures used in human subjects research — consent type, documentation, withdrawal mechanisms, and scope. (D4D_Human: InformedConsent)")
+    atRiskPopulations: Optional[str] = Field(alias="d4d:atRiskPopulations", default=None, description="Information about protections for at-risk populations (e.g. children, pregnant women, prisoners, cognitively impaired individuals) included in human subjects research. (D4D_Human: AtRiskPopulations)")
 
     def generateFileElem(self) -> ROCrateMetadataFileElem:
         """ Given an ROCrate Element create an appropriate ROCrateMetadataFileElem
