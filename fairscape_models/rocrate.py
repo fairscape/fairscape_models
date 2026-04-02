@@ -169,19 +169,19 @@ class ROCrateMetadataElem(BaseModel):
 
     # RAI fields (Croissant RAI 1.0 — http://mlcommons.org/croissant/RAI/1.0)
     # Descriptions drawn from the D4D schema (data-sheets-schema) exact_mappings where available.
-    rai_data_limitations: Optional[str] = Field(
+    rai_data_limitations: Optional[Union[str, List[str]]] = Field(
         alias="rai:dataLimitations", default=None,
         description="Documents known limitations of the dataset that may affect its use or interpretation — data generalization limits (e.g. related to data distribution, data quality issues, or data sources) and non-recommended uses. Distinct from biases (systematic errors) and anomalies (data quality issues). (rai:dataLimitations)"
     )
-    rai_data_biases: Optional[str] = Field(
+    rai_data_biases: Optional[Union[str, List[str]]] = Field(
         alias="rai:dataBiases", default=None,
         description="Documents known biases present in the dataset — systematic errors or prejudices that may affect the representativeness or fairness of the data. Distinct from anomalies (data quality issues) and limitations (scope constraints). (rai:dataBiases)"
     )
-    rai_data_use_cases: Optional[str] = Field(
+    rai_data_use_cases: Optional[Union[str, List[str]]] = Field(
         alias="rai:dataUseCases", default=None,
         description="Explicit statement of intended uses for this dataset, focusing on positive, recommended applications. Recommended use categories: Training, Testing, Validation, Development or Production Use, Fine Tuning, others. Include usage guidelines and caveats. (rai:dataUseCases)"
     )
-    rai_data_release_maintenance_plan: Optional[str] = Field(
+    rai_data_release_maintenance_plan: Optional[Union[str, List[str]]] = Field(
         alias="rai:dataReleaseMaintenancePlan", default=None,
         description="Will the dataset be updated (e.g. to correct labeling errors, add new instances, delete instances)? If so, how often, by whom, and how will updates be communicated? Covers versioning timeframe, maintainers, and deprecation policies. (rai:dataReleaseMaintenancePlan)"
     )
@@ -209,7 +209,7 @@ class ROCrateMetadataElem(BaseModel):
         alias="rai:dataImputationProtocol", default=None,
         description="Description of data imputation methodology, including techniques used to handle missing values (e.g. mean/median imputation, forward fill, model-based imputation) and rationale for chosen approaches. (rai:dataImputationProtocol)"
     )
-    rai_data_manipulation_protocol: Optional[str] = Field(
+    rai_data_manipulation_protocol: Optional[Union[str, List[str]]] = Field(
         alias="rai:dataManipulationProtocol", default=None,
         description="Was any cleaning of the data done (e.g. removal of instances, processing of missing values, deduplication, filtering)? If so, describe the cleaning procedures applied. (rai:dataManipulationProtocol)"
     )
