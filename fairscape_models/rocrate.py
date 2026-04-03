@@ -370,6 +370,7 @@ class ROCrateV1_2(BaseModel):
             "Computation": Computation,
             "Annotation": Annotation,
             "Experiment": Experiment,
+            "Activity": Activity,
             "CreativeWork": ROCrateMetadataFileElem,
             "Schema": Schema,
             "BioChemEntity": BioChemEntity,
