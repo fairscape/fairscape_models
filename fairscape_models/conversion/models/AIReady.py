@@ -63,7 +63,7 @@ class PreModelExplainabilityScore(BaseModel):
         has_content=False, details="No use cases or limitations specified. To document purpose, set 'rai:dataUseCases' and/or 'rai:dataLimitations' in root dataset"
     ))
     verifiable: SubCriterionScore = Field(default_factory=lambda: SubCriterionScore(
-        has_content=False, details="No checksums available. To add checksums for verification, set 'md5' or 'MD5' in Dataset/Software/ROCrate entities"
+        has_content=False, details="No checksums available. To add checksums for verification, set 'md5' or 'sha256' in Dataset/Software/ROCrate entities"
     ))
 
 class EthicsScore(BaseModel):

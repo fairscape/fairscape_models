@@ -91,7 +91,6 @@ OVERVIEW_MAPPING: Dict[str, Dict[str, Any]] = {
     "keywords":              {"source_key": "keywords"},
 
     # human-subjects & governance — top-level fields with additionalProperty fallback
-    "human_subject":            {"source_key": "humanSubjects",          "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("Human Subject")},
     "human_subject_research":   {"source_key": "humanSubjectResearch",   "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("Human Subject Research", "")},
     "human_subject_exemptions": {"source_key": "humanSubjectExemption",  "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("Human Subjects Exemptions", "")},
     "deidentified_samples":     {"source_key": "deidentified", "parser": _bool_to_yes_no, "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("De-identified Samples", "")},

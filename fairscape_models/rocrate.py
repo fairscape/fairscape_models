@@ -157,14 +157,13 @@ class ROCrateMetadataElem(BaseModel):
     humanSubjectExemption: Optional[str] = Field(default=None, description="If human subjects research qualifies for exemption from full IRB review, the applicable exemption category (e.g. 45 CFR 46 Exemption 4).")
     fdaRegulated: Optional[bool] = Field(default=None, description="Whether this dataset is subject to FDA regulations (e.g. clinical trial data, medical device data).")
     deidentified: Optional[bool] = Field(default=None, description="Whether the dataset has been de-identified to remove or obscure personally identifiable information.")
-    humanSubjects: Optional[str] = Field(alias="humanSubjects", default=None, description="Does this dataset involve human subjects? Indicate Yes/No and describe the nature of human subjects involvement.")
     humanSubjectResearch: Optional[str] = Field(default=None, description="Does this dataset involve human subjects? Indicate Yes/No and describe the nature of human subjects involvement.")
     dataGovernanceCommittee: Optional[str] = Field(default=None, description="Name or contact for the data governance committee responsible for oversight, access control, and policy enforcement for this dataset.")
 
     # Checksums
     md5: Optional[str] = Field(default=None, description="MD5 checksum of the digital object content")
     hash: Optional[str] = Field(default=None, description="Hash of the digital object content (if not MD5)")
-    sha256: Optional[str] = Field(default=None, description="SHA-256 checksum of the digital object content")
+    sha256: Optional[Union[str,List[str]]] = Field(default=None, description="SHA-256 checksum of the digital object content")
 
 
     # RAI fields (Croissant RAI 1.0 — http://mlcommons.org/croissant/RAI/1.0)

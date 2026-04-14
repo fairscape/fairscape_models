@@ -315,10 +315,10 @@ def _score_ethics(ethics: EthicsScore, root_data: Dict[str, Any]):
     if collection and str(collection).strip():
         details.append(f"Data collection: {collection}")
 
-    hs_val = root_data.get("humanSubjects")
+    hs_val = root_data.get("humanSubjectResearch")
     if not hs_val:
         for prop in (root_data.get("additionalProperty") or []):
-            if isinstance(prop, dict) and prop.get("name") == "Human Subject":
+            if isinstance(prop, dict) and prop.get("name") in ("Human Subject Research", "Human Subject"):
                 hs_val = prop.get("value")
                 break
     if hs_val:

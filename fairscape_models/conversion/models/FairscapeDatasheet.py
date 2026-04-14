@@ -36,8 +36,7 @@ class OverviewSection(BaseModel):
     keywords: List[str] = Field(default_factory=list)
     published: Optional[bool] = None 
 
-    # Human-subjects 
-    human_subject: Optional[str] = None
+    # Human-subjects
     human_subject_research: Optional[str] = None
     human_subject_exemptions: Optional[str] = None
     deidentified_samples: Optional[Union[str, bool]] = None
