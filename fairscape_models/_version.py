@@ -1,1 +1,2 @@
-__version__ = "1.0.24"
+from importlib.metadata import version
+__version__ = version("fairscape_models")
