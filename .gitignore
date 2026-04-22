@@ -23,3 +23,6 @@ build_commands.txt
 .venv*
 .mypy_cache*
 .pytest_cache*
+CLAUDE.md
+.claude/*
+.claude/

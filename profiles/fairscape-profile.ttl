@@ -1,0 +1,2080 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix evi: <https://w3id.org/EVI#> .
+@prefix schema: <https://schema.org/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rai: <http://mlcommons.org/croissant/RAI/> .
+@prefix d4d: <https://data-datasheet.github.io/data-datasheet#> .
+
+<https://w3id.org/EVI>
+    a owl:Ontology ;
+    rdfs:label "FAIRSCAPE EVI Ontology" ;
+    rdfs:comment "RDFS/OWL profile auto-generated from fairscape_models." .
+
+#──────────────────────────────────────────────────────────────────────────────
+# Classes
+#──────────────────────────────────────────────────────────────────────────────
+
+### IdentifierValue
+evi:IdentifierValue
+    a rdfs:Class, owl:Class ;
+    rdfs:label "IdentifierValue" .
+
+### IdentifierPropertyValue
+evi:IdentifierPropertyValue
+    a rdfs:Class, owl:Class ;
+    rdfs:label "IdentifierPropertyValue" .
+
+### Identifier
+evi:Identifier
+    a rdfs:Class, owl:Class ;
+    rdfs:label "Identifier" .
+
+### FairscapeBaseModel
+evi:FairscapeBaseModel
+    a rdfs:Class, owl:Class ;
+    rdfs:label "FairscapeBaseModel" ;
+    rdfs:comment """Refers to the Fairscape BaseModel inherited from Pydantic""" ;
+    rdfs:subClassOf evi:Identifier .
+
+### FairscapeEVIBaseModel
+evi:FairscapeEVIBaseModel
+    a rdfs:Class, owl:Class ;
+    rdfs:label "FairscapeEVIBaseModel" ;
+    rdfs:subClassOf evi:FairscapeBaseModel .
+
+### DigitalObject
+evi:DigitalObject
+    a rdfs:Class, owl:Class ;
+    rdfs:label "DigitalObject" ;
+    rdfs:comment """Base class for DigitalObject types (Dataset, Software, MLModel)""" .
+
+### Activity
+evi:Activity
+    a rdfs:Class, owl:Class ;
+    rdfs:label "Activity" ;
+    rdfs:comment """Base class for Activity types (Computation, Annotation, Experiment)""" .
+
+### Split
+evi:Split
+    a rdfs:Class, owl:Class ;
+    rdfs:label "Split" ;
+    rdfs:comment """A named partition or subset of a Dataset.""" .
+
+### Property
+evi:Property
+    a rdfs:Class, owl:Class ;
+    rdfs:label "Property" .
+
+### CodeAnalysis
+evi:CodeAnalysis
+    a rdfs:Class, owl:Class ;
+    rdfs:label "CodeAnalysis" ;
+    rdfs:comment """Analysis of a software entity used in the computation.""" .
+
+### DatasetSummary
+evi:DatasetSummary
+    a rdfs:Class, owl:Class ;
+    rdfs:label "DatasetSummary" ;
+    rdfs:comment """Summary of a dataset's role in the computation.""" .
+
+### ContactPoint
+evi:ContactPoint
+    a rdfs:Class, owl:Class ;
+    rdfs:label "ContactPoint" ;
+    rdfs:comment """Schema.org ContactPoint for structured contact information.""" .
+
+### PostalAddress
+evi:PostalAddress
+    a rdfs:Class, owl:Class ;
+    rdfs:label "PostalAddress" ;
+    rdfs:comment """Schema.org PostalAddress for structured address information.""" .
+
+### IRB
+evi:IRB
+    a rdfs:Class, owl:Class ;
+    rdfs:label "IRB" ;
+    rdfs:comment """Institutional Review Board with structured contact and address info.""" .
+
+### GenericMetadataElem
+evi:GenericMetadataElem
+    a rdfs:Class, owl:Class ;
+    rdfs:label "GenericMetadataElem" ;
+    rdfs:comment """Generic Metadata Element of an ROCrate""" .
+
+### Dataset
+evi:Dataset
+    a rdfs:Class, owl:Class ;
+    rdfs:label "Dataset" ;
+    rdfs:subClassOf evi:DigitalObject .
+
+### Software
+evi:Software
+    a rdfs:Class, owl:Class ;
+    rdfs:label "Software" ;
+    rdfs:subClassOf evi:DigitalObject .
+
+### MLModel
+evi:MLModel
+    a rdfs:Class, owl:Class ;
+    rdfs:label "MLModel" ;
+    rdfs:subClassOf evi:DigitalObject .
+
+### Computation
+evi:Computation
+    a rdfs:Class, owl:Class ;
+    rdfs:label "Computation" ;
+    rdfs:subClassOf evi:Activity .
+
+### Annotation
+evi:Annotation
+    a rdfs:Class, owl:Class ;
+    rdfs:label "Annotation" ;
+    rdfs:subClassOf evi:Activity .
+
+### Experiment
+evi:Experiment
+    a rdfs:Class, owl:Class ;
+    rdfs:label "Experiment" ;
+    rdfs:subClassOf evi:Activity .
+
+### Schema
+evi:Schema
+    a rdfs:Class, owl:Class ;
+    rdfs:label "Schema" ;
+    rdfs:subClassOf evi:FairscapeEVIBaseModel .
+
+### BioChemEntity
+evi:BioChemEntity
+    a rdfs:Class, owl:Class ;
+    rdfs:label "BioChemEntity" ;
+    rdfs:comment """Pydantic model for the Schema.org BioChemEntity datatype""" .
+
+### MedicalCondition
+evi:MedicalCondition
+    a rdfs:Class, owl:Class ;
+    rdfs:label "MedicalCondition" ;
+    rdfs:comment """Pydantic model for the Schema.org MedicalCondition datatype""" .
+
+### Sample
+evi:Sample
+    a rdfs:Class, owl:Class ;
+    rdfs:label "Sample" .
+
+### Instrument
+evi:Instrument
+    a rdfs:Class, owl:Class ;
+    rdfs:label "Instrument" .
+
+### Patient
+schema:Patient
+    a rdfs:Class, owl:Class ;
+    rdfs:label "Patient" .
+
+### ModelCard
+evi:MLModel
+    a rdfs:Class, owl:Class ;
+    rdfs:label "ModelCard" ;
+    rdfs:comment """Model Card for ML models as RO-Crate Dataset elements""" ;
+    rdfs:subClassOf evi:DigitalObject .
+
+### AnnotatedComputation
+evi:AnnotatedComputation
+    a rdfs:Class, owl:Class ;
+    rdfs:label "AnnotatedComputation" ;
+    rdfs:comment """LLM-generated annotation of a single evi:Computation step.""" ;
+    rdfs:subClassOf evi:DigitalObject .
+
+### AnnotatedEvidenceGraph
+evi:AnnotatedEvidenceGraph
+    a rdfs:Class, owl:Class ;
+    rdfs:label "AnnotatedEvidenceGraph" ;
+    rdfs:comment """Full annotated condensed evidence graph -- the graph-level LLM output.""" ;
+    rdfs:subClassOf evi:DigitalObject .
+
+### ROCrateMetadataElem
+evi:ROCrateMetadataElem
+    a rdfs:Class, owl:Class ;
+    rdfs:label "ROCrateMetadataElem" ;
+    rdfs:comment """Metadata Element of ROCrate that represents the crate as a whole""" .
+
+### ROCrateMetadataFileElem
+evi:ROCrateMetadataFileElem
+    a rdfs:Class, owl:Class ;
+    rdfs:label "ROCrateMetadataFileElem" ;
+    rdfs:comment """Metadata Element of an ROCrate cooresponding to the `ro-crate-metadata.json` file itself""" .
+
+### ROCrateDistribution
+evi:ROCrateDistribution
+    a rdfs:Class, owl:Class ;
+    rdfs:label "ROCrateDistribution" .
+
+### ROCrateV1_2
+evi:ROCrateV1_2
+    a rdfs:Class, owl:Class ;
+    rdfs:label "ROCrateV1_2" .
+
+#──────────────────────────────────────────────────────────────────────────────
+# Properties
+#──────────────────────────────────────────────────────────────────────────────
+
+### annotationsPerItem
+rai:annotationsPerItem
+    a rdf:Property ;
+    rdfs:label "annotationsPerItem" ;
+    rdfs:comment """Number of annotations collected per data item. Multiple annotations per item enable calculation of inter-annotator agreement. (rai:annotationsPerItem)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### annotatorDemographics
+rai:annotatorDemographics
+    a rdf:Property ;
+    rdfs:label "annotatorDemographics" ;
+    rdfs:comment """Demographic information about annotators, if available and relevant (e.g. geographic location, language background, expertise level, age group, gender). (rai:annotatorDemographics)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### dataAnnotationAnalysis
+rai:dataAnnotationAnalysis
+    a rdf:Property ;
+    rdfs:label "dataAnnotationAnalysis" ;
+    rdfs:comment """Analysis of annotation quality, inter-annotator agreement metrics (e.g. Cohen's kappa, Fleiss' kappa), and systematic patterns in disagreements between annotators of different socio-demographic groups. Covers how final dataset labels relate to individual annotator responses. (rai:dataAnnotationAnalysis)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### dataAnnotationPlatform
+rai:dataAnnotationPlatform
+    a rdf:Property ;
+    rdfs:label "dataAnnotationPlatform" ;
+    rdfs:comment """Platform or tool used for annotation (e.g. Label Studio, Prodigy, Amazon Mechanical Turk, custom annotation tool). (rai:dataAnnotationPlatform)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### dataAnnotationProtocol
+rai:dataAnnotationProtocol
+    a rdf:Property ;
+    rdfs:label "dataAnnotationProtocol" ;
+    rdfs:comment """Annotation methodology, tasks, and protocols followed during labeling. Includes annotation guidelines, quality control procedures, task definitions, workforce type, annotation characteristics, and label distributions. (rai:dataAnnotationProtocol)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### dataBiases
+rai:dataBiases
+    a rdf:Property ;
+    rdfs:label "dataBiases" ;
+    rdfs:comment """Documents known biases present in the dataset — systematic errors or prejudices that may affect the representativeness or fairness of the data. Distinct from anomalies (data quality issues) and limitations (scope constraints). (rai:dataBiases)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### dataCollection
+rai:dataCollection
+    a rdf:Property ;
+    rdfs:label "dataCollection" ;
+    rdfs:comment """What mechanisms or procedures were used to collect the data (e.g. hardware sensors, manual curation, software APIs)? Also covers how these mechanisms were validated. (rai:dataCollection)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### dataCollectionMissingData
+rai:dataCollectionMissingData
+    a rdf:Property ;
+    rdfs:label "dataCollectionMissingData" ;
+    rdfs:comment """Documentation of missing data in the dataset, including patterns (e.g. MCAR, MAR, MNAR), known or suspected causes (e.g. sensor failures, participant dropout, privacy constraints), and strategies used to handle missing values. (rai:dataCollectionMissingData)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### dataCollectionRawData
+rai:dataCollectionRawData
+    a rdf:Property ;
+    rdfs:label "dataCollectionRawData" ;
+    rdfs:comment """Description of raw data sources before preprocessing, cleaning, or labeling. Documents where the original data comes from and how it can be accessed. (rai:dataCollectionRawData)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### dataCollectionTimeframe
+rai:dataCollectionTimeframe
+    a rdf:Property ;
+    rdfs:label "dataCollectionTimeframe" ;
+    rdfs:comment """Over what timeframe was the data collected, and does this timeframe match the creation timeframe of the underlying data? Provide start and end dates where possible. (rai:dataCollectionTimeframe)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### dataCollectionType
+rai:dataCollectionType
+    a rdf:Property ;
+    rdfs:label "dataCollectionType" ;
+    rdfs:comment """Data collection type(s). Recommended values: Surveys, Secondary Data Analysis, Physical Data Collection, Direct Measurement, Document Analysis, Manual Human Curator, Software Collection, Experiments, Web Scraping, Web API, Focus Groups, Self-Reporting, Customer Feedback Data, User-Generated Content Data, Passive Data Collection, Others. (rai:dataCollectionType)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### dataImputationProtocol
+rai:dataImputationProtocol
+    a rdf:Property ;
+    rdfs:label "dataImputationProtocol" ;
+    rdfs:comment """Description of data imputation methodology, including techniques used to handle missing values (e.g. mean/median imputation, forward fill, model-based imputation) and rationale for chosen approaches. (rai:dataImputationProtocol)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### dataLimitations
+rai:dataLimitations
+    a rdf:Property ;
+    rdfs:label "dataLimitations" ;
+    rdfs:comment """Documents known limitations of the dataset that may affect its use or interpretation — data generalization limits (e.g. related to data distribution, data quality issues, or data sources) and non-recommended uses. Distinct from biases (systematic errors) and anomalies (data quality issues). (rai:dataLimitations)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### dataManipulationProtocol
+rai:dataManipulationProtocol
+    a rdf:Property ;
+    rdfs:label "dataManipulationProtocol" ;
+    rdfs:comment """Was any cleaning of the data done (e.g. removal of instances, processing of missing values, deduplication, filtering)? If so, describe the cleaning procedures applied. (rai:dataManipulationProtocol)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### dataPreprocessingProtocol
+rai:dataPreprocessingProtocol
+    a rdf:Property ;
+    rdfs:label "dataPreprocessingProtocol" ;
+    rdfs:comment """Was any preprocessing of the data done (e.g. discretization or bucketing, tokenization, feature extraction, normalization)? Describe the steps required to bring collected data to a state that can be processed by an ML model or algorithm. (rai:dataPreprocessingProtocol)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### dataReleaseMaintenancePlan
+rai:dataReleaseMaintenancePlan
+    a rdf:Property ;
+    rdfs:label "dataReleaseMaintenancePlan" ;
+    rdfs:comment """Will the dataset be updated (e.g. to correct labeling errors, add new instances, delete instances)? If so, how often, by whom, and how will updates be communicated? Covers versioning timeframe, maintainers, and deprecation policies. (rai:dataReleaseMaintenancePlan)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### dataSocialImpact
+rai:dataSocialImpact
+    a rdf:Property ;
+    rdfs:label "dataSocialImpact" ;
+    rdfs:comment """Is there anything about the dataset's composition or collection that might impact future uses or create risks/harm (e.g. unfair treatment, legal or financial risks)? Describe potential impacts and any mitigation strategies. (rai:dataSocialImpact)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### dataUseCases
+rai:dataUseCases
+    a rdf:Property ;
+    rdfs:label "dataUseCases" ;
+    rdfs:comment """Explicit statement of intended uses for this dataset, focusing on positive, recommended applications. Recommended use categories: Training, Testing, Validation, Development or Production Use, Fine Tuning, others. Include usage guidelines and caveats. (rai:dataUseCases)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### machineAnnotationTools
+rai:machineAnnotationTools
+    a rdf:Property ;
+    rdfs:label "machineAnnotationTools" ;
+    rdfs:comment """Automated or machine-learning-based annotation tools used in dataset creation, including NLP pipelines, computer vision models, or other automated labeling systems. Format each entry as 'ToolName version' (e.g. 'spaCy 3.5.0'). (rai:machineAnnotationTools)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### personalSensitiveInformation
+rai:personalSensitiveInformation
+    a rdf:Property ;
+    rdfs:label "personalSensitiveInformation" ;
+    rdfs:comment """Does the dataset contain data that might be considered sensitive (e.g. race, sexual orientation, religion, biometrics)? List sensitive attribute types present: Gender, Socio-economic status, Geography, Language, Age, Culture, Experience or Seniority, others. (rai:personalSensitiveInformation)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### used
+prov:used
+    a rdf:Property ;
+    rdfs:label "used" ;
+    rdfs:domain evi:Activity ;
+    rdfs:range evi:IdentifierValue .
+
+### wasAssociatedWith
+prov:wasAssociatedWith
+    a rdf:Property ;
+    rdfs:label "wasAssociatedWith" ;
+    rdfs:domain evi:Activity ;
+    rdfs:range evi:IdentifierValue .
+
+### wasAttributedTo
+prov:wasAttributedTo
+    a rdf:Property ;
+    rdfs:label "wasAttributedTo" ;
+    rdfs:domain evi:DigitalObject ;
+    rdfs:range evi:IdentifierValue .
+
+### wasDerivedFrom
+prov:wasDerivedFrom
+    a rdf:Property ;
+    rdfs:label "wasDerivedFrom" ;
+    rdfs:domain evi:DigitalObject ;
+    rdfs:range evi:IdentifierValue .
+
+### wasGeneratedBy
+prov:wasGeneratedBy
+    a rdf:Property ;
+    rdfs:label "wasGeneratedBy" ;
+    rdfs:domain evi:DigitalObject ;
+    rdfs:range evi:IdentifierValue .
+
+### addressingGaps
+d4d:addressingGaps
+    a rdf:Property ;
+    rdfs:label "addressingGaps" ;
+    rdfs:comment """Was there a specific knowledge or resource gap that needed to be filled by creation of this dataset? (D4D_Motivation: AddressingGap)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### atRiskPopulations
+d4d:atRiskPopulations
+    a rdf:Property ;
+    rdfs:label "atRiskPopulations" ;
+    rdfs:comment """Information about protections for at-risk populations (e.g. children, pregnant women, prisoners, cognitively impaired individuals) included in human subjects research. (D4D_Human: AtRiskPopulations)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### contentWarning
+d4d:contentWarning
+    a rdf:Property ;
+    rdfs:label "contentWarning" ;
+    rdfs:comment """Does the dataset contain any data that might be offensive, insulting, threatening, or otherwise anxiety-provoking if viewed directly? (D4D_Composition: ContentWarning)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### dataAnomalies
+d4d:dataAnomalies
+    a rdf:Property ;
+    rdfs:label "dataAnomalies" ;
+    rdfs:comment """Are there any errors, sources of noise, or redundancies in the dataset? (D4D_Composition: DataAnomaly)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### informedConsent
+d4d:informedConsent
+    a rdf:Property ;
+    rdfs:label "informedConsent" ;
+    rdfs:comment """Details about informed consent procedures used in human subjects research — consent type, documentation, withdrawal mechanisms, and scope. (D4D_Human: InformedConsent)""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### Schema
+evi:Schema
+    a rdf:Property ;
+    rdfs:label "Schema" ;
+    rdfs:domain evi:Dataset ;
+    rdfs:range evi:IdentifierValue .
+
+### about
+evi:about
+    a rdf:Property ;
+    rdfs:label "about" ;
+    rdfs:domain evi:ROCrateMetadataFileElem ;
+    rdfs:range evi:IdentifierValue .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:about ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:ROCrateMetadataFileElem .
+
+### additionalDocumentation
+evi:additionalDocumentation
+    a rdf:Property ;
+    rdfs:label "additionalDocumentation" ;
+    rdfs:domain evi:DigitalObject ;
+    rdfs:domain evi:Computation ;
+    rdfs:domain evi:Instrument ;
+    rdfs:range xsd:string .
+
+### additionalProperties
+evi:additionalProperties
+    a rdf:Property ;
+    rdfs:label "additionalProperties" ;
+    rdfs:domain evi:Schema ;
+    rdfs:range xsd:boolean .
+
+### additionalProperty
+evi:additionalProperty
+    a rdf:Property ;
+    rdfs:label "additionalProperty" ;
+    rdfs:comment """Additional schema.org PropertyValue entries for metadata not covered by other fields (e.g. [{"name": "Human Subject", "value": "Yes"}]).""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range rdfs:Literal .
+
+### address
+evi:address
+    a rdf:Property ;
+    rdfs:label "address" ;
+    rdfs:domain evi:IRB ;
+    rdfs:range evi:PostalAddress .
+
+### addressCountry
+evi:addressCountry
+    a rdf:Property ;
+    rdfs:label "addressCountry" ;
+    rdfs:domain evi:PostalAddress ;
+    rdfs:range xsd:string .
+
+### addressLocality
+evi:addressLocality
+    a rdf:Property ;
+    rdfs:label "addressLocality" ;
+    rdfs:domain evi:PostalAddress ;
+    rdfs:range xsd:string .
+
+### addressRegion
+evi:addressRegion
+    a rdf:Property ;
+    rdfs:label "addressRegion" ;
+    rdfs:domain evi:PostalAddress ;
+    rdfs:range xsd:string .
+
+### annotatedBy
+evi:annotatedBy
+    a rdf:Property ;
+    rdfs:label "annotatedBy" ;
+    rdfs:domain evi:Computation ;
+    rdfs:range evi:IdentifierValue .
+
+### annotates
+evi:annotates
+    a rdf:Property ;
+    rdfs:label "annotates" ;
+    rdfs:domain evi:AnnotatedComputation ;
+    rdfs:domain evi:AnnotatedEvidenceGraph ;
+    rdfs:range evi:IdentifierValue .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:annotates ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:AnnotatedComputation .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:annotates ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:AnnotatedEvidenceGraph .
+
+### archivedObjectPath
+evi:archivedObjectPath
+    a rdf:Property ;
+    rdfs:label "archivedObjectPath" ;
+    rdfs:domain evi:ROCrateDistribution ;
+    rdfs:range xsd:string .
+
+### archivedROCrateBucket
+evi:archivedROCrateBucket
+    a rdf:Property ;
+    rdfs:label "archivedROCrateBucket" ;
+    rdfs:domain evi:ROCrateDistribution ;
+    rdfs:range xsd:string .
+
+### associatedDisease
+evi:associatedDisease
+    a rdf:Property ;
+    rdfs:label "associatedDisease" ;
+    rdfs:domain evi:BioChemEntity ;
+    rdfs:range evi:IdentifierValue .
+
+### associatedPublication
+evi:associatedPublication
+    a rdf:Property ;
+    rdfs:label "associatedPublication" ;
+    rdfs:comment """Publication(s) associated with or describing this dataset.""" ;
+    rdfs:domain evi:DigitalObject ;
+    rdfs:domain evi:Activity ;
+    rdfs:domain evi:Instrument ;
+    rdfs:domain evi:MLModel ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### author
+evi:author
+    a rdf:Property ;
+    rdfs:label "author" ;
+    rdfs:comment """Who created the dataset (e.g. which team, research group) and on behalf of which entity (e.g. company, institution, organization).""" ;
+    rdfs:domain evi:DigitalObject ;
+    rdfs:domain evi:Sample ;
+    rdfs:domain evi:MLModel ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range rdfs:Literal .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:author ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:DigitalObject .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:author ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Sample .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:author ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:MLModel .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:author ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:ROCrateMetadataElem .
+
+### baseModel
+evi:baseModel
+    a rdf:Property ;
+    rdfs:label "baseModel" ;
+    rdfs:domain evi:MLModel ;
+    rdfs:range xsd:string .
+
+### birthDate
+evi:birthDate
+    a rdf:Property ;
+    rdfs:label "birthDate" ;
+    rdfs:domain schema:Patient ;
+    rdfs:range xsd:string .
+
+### cellLineReference
+evi:cellLineReference
+    a rdf:Property ;
+    rdfs:label "cellLineReference" ;
+    rdfs:domain evi:Sample ;
+    rdfs:range evi:IdentifierValue .
+
+### citation
+evi:citation
+    a rdf:Property ;
+    rdfs:label "citation" ;
+    rdfs:comment """Preferred citation string for this dataset.""" ;
+    rdfs:domain evi:MLModel ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### codeAnalysis
+evi:codeAnalysis
+    a rdf:Property ;
+    rdfs:label "codeAnalysis" ;
+    rdfs:domain evi:AnnotatedComputation ;
+    rdfs:range evi:CodeAnalysis .
+
+### command
+evi:command
+    a rdf:Property ;
+    rdfs:label "command" ;
+    rdfs:domain evi:Computation ;
+    rdfs:range xsd:string .
+
+### completeness
+evi:completeness
+    a rdf:Property ;
+    rdfs:label "completeness" ;
+    rdfs:comment """Assessment of how complete the dataset is relative to its intended scope (e.g. percentage of expected records present, known gaps).""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### computationCount
+evi:computationCount
+    a rdf:Property ;
+    rdfs:label "computationCount" ;
+    rdfs:comment """Pre-aggregated count of Computation and Experiment entities across all sub-crates. Used in AI-Ready Provenance scoring.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:integer .
+
+### concerns
+evi:concerns
+    a rdf:Property ;
+    rdfs:label "concerns" ;
+    rdfs:domain evi:CodeAnalysis ;
+    rdfs:domain evi:AnnotatedComputation ;
+    rdfs:domain evi:AnnotatedEvidenceGraph ;
+    rdfs:range xsd:string .
+
+### conditionsOfAccess
+evi:conditionsOfAccess
+    a rdf:Property ;
+    rdfs:label "conditionsOfAccess" ;
+    rdfs:comment """Terms and conditions governing access to and use of this dataset, including any data use agreements required.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### confidentialityLevel
+evi:confidentialityLevel
+    a rdf:Property ;
+    rdfs:label "confidentialityLevel" ;
+    rdfs:comment """HL7 Confidentiality code indicating the level of confidentiality or sensitivity of the dataset (e.g. 'normal', 'restricted', 'very restricted').""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### conformsTo
+evi:conformsTo
+    a rdf:Property ;
+    rdfs:label "conformsTo" ;
+    rdfs:domain evi:ROCrateMetadataFileElem ;
+    rdfs:range evi:IdentifierValue .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:conformsTo ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:ROCrateMetadataFileElem .
+
+### contactEmail
+evi:contactEmail
+    a rdf:Property ;
+    rdfs:label "contactEmail" ;
+    rdfs:comment """Email address for questions or correspondence about the dataset.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### contactPoint
+evi:contactPoint
+    a rdf:Property ;
+    rdfs:label "contactPoint" ;
+    rdfs:domain evi:IRB ;
+    rdfs:range evi:ContactPoint .
+
+### contactType
+evi:contactType
+    a rdf:Property ;
+    rdfs:label "contactType" ;
+    rdfs:domain evi:ContactPoint ;
+    rdfs:range xsd:string .
+
+### contentSize
+evi:contentSize
+    a rdf:Property ;
+    rdfs:label "contentSize" ;
+    rdfs:comment """Total size of the dataset content (e.g. '2.4 GB', '150 MB'). Used in AI-Ready Characterization scoring.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### contentUrl
+evi:contentUrl
+    a rdf:Property ;
+    rdfs:label "contentUrl" ;
+    rdfs:domain evi:DigitalObject ;
+    rdfs:domain evi:Sample ;
+    rdfs:domain evi:Instrument ;
+    rdfs:domain evi:MLModel ;
+    rdfs:range xsd:string .
+
+### copyrightNotice
+evi:copyrightNotice
+    a rdf:Property ;
+    rdfs:label "copyrightNotice" ;
+    rdfs:comment """Copyright statement for the dataset, including year and rights holder.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### createdBy
+evi:createdBy
+    a rdf:Property ;
+    rdfs:label "createdBy" ;
+    rdfs:domain evi:Annotation ;
+    rdfs:range evi:IdentifierValue .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:createdBy ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Annotation .
+
+### dataGovernanceCommittee
+evi:dataGovernanceCommittee
+    a rdf:Property ;
+    rdfs:label "dataGovernanceCommittee" ;
+    rdfs:comment """Name or contact for the data governance committee responsible for oversight, access control, and policy enforcement for this dataset.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### dataLicense
+evi:dataLicense
+    a rdf:Property ;
+    rdfs:label "dataLicense" ;
+    rdfs:comment """Will the dataset be distributed under a copyright or other IP license? Provide a link to or copy of the license terms (e.g. CC BY 4.0, MIT).""" ;
+    rdfs:domain evi:MLModel ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:dataLicense ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:ROCrateMetadataElem .
+
+### dataset
+evi:dataset
+    a rdf:Property ;
+    rdfs:label "dataset" ;
+    rdfs:domain evi:DatasetSummary ;
+    rdfs:range evi:IdentifierValue .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:dataset ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:DatasetSummary .
+
+### datasetCount
+evi:datasetCount
+    a rdf:Property ;
+    rdfs:label "datasetCount" ;
+    rdfs:comment """Pre-aggregated count of Dataset entities across all sub-crates. Used in AI-Ready Provenance scoring in place of counting entities at query time.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:integer .
+
+### dateCreated
+evi:dateCreated
+    a rdf:Property ;
+    rdfs:label "dateCreated" ;
+    rdfs:domain evi:Computation ;
+    rdfs:domain evi:Annotation ;
+    rdfs:domain evi:AnnotatedComputation ;
+    rdfs:domain evi:AnnotatedEvidenceGraph ;
+    rdfs:range xsd:string .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:dateCreated ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Computation .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:dateCreated ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Annotation .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:dateCreated ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:AnnotatedComputation .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:dateCreated ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:AnnotatedEvidenceGraph .
+
+### dateModified
+evi:dateModified
+    a rdf:Property ;
+    rdfs:label "dateModified" ;
+    rdfs:domain evi:Software ;
+    rdfs:domain evi:MLModel ;
+    rdfs:range xsd:string .
+
+### datePerformed
+evi:datePerformed
+    a rdf:Property ;
+    rdfs:label "datePerformed" ;
+    rdfs:domain evi:Experiment ;
+    rdfs:range xsd:string .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:datePerformed ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Experiment .
+
+### datePublished
+evi:datePublished
+    a rdf:Property ;
+    rdfs:label "datePublished" ;
+    rdfs:comment """Date the dataset was published or made publicly available (ISO 8601).""" ;
+    rdfs:domain evi:Dataset ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:datePublished ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Dataset .
+
+### deathDate
+evi:deathDate
+    a rdf:Property ;
+    rdfs:label "deathDate" ;
+    rdfs:domain schema:Patient ;
+    rdfs:range xsd:string .
+
+### deidentified
+evi:deidentified
+    a rdf:Property ;
+    rdfs:label "deidentified" ;
+    rdfs:comment """Whether the dataset has been de-identified to remove or obscure personally identifiable information.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:boolean .
+
+### derivedFrom
+evi:derivedFrom
+    a rdf:Property ;
+    rdfs:label "derivedFrom" ;
+    rdfs:domain evi:Dataset ;
+    rdfs:domain evi:MLModel ;
+    rdfs:domain evi:MLModel ;
+    rdfs:range evi:IdentifierValue .
+
+### description
+evi:description
+    a rdf:Property ;
+    rdfs:label "description" ;
+    rdfs:comment """A human-readable description of the dataset.""" ;
+    rdfs:domain evi:FairscapeEVIBaseModel ;
+    rdfs:domain evi:DigitalObject ;
+    rdfs:domain evi:Activity ;
+    rdfs:domain evi:Split ;
+    rdfs:domain evi:Property ;
+    rdfs:domain evi:DatasetSummary ;
+    rdfs:domain evi:BioChemEntity ;
+    rdfs:domain evi:MedicalCondition ;
+    rdfs:domain evi:Sample ;
+    rdfs:domain evi:Instrument ;
+    rdfs:domain evi:MLModel ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:description ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:FairscapeEVIBaseModel .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:description ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:DigitalObject .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:description ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Activity .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:description ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Property .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:description ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:MedicalCondition .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:description ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Sample .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:description ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Instrument .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:description ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:MLModel .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:description ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:ROCrateMetadataElem .
+
+### diagnosis
+evi:diagnosis
+    a rdf:Property ;
+    rdfs:label "diagnosis" ;
+    rdfs:domain schema:Patient ;
+    rdfs:range evi:IdentifierValue .
+
+### drug
+evi:drug
+    a rdf:Property ;
+    rdfs:label "drug" ;
+    rdfs:domain evi:MedicalCondition ;
+    rdfs:domain schema:Patient ;
+    rdfs:range evi:IdentifierValue .
+
+### email
+evi:email
+    a rdf:Property ;
+    rdfs:label "email" ;
+    rdfs:domain evi:ContactPoint ;
+    rdfs:range xsd:string .
+
+### entitiesWithChecksums
+evi:entitiesWithChecksums
+    a rdf:Property ;
+    rdfs:label "entitiesWithChecksums" ;
+    rdfs:comment """Pre-aggregated count of entities that have md5, sha256, or hash set. Used with evi:totalEntities to compute checksum coverage percentage.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:integer .
+
+### entitiesWithSummaryStats
+evi:entitiesWithSummaryStats
+    a rdf:Property ;
+    rdfs:label "entitiesWithSummaryStats" ;
+    rdfs:comment """Pre-aggregated count of entities that have hasSummaryStatistics set. Used in AI-Ready Characterization scoring.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:integer .
+
+### ethicalReview
+evi:ethicalReview
+    a rdf:Property ;
+    rdfs:label "ethicalReview" ;
+    rdfs:comment """Were any ethical or compliance review processes conducted (e.g. by an Institutional Review Board)? If so, describe the process, frequency of review, and outcomes. Or provide a contact for ethical review information.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### examples
+evi:examples
+    a rdf:Property ;
+    rdfs:label "examples" ;
+    rdfs:domain evi:Schema ;
+    rdfs:range rdfs:Literal .
+
+### executiveSummary
+evi:executiveSummary
+    a rdf:Property ;
+    rdfs:label "executiveSummary" ;
+    rdfs:domain evi:AnnotatedEvidenceGraph ;
+    rdfs:range xsd:string .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:executiveSummary ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:AnnotatedEvidenceGraph .
+
+### experimentType
+evi:experimentType
+    a rdf:Property ;
+    rdfs:label "experimentType" ;
+    rdfs:domain evi:Experiment ;
+    rdfs:range xsd:string .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:experimentType ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Experiment .
+
+### extractedObjectPath
+evi:extractedObjectPath
+    a rdf:Property ;
+    rdfs:label "extractedObjectPath" ;
+    rdfs:domain evi:ROCrateDistribution ;
+    rdfs:range xsd:string .
+
+### extractedROCrateBucket
+evi:extractedROCrateBucket
+    a rdf:Property ;
+    rdfs:label "extractedROCrateBucket" ;
+    rdfs:domain evi:ROCrateDistribution ;
+    rdfs:range xsd:string .
+
+### fdaRegulated
+evi:fdaRegulated
+    a rdf:Property ;
+    rdfs:label "fdaRegulated" ;
+    rdfs:comment """Whether this dataset is subject to FDA regulations (e.g. clinical trial data, medical device data).""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:boolean .
+
+### fileFormat
+evi:fileFormat
+    a rdf:Property ;
+    rdfs:label "fileFormat" ;
+    rdfs:domain evi:Dataset ;
+    rdfs:domain evi:Software ;
+    rdfs:domain evi:MLModel ;
+    rdfs:range xsd:string .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:fileFormat ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Dataset .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:fileFormat ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Software .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:fileFormat ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:MLModel .
+
+### formats
+evi:formats
+    a rdf:Property ;
+    rdfs:label "formats" ;
+    rdfs:comment """Pre-aggregated list of unique file format values (up to 5) across all entities. Used in AI-Ready Computability scoring.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### framework
+evi:framework
+    a rdf:Property ;
+    rdfs:label "framework" ;
+    rdfs:domain evi:MLModel ;
+    rdfs:range xsd:string .
+
+### funder
+evi:funder
+    a rdf:Property ;
+    rdfs:label "funder" ;
+    rdfs:comment """Who funded the creation of the dataset? Include grant names and numbers where applicable.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### gender
+evi:gender
+    a rdf:Property ;
+    rdfs:label "gender" ;
+    rdfs:domain schema:Patient ;
+    rdfs:range xsd:string .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:gender ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf schema:Patient .
+
+### generated
+evi:generated
+    a rdf:Property ;
+    rdfs:label "generated" ;
+    rdfs:domain evi:Activity ;
+    rdfs:range evi:IdentifierValue .
+
+### generatedBy
+evi:generatedBy
+    a rdf:Property ;
+    rdfs:label "generatedBy" ;
+    rdfs:domain evi:Dataset ;
+    rdfs:domain evi:MLModel ;
+    rdfs:domain evi:MLModel ;
+    rdfs:range evi:IdentifierValue .
+
+### hasBias
+evi:hasBias
+    a rdf:Property ;
+    rdfs:label "hasBias" ;
+    rdfs:domain evi:MLModel ;
+    rdfs:range xsd:string .
+
+### hasPart
+evi:hasPart
+    a rdf:Property ;
+    rdfs:label "hasPart" ;
+    rdfs:comment """Dataset, Software, Computation, and other entities that are part of this RO-Crate, referenced by identifier.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range evi:IdentifierValue .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:hasPart ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:ROCrateMetadataElem .
+
+### hasSummaryStatistics
+evi:hasSummaryStatistics
+    a rdf:Property ;
+    rdfs:label "hasSummaryStatistics" ;
+    rdfs:comment """Reference to a summary statistics entity describing distributions, counts, and key statistics for this dataset.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range evi:IdentifierValue .
+
+### hash
+evi:hash
+    a rdf:Property ;
+    rdfs:label "hash" ;
+    rdfs:comment """Hash of the digital object content (if not MD5)""" ;
+    rdfs:domain evi:DigitalObject ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### header
+evi:header
+    a rdf:Property ;
+    rdfs:label "header" ;
+    rdfs:domain evi:Schema ;
+    rdfs:range xsd:boolean .
+
+### healthCondition
+evi:healthCondition
+    a rdf:Property ;
+    rdfs:label "healthCondition" ;
+    rdfs:domain schema:Patient ;
+    rdfs:range evi:IdentifierValue .
+
+### humanSubjectExemption
+evi:humanSubjectExemption
+    a rdf:Property ;
+    rdfs:label "humanSubjectExemption" ;
+    rdfs:comment """If human subjects research qualifies for exemption from full IRB review, the applicable exemption category (e.g. 45 CFR 46 Exemption 4).""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### humanSubjectResearch
+evi:humanSubjectResearch
+    a rdf:Property ;
+    rdfs:label "humanSubjectResearch" ;
+    rdfs:comment """Does this dataset involve human subjects? Indicate Yes/No and describe the nature of human subjects involvement.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### identifier
+evi:identifier
+    a rdf:Property ;
+    rdfs:label "identifier" ;
+    rdfs:comment """DOI or other external persistent identifier for the dataset (used for Findability and Sustainability scoring).""" ;
+    rdfs:domain evi:BioChemEntity ;
+    rdfs:domain evi:MedicalCondition ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range rdfs:Literal .
+
+### index
+evi:index
+    a rdf:Property ;
+    rdfs:label "index" ;
+    rdfs:domain evi:Property ;
+    rdfs:range xsd:string .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:index ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Property .
+
+### inputSize
+evi:inputSize
+    a rdf:Property ;
+    rdfs:label "inputSize" ;
+    rdfs:domain evi:MLModel ;
+    rdfs:range xsd:string .
+
+### inputSummaries
+evi:inputSummaries
+    a rdf:Property ;
+    rdfs:label "inputSummaries" ;
+    rdfs:domain evi:AnnotatedComputation ;
+    rdfs:range evi:DatasetSummary .
+
+### intendedUseCase
+evi:intendedUseCase
+    a rdf:Property ;
+    rdfs:label "intendedUseCase" ;
+    rdfs:domain evi:MLModel ;
+    rdfs:range xsd:string .
+
+### interpreterVersion
+evi:interpreterVersion
+    a rdf:Property ;
+    rdfs:label "interpreterVersion" ;
+    rdfs:domain evi:AnnotatedComputation ;
+    rdfs:domain evi:AnnotatedEvidenceGraph ;
+    rdfs:range xsd:string .
+
+### irb
+evi:irb
+    a rdf:Property ;
+    rdfs:label "irb" ;
+    rdfs:comment """Institutional Review Board (IRB) information — approval status, approving institution, and contact details.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range evi:IRB .
+
+### irbProtocolId
+evi:irbProtocolId
+    a rdf:Property ;
+    rdfs:label "irbProtocolId" ;
+    rdfs:comment """IRB protocol identifier number assigned by the reviewing institution.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### isPartOf
+evi:isPartOf
+    a rdf:Property ;
+    rdfs:label "isPartOf" ;
+    rdfs:comment """Parent organization(s) or project(s) this crate belongs to, referenced by identifier.""" ;
+    rdfs:domain evi:DigitalObject ;
+    rdfs:domain evi:Activity ;
+    rdfs:domain evi:GenericMetadataElem ;
+    rdfs:domain evi:Schema ;
+    rdfs:domain evi:BioChemEntity ;
+    rdfs:domain evi:MedicalCondition ;
+    rdfs:domain evi:Sample ;
+    rdfs:domain evi:Instrument ;
+    rdfs:domain schema:Patient ;
+    rdfs:domain evi:MLModel ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range evi:IdentifierValue .
+
+### isRandom
+evi:isRandom
+    a rdf:Property ;
+    rdfs:label "isRandom" ;
+    rdfs:domain evi:Split ;
+    rdfs:range xsd:boolean .
+
+### isSample
+evi:isSample
+    a rdf:Property ;
+    rdfs:label "isSample" ;
+    rdfs:domain evi:Split ;
+    rdfs:range xsd:boolean .
+
+### keyFindings
+evi:keyFindings
+    a rdf:Property ;
+    rdfs:label "keyFindings" ;
+    rdfs:domain evi:AnnotatedEvidenceGraph ;
+    rdfs:range xsd:string .
+
+### keyFunctions
+evi:keyFunctions
+    a rdf:Property ;
+    rdfs:label "keyFunctions" ;
+    rdfs:domain evi:CodeAnalysis ;
+    rdfs:range xsd:string .
+
+### keywords
+evi:keywords
+    a rdf:Property ;
+    rdfs:label "keywords" ;
+    rdfs:comment """Keywords or tags describing the dataset, used for discovery and search.""" ;
+    rdfs:domain evi:FairscapeEVIBaseModel ;
+    rdfs:domain evi:Dataset ;
+    rdfs:domain evi:Sample ;
+    rdfs:domain evi:MLModel ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:keywords ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Dataset .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:keywords ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Sample .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:keywords ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:MLModel .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:keywords ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:ROCrateMetadataElem .
+
+### llmModel
+evi:llmModel
+    a rdf:Property ;
+    rdfs:label "llmModel" ;
+    rdfs:domain evi:AnnotatedComputation ;
+    rdfs:domain evi:AnnotatedEvidenceGraph ;
+    rdfs:range xsd:string .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:llmModel ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:AnnotatedComputation .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:llmModel ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:AnnotatedEvidenceGraph .
+
+### llmTemperature
+evi:llmTemperature
+    a rdf:Property ;
+    rdfs:label "llmTemperature" ;
+    rdfs:domain evi:AnnotatedComputation ;
+    rdfs:domain evi:AnnotatedEvidenceGraph ;
+    rdfs:range xsd:decimal .
+
+### manufacturer
+evi:manufacturer
+    a rdf:Property ;
+    rdfs:label "manufacturer" ;
+    rdfs:domain evi:Instrument ;
+    rdfs:range xsd:string .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:manufacturer ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Instrument .
+
+### max_items
+evi:max_items
+    a rdf:Property ;
+    rdfs:label "max_items" ;
+    rdfs:domain evi:Property ;
+    rdfs:range xsd:integer .
+
+### md5
+evi:md5
+    a rdf:Property ;
+    rdfs:label "md5" ;
+    rdfs:comment """MD5 checksum of the digital object content""" ;
+    rdfs:domain evi:DigitalObject ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### min_items
+evi:min_items
+    a rdf:Property ;
+    rdfs:label "min_items" ;
+    rdfs:domain evi:Property ;
+    rdfs:range xsd:integer .
+
+### model
+evi:model
+    a rdf:Property ;
+    rdfs:label "model" ;
+    rdfs:domain evi:Instrument ;
+    rdfs:range xsd:string .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:model ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Instrument .
+
+### modelArchitecture
+evi:modelArchitecture
+    a rdf:Property ;
+    rdfs:label "modelArchitecture" ;
+    rdfs:domain evi:MLModel ;
+    rdfs:range xsd:string .
+
+### modelFormat
+evi:modelFormat
+    a rdf:Property ;
+    rdfs:label "modelFormat" ;
+    rdfs:domain evi:MLModel ;
+    rdfs:range xsd:string .
+
+### modelTask
+evi:modelTask
+    a rdf:Property ;
+    rdfs:label "modelTask" ;
+    rdfs:domain evi:MLModel ;
+    rdfs:range xsd:string .
+
+### modelType
+evi:modelType
+    a rdf:Property ;
+    rdfs:label "modelType" ;
+    rdfs:domain evi:MLModel ;
+    rdfs:range xsd:string .
+
+### name
+evi:name
+    a rdf:Property ;
+    rdfs:label "name" ;
+    rdfs:comment """A human-readable name for the dataset.""" ;
+    rdfs:domain evi:IdentifierPropertyValue ;
+    rdfs:domain evi:Identifier ;
+    rdfs:domain evi:DigitalObject ;
+    rdfs:domain evi:Activity ;
+    rdfs:domain evi:Split ;
+    rdfs:domain evi:CodeAnalysis ;
+    rdfs:domain evi:DatasetSummary ;
+    rdfs:domain evi:IRB ;
+    rdfs:domain evi:BioChemEntity ;
+    rdfs:domain evi:MedicalCondition ;
+    rdfs:domain evi:Sample ;
+    rdfs:domain evi:Instrument ;
+    rdfs:domain schema:Patient ;
+    rdfs:domain evi:MLModel ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:name ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:IdentifierPropertyValue .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:name ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Identifier .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:name ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:DigitalObject .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:name ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Activity .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:name ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Split .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:name ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:IRB .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:name ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:BioChemEntity .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:name ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:MedicalCondition .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:name ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Sample .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:name ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Instrument .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:name ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf schema:Patient .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:name ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:MLModel .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:name ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:ROCrateMetadataElem .
+
+### narrativeSummary
+evi:narrativeSummary
+    a rdf:Property ;
+    rdfs:label "narrativeSummary" ;
+    rdfs:domain evi:AnnotatedEvidenceGraph ;
+    rdfs:range xsd:string .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:narrativeSummary ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:AnnotatedEvidenceGraph .
+
+### outputSummaries
+evi:outputSummaries
+    a rdf:Property ;
+    rdfs:label "outputSummaries" ;
+    rdfs:domain evi:AnnotatedComputation ;
+    rdfs:range evi:DatasetSummary .
+
+### parameters
+evi:parameters
+    a rdf:Property ;
+    rdfs:label "parameters" ;
+    rdfs:domain evi:MLModel ;
+    rdfs:range xsd:decimal .
+
+### pattern
+evi:pattern
+    a rdf:Property ;
+    rdfs:label "pattern" ;
+    rdfs:domain evi:Property ;
+    rdfs:range xsd:string .
+
+### postalCode
+evi:postalCode
+    a rdf:Property ;
+    rdfs:label "postalCode" ;
+    rdfs:domain evi:PostalAddress ;
+    rdfs:range xsd:string .
+
+### principalInvestigator
+evi:principalInvestigator
+    a rdf:Property ;
+    rdfs:label "principalInvestigator" ;
+    rdfs:comment """A key individual (Principal Investigator) responsible for or overseeing dataset creation.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### processed
+evi:processed
+    a rdf:Property ;
+    rdfs:label "processed" ;
+    rdfs:comment """Flag indicating whether this release-level RO-Crate has been processed and aggregated metrics computed.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:boolean .
+
+### prohibitedUses
+evi:prohibitedUses
+    a rdf:Property ;
+    rdfs:label "prohibitedUses" ;
+    rdfs:comment """Explicit statement of prohibited or forbidden uses for this dataset — uses that are not permitted by license, ethics, or policy. Stronger than discouraged uses.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### properties
+evi:properties
+    a rdf:Property ;
+    rdfs:label "properties" ;
+    rdfs:domain evi:Property ;
+    rdfs:domain evi:Schema ;
+    rdfs:range rdfs:Literal .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:properties ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Schema .
+
+### protocol
+evi:protocol
+    a rdf:Property ;
+    rdfs:label "protocol" ;
+    rdfs:domain evi:Experiment ;
+    rdfs:range xsd:string .
+
+### published
+evi:published
+    a rdf:Property ;
+    rdfs:label "published" ;
+    rdfs:domain evi:FairscapeEVIBaseModel ;
+    rdfs:range xsd:boolean .
+
+### publisher
+evi:publisher
+    a rdf:Property ;
+    rdfs:label "publisher" ;
+    rdfs:comment """Organization or person responsible for publishing or distributing the dataset.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### query
+evi:query
+    a rdf:Property ;
+    rdfs:label "query" ;
+    rdfs:domain evi:Split ;
+    rdfs:range xsd:string .
+
+### queryType
+evi:queryType
+    a rdf:Property ;
+    rdfs:label "queryType" ;
+    rdfs:domain evi:Split ;
+    rdfs:range xsd:string .
+
+### required
+evi:required
+    a rdf:Property ;
+    rdfs:label "required" ;
+    rdfs:domain evi:Schema ;
+    rdfs:range xsd:string .
+
+### role
+evi:role
+    a rdf:Property ;
+    rdfs:label "role" ;
+    rdfs:domain evi:DatasetSummary ;
+    rdfs:range xsd:string .
+
+### runBy
+evi:runBy
+    a rdf:Property ;
+    rdfs:label "runBy" ;
+    rdfs:domain evi:Computation ;
+    rdfs:domain evi:Experiment ;
+    rdfs:range evi:IdentifierValue .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:runBy ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Computation .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:runBy ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Experiment .
+
+### samplingStrategy
+evi:samplingStrategy
+    a rdf:Property ;
+    rdfs:label "samplingStrategy" ;
+    rdfs:domain evi:Split ;
+    rdfs:range xsd:string .
+
+### schemaCount
+evi:schemaCount
+    a rdf:Property ;
+    rdfs:label "schemaCount" ;
+    rdfs:comment """Pre-aggregated count of Schema entities across all sub-crates. Used in AI-Ready Characterization scoring.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:integer .
+
+### schemaType
+evi:schemaType
+    a rdf:Property ;
+    rdfs:label "schemaType" ;
+    rdfs:domain evi:Schema ;
+    rdfs:range xsd:string .
+
+### sdPublisher
+evi:sdPublisher
+    a rdf:Property ;
+    rdfs:label "sdPublisher" ;
+    rdfs:domain schema:Patient ;
+    rdfs:range xsd:string .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:sdPublisher ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf schema:Patient .
+
+### separator
+evi:separator
+    a rdf:Property ;
+    rdfs:label "separator" ;
+    rdfs:domain evi:Schema ;
+    rdfs:range xsd:string .
+
+### sha256
+evi:sha256
+    a rdf:Property ;
+    rdfs:label "sha256" ;
+    rdfs:comment """SHA-256 checksum of the digital object content""" ;
+    rdfs:domain evi:DigitalObject ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### software
+evi:software
+    a rdf:Property ;
+    rdfs:label "software" ;
+    rdfs:domain evi:CodeAnalysis ;
+    rdfs:range evi:IdentifierValue .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:software ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:CodeAnalysis .
+
+### softwareCount
+evi:softwareCount
+    a rdf:Property ;
+    rdfs:label "softwareCount" ;
+    rdfs:comment """Pre-aggregated count of Software entities across all sub-crates. Used in AI-Ready Provenance scoring.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:integer .
+
+### sourceDatasets
+evi:sourceDatasets
+    a rdf:Property ;
+    rdfs:label "sourceDatasets" ;
+    rdfs:domain evi:Split ;
+    rdfs:range evi:IdentifierValue .
+
+### splitType
+evi:splitType
+    a rdf:Property ;
+    rdfs:label "splitType" ;
+    rdfs:domain evi:Split ;
+    rdfs:range rdfs:Literal .
+
+### splits
+evi:splits
+    a rdf:Property ;
+    rdfs:label "splits" ;
+    rdfs:domain evi:Dataset ;
+    rdfs:range evi:Split .
+
+### stepAnnotations
+evi:stepAnnotations
+    a rdf:Property ;
+    rdfs:label "stepAnnotations" ;
+    rdfs:domain evi:AnnotatedEvidenceGraph ;
+    rdfs:range evi:IdentifierValue .
+
+### stepSummary
+evi:stepSummary
+    a rdf:Property ;
+    rdfs:label "stepSummary" ;
+    rdfs:domain evi:AnnotatedComputation ;
+    rdfs:range xsd:string .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:stepSummary ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:AnnotatedComputation .
+
+### streetAddress
+evi:streetAddress
+    a rdf:Property ;
+    rdfs:label "streetAddress" ;
+    rdfs:domain evi:PostalAddress ;
+    rdfs:range xsd:string .
+
+### summary
+evi:summary
+    a rdf:Property ;
+    rdfs:label "summary" ;
+    rdfs:domain evi:CodeAnalysis ;
+    rdfs:range xsd:string .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:summary ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:CodeAnalysis .
+
+### telephone
+evi:telephone
+    a rdf:Property ;
+    rdfs:label "telephone" ;
+    rdfs:domain evi:ContactPoint ;
+    rdfs:range xsd:string .
+
+### totalContentSizeBytes
+evi:totalContentSizeBytes
+    a rdf:Property ;
+    rdfs:label "totalContentSizeBytes" ;
+    rdfs:comment """Pre-aggregated total content size in bytes across all sub-crate datasets. Used in AI-Ready Characterization scoring.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:integer .
+
+### totalEntities
+evi:totalEntities
+    a rdf:Property ;
+    rdfs:label "totalEntities" ;
+    rdfs:comment """Pre-aggregated total count of Dataset and Software entities. Used as denominator for checksum coverage in AI-Ready Pre-Model Explainability scoring.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:integer .
+
+### trainedOn
+evi:trainedOn
+    a rdf:Property ;
+    rdfs:label "trainedOn" ;
+    rdfs:domain evi:MLModel ;
+    rdfs:range evi:IdentifierValue .
+
+### trainingDataset
+evi:trainingDataset
+    a rdf:Property ;
+    rdfs:label "trainingDataset" ;
+    rdfs:domain evi:MLModel ;
+    rdfs:range xsd:string .
+
+### type
+evi:type
+    a rdf:Property ;
+    rdfs:label "type" ;
+    rdfs:domain evi:Property ;
+    rdfs:range xsd:string .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:type ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:Property .
+
+### unique_items
+evi:unique_items
+    a rdf:Property ;
+    rdfs:label "unique_items" ;
+    rdfs:domain evi:Property ;
+    rdfs:range xsd:boolean .
+
+### url
+evi:url
+    a rdf:Property ;
+    rdfs:label "url" ;
+    rdfs:domain evi:FairscapeBaseModel ;
+    rdfs:domain evi:MLModel ;
+    rdfs:range rdfs:Literal .
+
+### usageInfo
+evi:usageInfo
+    a rdf:Property ;
+    rdfs:label "usageInfo" ;
+    rdfs:comment """Additional usage information or instructions for working with this dataset.""" ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+### usageInformation
+evi:usageInformation
+    a rdf:Property ;
+    rdfs:label "usageInformation" ;
+    rdfs:domain evi:MLModel ;
+    rdfs:range xsd:string .
+
+### usedBy
+evi:usedBy
+    a rdf:Property ;
+    rdfs:label "usedBy" ;
+    rdfs:domain evi:BioChemEntity ;
+    rdfs:domain evi:MedicalCondition ;
+    rdfs:range evi:IdentifierValue .
+
+### usedByComputation
+evi:usedByComputation
+    a rdf:Property ;
+    rdfs:label "usedByComputation" ;
+    rdfs:domain evi:DigitalObject ;
+    rdfs:range evi:IdentifierValue .
+
+### usedByExperiment
+evi:usedByExperiment
+    a rdf:Property ;
+    rdfs:label "usedByExperiment" ;
+    rdfs:domain evi:Instrument ;
+    rdfs:range evi:IdentifierValue .
+
+### usedDataset
+evi:usedDataset
+    a rdf:Property ;
+    rdfs:label "usedDataset" ;
+    rdfs:domain evi:Computation ;
+    rdfs:domain evi:Annotation ;
+    rdfs:range evi:IdentifierValue .
+
+### usedInstrument
+evi:usedInstrument
+    a rdf:Property ;
+    rdfs:label "usedInstrument" ;
+    rdfs:domain evi:Experiment ;
+    rdfs:range evi:IdentifierValue .
+
+### usedMLModel
+evi:usedMLModel
+    a rdf:Property ;
+    rdfs:label "usedMLModel" ;
+    rdfs:domain evi:Computation ;
+    rdfs:range evi:IdentifierValue .
+
+### usedSample
+evi:usedSample
+    a rdf:Property ;
+    rdfs:label "usedSample" ;
+    rdfs:domain evi:Experiment ;
+    rdfs:range evi:IdentifierValue .
+
+### usedSoftware
+evi:usedSoftware
+    a rdf:Property ;
+    rdfs:label "usedSoftware" ;
+    rdfs:domain evi:Computation ;
+    rdfs:range evi:IdentifierValue .
+
+### usedStain
+evi:usedStain
+    a rdf:Property ;
+    rdfs:label "usedStain" ;
+    rdfs:domain evi:Experiment ;
+    rdfs:range evi:IdentifierValue .
+
+### usedTreatment
+evi:usedTreatment
+    a rdf:Property ;
+    rdfs:label "usedTreatment" ;
+    rdfs:domain evi:Experiment ;
+    rdfs:range evi:IdentifierValue .
+
+### value
+evi:value
+    a rdf:Property ;
+    rdfs:label "value" ;
+    rdfs:domain evi:IdentifierPropertyValue ;
+    rdfs:range xsd:string .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:value ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:IdentifierPropertyValue .
+
+### value_url
+evi:value_url
+    a rdf:Property ;
+    rdfs:label "value_url" ;
+    rdfs:domain evi:Property ;
+    rdfs:range xsd:string .
+
+### version
+evi:version
+    a rdf:Property ;
+    rdfs:label "version" ;
+    rdfs:comment """Version string for this release of the dataset (e.g. '1.0', '2.3.1').""" ;
+    rdfs:domain evi:DigitalObject ;
+    rdfs:domain evi:MLModel ;
+    rdfs:domain evi:ROCrateMetadataElem ;
+    rdfs:range xsd:string .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:version ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:MLModel .
+
+[]
+    a owl:Restriction ;
+    owl:onProperty evi:version ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+    rdfs:subClassOf evi:ROCrateMetadataElem .
+
+### workLicense
+evi:workLicense
+    a rdf:Property ;
+    rdfs:label "workLicense" ;
+    rdfs:domain evi:FairscapeEVIBaseModel ;
+    rdfs:range xsd:string .
+

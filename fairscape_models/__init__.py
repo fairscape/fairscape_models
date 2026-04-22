@@ -15,3 +15,5 @@ from fairscape_models.model_card import ModelCard
 from fairscape_models.experiment import Experiment
 from fairscape_models.annotated_computation import AnnotatedComputation, CodeAnalysis, DatasetSummary
 from fairscape_models.annotated_evidence_graph import AnnotatedEvidenceGraph
+from fairscape_models.instrument import Instrument
+from fairscape_models.patient import Patient
