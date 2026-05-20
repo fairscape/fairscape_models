@@ -8,28 +8,34 @@
 export type Id = string;
 export type Name = string;
 export type Type = string | null;
-export type Additionaltype = string | null;
-export type Createdby = string;
 export type Description = string;
-export type Datecreated = string;
 export type Associatedpublication = string | null;
-export type Useddataset = IdentifierValue[] | null;
-export type Id1 = string;
 export type Generated = IdentifierValue[] | null;
+export type Id1 = string;
 export type Ispartof = IdentifierValue[] | null;
+export type ProvUsed = (string | IdentifierValue)[] | null;
+export type ProvWasassociatedwith = (string | IdentifierValue)[] | null;
+export type Fairscapeversion = string;
+export type Additionaltype = string | null;
+export type Createdby = string | IdentifierValue;
+export type Datecreated = string;
+export type Useddataset = IdentifierValue[] | null;
 
 export interface Annotation {
   "@id": Id;
   name: Name;
   "@type"?: Type;
-  additionalType?: Additionaltype;
-  createdBy: Createdby;
   description: Description;
-  dateCreated: Datecreated;
   associatedPublication?: Associatedpublication;
-  usedDataset?: Useddataset;
   generated?: Generated;
   isPartOf?: Ispartof;
+  "prov:used"?: ProvUsed;
+  "prov:wasAssociatedWith"?: ProvWasassociatedwith;
+  fairscapeVersion?: Fairscapeversion;
+  additionalType?: Additionaltype;
+  createdBy: Createdby;
+  dateCreated: Datecreated;
+  usedDataset?: Useddataset;
   [k: string]: unknown;
 }
 export interface IdentifierValue {

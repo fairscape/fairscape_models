@@ -7,13 +7,14 @@
 
 export type Id = string;
 export type Name = string;
-export type Type = string | null;
+export type Type = string[] | string | null;
 export type Author = string | string[];
 export type Description = string;
 export type Keywords = string[];
 export type Contenturl = string[] | string | null;
 export type Id1 = string;
 export type Ispartof = IdentifierValue[] | null;
+export type Fairscapeversion = string;
 
 export interface Sample {
   "@id": Id;
@@ -25,6 +26,7 @@ export interface Sample {
   contentUrl?: Contenturl;
   cellLineReference?: IdentifierValue | null;
   isPartOf?: Ispartof;
+  fairscapeVersion?: Fairscapeversion;
   [k: string]: unknown;
 }
 export interface IdentifierValue {

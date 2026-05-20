@@ -1,0 +1,411 @@
+{
+  "$defs": {
+    "IdentifierValue": {
+      "additionalProperties": true,
+      "properties": {
+        "@id": {
+          "title": "@Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "@id"
+      ],
+      "title": "IdentifierValue",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "description": "Full annotated condensed evidence graph -- the graph-level LLM output.\n\nContains all original crate entities plus AnnotatedComputation nodes\nin a flat dict keyed by @id. Computation nodes are replaced by their\nannotated supersets. DAG is reconstructable from cross-references\n(generatedBy, usedDataset, evi:annotates, etc.).",
+  "properties": {
+    "@id": {
+      "title": "@Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "@type": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [
+        "prov:Entity",
+        "https://w3id.org/EVI#EvidenceGraph",
+        "https://w3id.org/EVI#AnnotatedEvidenceGraph"
+      ],
+      "title": "@Type"
+    },
+    "author": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/IdentifierValue"
+        },
+        {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/IdentifierValue"
+              }
+            ]
+          },
+          "type": "array"
+        }
+      ],
+      "title": "Author"
+    },
+    "description": {
+      "minLength": 10,
+      "title": "Description",
+      "type": "string"
+    },
+    "version": {
+      "default": "0.1.0",
+      "title": "Version",
+      "type": "string"
+    },
+    "associatedPublication": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Associatedpublication"
+    },
+    "additionalDocumentation": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Additionaldocumentation"
+    },
+    "contentUrl": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Contenturl"
+    },
+    "isPartOf": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Ispartof"
+    },
+    "usedByComputation": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Usedbycomputation"
+    },
+    "md5": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "MD5 checksum of the digital object content",
+      "title": "Md5"
+    },
+    "hash": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Hash of the digital object content (if not MD5)",
+      "title": "Hash"
+    },
+    "sha256": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "SHA-256 checksum of the digital object content",
+      "title": "Sha256"
+    },
+    "fairscapeVersion": {
+      "default": "1.0.20",
+      "title": "Fairscapeversion",
+      "type": "string"
+    },
+    "prov:wasGeneratedBy": {
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/IdentifierValue"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Prov:Wasgeneratedby"
+    },
+    "prov:wasDerivedFrom": {
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/IdentifierValue"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Prov:Wasderivedfrom"
+    },
+    "prov:wasAttributedTo": {
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/IdentifierValue"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Prov:Wasattributedto"
+    },
+    "additionalType": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": "AnnotatedEvidenceGraph",
+      "title": "Additionaltype"
+    },
+    "evi:annotates": {
+      "$ref": "#/$defs/IdentifierValue"
+    },
+    "@graph": {
+      "additionalProperties": true,
+      "title": "@Graph",
+      "type": "object"
+    },
+    "evi:executiveSummary": {
+      "title": "Evi:Executivesummary",
+      "type": "string"
+    },
+    "evi:narrativeSummary": {
+      "title": "Evi:Narrativesummary",
+      "type": "string"
+    },
+    "evi:keyFindings": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Evi:Keyfindings"
+    },
+    "evi:concerns": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Evi:Concerns"
+    },
+    "evi:stepAnnotations": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Evi:Stepannotations"
+    },
+    "evi:llmModel": {
+      "title": "Evi:Llmmodel",
+      "type": "string"
+    },
+    "evi:llmTemperature": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Evi:Llmtemperature"
+    },
+    "dateCreated": {
+      "title": "Datecreated",
+      "type": "string"
+    },
+    "evi:interpreterVersion": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Evi:Interpreterversion"
+    }
+  },
+  "required": [
+    "@id",
+    "name",
+    "author",
+    "description",
+    "evi:annotates",
+    "@graph",
+    "evi:executiveSummary",
+    "evi:narrativeSummary",
+    "evi:llmModel",
+    "dateCreated"
+  ],
+  "title": "AnnotatedEvidenceGraph",
+  "type": "object"
+}

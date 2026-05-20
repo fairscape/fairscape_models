@@ -5,40 +5,319 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
+/**
+ * Persistent unique identifier for this RO-Crate (ARK, DOI, URL, etc.).
+ */
 export type Id = string;
+/**
+ * RO-Crate type list; always includes 'Dataset' and 'https://w3id.org/EVI#ROCrate'. MUST NOT include 'Profile' — that type is reserved for the hand-authored Profile Crate at the profile URI.
+ */
 export type Type = string[];
-export type Name = string;
-export type Description = string;
-export type Keywords = string[];
-export type Ispartof = IdentifierValue[] | null;
+/**
+ * Profile this crate conforms to. Defaults to the Fairscape release profile URI.
+ */
+export type Conformsto = IdentifierValue | IdentifierValue[];
 export type Id1 = string;
+/**
+ * A human-readable name for the dataset.
+ */
+export type Name = string;
+/**
+ * A human-readable description of the dataset.
+ */
+export type Description = string;
+/**
+ * Keywords or tags describing the dataset, used for discovery and search.
+ */
+export type Keywords = string[];
+/**
+ * Version string for this release of the dataset (e.g. '1.0', '2.3.1').
+ */
 export type Version = string;
+/**
+ * Date the dataset was published or made publicly available (ISO 8601).
+ */
+export type Datepublished = string | null;
+/**
+ * Parent organization(s) or project(s) this crate belongs to, referenced by identifier.
+ */
+export type Ispartof = IdentifierValue[] | null;
+/**
+ * Dataset, Software, Computation, and other entities that are part of this RO-Crate, referenced by identifier.
+ */
 export type Haspart = IdentifierValue[];
+/**
+ * Who created the dataset (e.g. which team, research group) and on behalf of which entity (e.g. company, institution, organization).
+ */
 export type Author = string | string[];
-export type License = string | null;
+/**
+ * Organization or person responsible for publishing or distributing the dataset.
+ */
+export type Publisher = string | null;
+/**
+ * A key individual (Principal Investigator) responsible for or overseeing dataset creation.
+ */
+export type Principalinvestigator = string | null;
+/**
+ * Who funded the creation of the dataset? Include grant names and numbers where applicable.
+ */
+export type Funder = string | null;
+/**
+ * Email address for questions or correspondence about the dataset.
+ */
+export type Contactemail = string | null;
+/**
+ * Preferred citation string for this dataset.
+ */
+export type Citation = string | null;
+/**
+ * Publication(s) associated with or describing this dataset.
+ */
 export type Associatedpublication = string[] | string | null;
+/**
+ * DOI or other external persistent identifier for the dataset (used for Findability and Sustainability scoring).
+ */
+export type Identifier = string | null;
+/**
+ * Will the dataset be distributed under a copyright or other IP license? Provide a link to or copy of the license terms (e.g. CC BY 4.0, MIT).
+ */
+export type License = string | null;
+/**
+ * Terms and conditions governing access to and use of this dataset, including any data use agreements required.
+ */
 export type Conditionsofaccess = string | null;
+/**
+ * Copyright statement for the dataset, including year and rights holder.
+ */
 export type Copyrightnotice = string | null;
-export type RaiDatalimitations = string | null;
-export type RaiDatabiases = string | null;
-export type RaiDatausecases = string | null;
-export type RaiDatareleasemaintenanceplan = string | null;
+/**
+ * Total size of the dataset content (e.g. '2.4 GB', '150 MB'). Used in AI-Ready Characterization scoring.
+ */
+export type Contentsize = string | null;
+/**
+ * Additional usage information or instructions for working with this dataset.
+ */
+export type Usageinfo = string | null;
+/**
+ * Reference to a summary statistics entity describing distributions, counts, and key statistics for this dataset.
+ */
+export type Hassummarystatistics = string | IdentifierValue | null;
+/**
+ * Additional schema.org PropertyValue entries for metadata not covered by other fields (e.g. [{"name": "Human Subject", "value": "Yes"}]).
+ */
+export type Additionalproperty =
+  | {
+      [k: string]: unknown;
+    }[]
+  | null;
+/**
+ * Were any ethical or compliance review processes conducted (e.g. by an Institutional Review Board)? If so, describe the process, frequency of review, and outcomes. Or provide a contact for ethical review information.
+ */
+export type Ethicalreview = string | null;
+/**
+ * HL7 Confidentiality code indicating the level of confidentiality or sensitivity of the dataset (e.g. 'normal', 'restricted', 'very restricted').
+ */
+export type Confidentialitylevel = string | null;
+/**
+ * Institutional Review Board (IRB) information — approval status, approving institution, and contact details.
+ */
+export type Irb = string | IRB | null;
+export type Type1 = string;
+export type Name1 = string;
+export type Type2 = string;
+export type Contacttype = string | null;
+export type Email = string | null;
+export type Telephone = string | null;
+export type Type3 = string;
+export type Streetaddress = string | null;
+export type Addresslocality = string | null;
+export type Addressregion = string | null;
+export type Postalcode = string | null;
+export type Addresscountry = string | null;
+/**
+ * IRB protocol identifier number assigned by the reviewing institution.
+ */
+export type Irbprotocolid = string | null;
+/**
+ * If human subjects research qualifies for exemption from full IRB review, the applicable exemption category (e.g. 45 CFR 46 Exemption 4).
+ */
+export type Humansubjectexemption = string | null;
+/**
+ * Whether this dataset is subject to FDA regulations (e.g. clinical trial data, medical device data).
+ */
+export type Fdaregulated = boolean | null;
+/**
+ * Whether the dataset has been de-identified to remove or obscure personally identifiable information.
+ */
+export type Deidentified = boolean | null;
+/**
+ * Does this dataset involve human subjects? Indicate Yes/No and describe the nature of human subjects involvement.
+ */
+export type Humansubjectresearch = string | null;
+/**
+ * Name or contact for the data governance committee responsible for oversight, access control, and policy enforcement for this dataset.
+ */
+export type Datagovernancecommittee = string | null;
+/**
+ * MD5 checksum of the digital object content
+ */
+export type Md5 = string | null;
+/**
+ * Hash of the digital object content (if not MD5)
+ */
+export type Hash = string | null;
+/**
+ * SHA-256 checksum of the digital object content
+ */
+export type Sha256 = string[] | string | null;
+/**
+ * Documents known limitations of the dataset that may affect its use or interpretation — data generalization limits (e.g. related to data distribution, data quality issues, or data sources) and non-recommended uses. Distinct from biases (systematic errors) and anomalies (data quality issues). (rai:dataLimitations)
+ */
+export type RaiDatalimitations = string[] | string | null;
+/**
+ * Documents known biases present in the dataset — systematic errors or prejudices that may affect the representativeness or fairness of the data. Distinct from anomalies (data quality issues) and limitations (scope constraints). (rai:dataBiases)
+ */
+export type RaiDatabiases = string[] | string | null;
+/**
+ * Explicit statement of intended uses for this dataset, focusing on positive, recommended applications. Recommended use categories: Training, Testing, Validation, Development or Production Use, Fine Tuning, others. Include usage guidelines and caveats. (rai:dataUseCases)
+ */
+export type RaiDatausecases = string[] | string | null;
+/**
+ * Will the dataset be updated (e.g. to correct labeling errors, add new instances, delete instances)? If so, how often, by whom, and how will updates be communicated? Covers versioning timeframe, maintainers, and deprecation policies. (rai:dataReleaseMaintenancePlan)
+ */
+export type RaiDatareleasemaintenanceplan = string[] | string | null;
+/**
+ * What mechanisms or procedures were used to collect the data (e.g. hardware sensors, manual curation, software APIs)? Also covers how these mechanisms were validated. (rai:dataCollection)
+ */
 export type RaiDatacollection = string | null;
+/**
+ * Data collection type(s). Recommended values: Surveys, Secondary Data Analysis, Physical Data Collection, Direct Measurement, Document Analysis, Manual Human Curator, Software Collection, Experiments, Web Scraping, Web API, Focus Groups, Self-Reporting, Customer Feedback Data, User-Generated Content Data, Passive Data Collection, Others. (rai:dataCollectionType)
+ */
 export type RaiDatacollectiontype = string[] | null;
+/**
+ * Documentation of missing data in the dataset, including patterns (e.g. MCAR, MAR, MNAR), known or suspected causes (e.g. sensor failures, participant dropout, privacy constraints), and strategies used to handle missing values. (rai:dataCollectionMissingData)
+ */
 export type RaiDatacollectionmissingdata = string | null;
+/**
+ * Description of raw data sources before preprocessing, cleaning, or labeling. Documents where the original data comes from and how it can be accessed. (rai:dataCollectionRawData)
+ */
 export type RaiDatacollectionrawdata = string | null;
+/**
+ * Over what timeframe was the data collected, and does this timeframe match the creation timeframe of the underlying data? Provide start and end dates where possible. (rai:dataCollectionTimeframe)
+ */
 export type RaiDatacollectiontimeframe = string[] | null;
+/**
+ * Description of data imputation methodology, including techniques used to handle missing values (e.g. mean/median imputation, forward fill, model-based imputation) and rationale for chosen approaches. (rai:dataImputationProtocol)
+ */
 export type RaiDataimputationprotocol = string | null;
-export type RaiDatamanipulationprotocol = string | null;
+/**
+ * Was any cleaning of the data done (e.g. removal of instances, processing of missing values, deduplication, filtering)? If so, describe the cleaning procedures applied. (rai:dataManipulationProtocol)
+ */
+export type RaiDatamanipulationprotocol = string[] | string | null;
+/**
+ * Was any preprocessing of the data done (e.g. discretization or bucketing, tokenization, feature extraction, normalization)? Describe the steps required to bring collected data to a state that can be processed by an ML model or algorithm. (rai:dataPreprocessingProtocol)
+ */
 export type RaiDatapreprocessingprotocol = string[] | null;
+/**
+ * Annotation methodology, tasks, and protocols followed during labeling. Includes annotation guidelines, quality control procedures, task definitions, workforce type, annotation characteristics, and label distributions. (rai:dataAnnotationProtocol)
+ */
 export type RaiDataannotationprotocol = string | null;
+/**
+ * Platform or tool used for annotation (e.g. Label Studio, Prodigy, Amazon Mechanical Turk, custom annotation tool). (rai:dataAnnotationPlatform)
+ */
 export type RaiDataannotationplatform = string[] | null;
+/**
+ * Analysis of annotation quality, inter-annotator agreement metrics (e.g. Cohen's kappa, Fleiss' kappa), and systematic patterns in disagreements between annotators of different socio-demographic groups. Covers how final dataset labels relate to individual annotator responses. (rai:dataAnnotationAnalysis)
+ */
 export type RaiDataannotationanalysis = string[] | null;
+/**
+ * Does the dataset contain data that might be considered sensitive (e.g. race, sexual orientation, religion, biometrics)? List sensitive attribute types present: Gender, Socio-economic status, Geography, Language, Age, Culture, Experience or Seniority, others. (rai:personalSensitiveInformation)
+ */
 export type RaiPersonalsensitiveinformation = string[] | null;
+/**
+ * Is there anything about the dataset's composition or collection that might impact future uses or create risks/harm (e.g. unfair treatment, legal or financial risks)? Describe potential impacts and any mitigation strategies. (rai:dataSocialImpact)
+ */
 export type RaiDatasocialimpact = string | null;
+/**
+ * Number of annotations collected per data item. Multiple annotations per item enable calculation of inter-annotator agreement. (rai:annotationsPerItem)
+ */
 export type RaiAnnotationsperitem = string | null;
+/**
+ * Demographic information about annotators, if available and relevant (e.g. geographic location, language background, expertise level, age group, gender). (rai:annotatorDemographics)
+ */
 export type RaiAnnotatordemographics = string[] | null;
+/**
+ * Automated or machine-learning-based annotation tools used in dataset creation, including NLP pipelines, computer vision models, or other automated labeling systems. Format each entry as 'ToolName version' (e.g. 'spaCy 3.5.0'). (rai:machineAnnotationTools)
+ */
 export type RaiMachineannotationtools = string[] | null;
+/**
+ * Assessment of how complete the dataset is relative to its intended scope (e.g. percentage of expected records present, known gaps).
+ */
+export type Completeness = string | null;
+/**
+ * Explicit statement of prohibited or forbidden uses for this dataset — uses that are not permitted by license, ethics, or policy. Stronger than discouraged uses.
+ */
+export type Prohibiteduses = string | null;
+/**
+ * Pre-aggregated count of Dataset entities across all sub-crates. Used in AI-Ready Provenance scoring in place of counting entities at query time.
+ */
+export type EviDatasetcount = number | null;
+/**
+ * Pre-aggregated count of Computation and Experiment entities across all sub-crates. Used in AI-Ready Provenance scoring.
+ */
+export type EviComputationcount = number | null;
+/**
+ * Pre-aggregated count of Software entities across all sub-crates. Used in AI-Ready Provenance scoring.
+ */
+export type EviSoftwarecount = number | null;
+/**
+ * Pre-aggregated count of Schema entities across all sub-crates. Used in AI-Ready Characterization scoring.
+ */
+export type EviSchemacount = number | null;
+/**
+ * Pre-aggregated total content size in bytes across all sub-crate datasets. Used in AI-Ready Characterization scoring.
+ */
+export type EviTotalcontentsizebytes = number | null;
+/**
+ * Pre-aggregated count of entities that have hasSummaryStatistics set. Used in AI-Ready Characterization scoring.
+ */
+export type EviEntitieswithsummarystats = number | null;
+/**
+ * Pre-aggregated count of entities that have md5, sha256, or hash set. Used with evi:totalEntities to compute checksum coverage percentage.
+ */
+export type EviEntitieswithchecksums = number | null;
+/**
+ * Pre-aggregated total count of Dataset and Software entities. Used as denominator for checksum coverage in AI-Ready Pre-Model Explainability scoring.
+ */
+export type EviTotalentities = number | null;
+/**
+ * Pre-aggregated list of unique file format values (up to 5) across all entities. Used in AI-Ready Computability scoring.
+ */
+export type EviFormats = string[] | null;
+/**
+ * Flag indicating whether this release-level RO-Crate has been processed and aggregated metrics computed.
+ */
+export type EviProcessed = boolean | null;
+/**
+ * Was there a specific knowledge or resource gap that needed to be filled by creation of this dataset? (D4D_Motivation: AddressingGap)
+ */
+export type D4DAddressinggaps = string | null;
+/**
+ * Are there any errors, sources of noise, or redundancies in the dataset? (D4D_Composition: DataAnomaly)
+ */
+export type D4DDataanomalies = string | null;
+/**
+ * Does the dataset contain any data that might be offensive, insulting, threatening, or otherwise anxiety-provoking if viewed directly? (D4D_Composition: ContentWarning)
+ */
+export type D4DContentwarning = string | null;
+/**
+ * Details about informed consent procedures used in human subjects research — consent type, documentation, withdrawal mechanisms, and scope. (D4D_Human: InformedConsent)
+ */
+export type D4DInformedconsent = string | null;
+/**
+ * Information about protections for at-risk populations (e.g. children, pregnant women, prisoners, cognitively impaired individuals) included in human subjects research. (D4D_Human: AtRiskPopulations)
+ */
+export type D4DAtriskpopulations = string | null;
 
 /**
  * Metadata Element of ROCrate that represents the crate as a whole
@@ -48,6 +327,7 @@ export type RaiMachineannotationtools = string[] | null;
  *     {
  *         '@id': 'https://fairscape.net/ark:59852/rocrate-2.cm4ai_chromatin_mda-mb-468_untreated_imageembedfold1_initialrun0.1alpha',
  *         '@type': ['Dataset', 'https://w3id.org/EVI#ROCrate'],
+ *         'conformsTo': {'@id': 'https://w3id.org/fairscape/profile/0.1'},
  *         'name': 'Initial integration run',
  *         'description': 'Ideker Lab CM4AI 0.1 alpha MDA-MB-468 untreated chromatin Initial integration run IF Image Embedding IF microscopy images embedding fold1',
  *         'keywords': ['Ideker Lab', 'fold1'],
@@ -73,17 +353,41 @@ export type RaiMachineannotationtools = string[] | null;
 export interface ROCrateMetadataElem {
   "@id": Id;
   "@type": Type;
+  conformsTo?: Conformsto;
   name: Name;
   description: Description;
   keywords: Keywords;
-  isPartOf?: Ispartof;
   version: Version;
+  datePublished?: Datepublished;
+  isPartOf?: Ispartof;
   hasPart: Haspart;
   author: Author;
-  license: License;
+  publisher?: Publisher;
+  principalInvestigator?: Principalinvestigator;
+  funder?: Funder;
+  contactEmail?: Contactemail;
+  citation?: Citation;
   associatedPublication?: Associatedpublication;
+  identifier?: Identifier;
+  license: License;
   conditionsOfAccess?: Conditionsofaccess;
   copyrightNotice?: Copyrightnotice;
+  contentSize?: Contentsize;
+  usageInfo?: Usageinfo;
+  hasSummaryStatistics?: Hassummarystatistics;
+  additionalProperty?: Additionalproperty;
+  ethicalReview?: Ethicalreview;
+  confidentialityLevel?: Confidentialitylevel;
+  irb?: Irb;
+  irbProtocolId?: Irbprotocolid;
+  humanSubjectExemption?: Humansubjectexemption;
+  fdaRegulated?: Fdaregulated;
+  deidentified?: Deidentified;
+  humanSubjectResearch?: Humansubjectresearch;
+  dataGovernanceCommittee?: Datagovernancecommittee;
+  md5?: Md5;
+  hash?: Hash;
+  sha256?: Sha256;
   "rai:dataLimitations"?: RaiDatalimitations;
   "rai:dataBiases"?: RaiDatabiases;
   "rai:dataUseCases"?: RaiDatausecases;
@@ -104,9 +408,58 @@ export interface ROCrateMetadataElem {
   "rai:annotationsPerItem"?: RaiAnnotationsperitem;
   "rai:annotatorDemographics"?: RaiAnnotatordemographics;
   "rai:machineAnnotationTools"?: RaiMachineannotationtools;
+  completeness?: Completeness;
+  prohibitedUses?: Prohibiteduses;
+  "evi:datasetCount"?: EviDatasetcount;
+  "evi:computationCount"?: EviComputationcount;
+  "evi:softwareCount"?: EviSoftwarecount;
+  "evi:schemaCount"?: EviSchemacount;
+  "evi:totalContentSizeBytes"?: EviTotalcontentsizebytes;
+  "evi:entitiesWithSummaryStats"?: EviEntitieswithsummarystats;
+  "evi:entitiesWithChecksums"?: EviEntitieswithchecksums;
+  "evi:totalEntities"?: EviTotalentities;
+  "evi:formats"?: EviFormats;
+  "evi:processed"?: EviProcessed;
+  "d4d:addressingGaps"?: D4DAddressinggaps;
+  "d4d:dataAnomalies"?: D4DDataanomalies;
+  "d4d:contentWarning"?: D4DContentwarning;
+  "d4d:informedConsent"?: D4DInformedconsent;
+  "d4d:atRiskPopulations"?: D4DAtriskpopulations;
   [k: string]: unknown;
 }
 export interface IdentifierValue {
   "@id": Id1;
+  [k: string]: unknown;
+}
+/**
+ * Institutional Review Board with structured contact and address info.
+ */
+export interface IRB {
+  "@type"?: Type1;
+  name: Name1;
+  contactPoint?: ContactPoint | null;
+  address?: PostalAddress | null;
+  [k: string]: unknown;
+}
+/**
+ * Schema.org ContactPoint for structured contact information.
+ */
+export interface ContactPoint {
+  "@type"?: Type2;
+  contactType?: Contacttype;
+  email?: Email;
+  telephone?: Telephone;
+  [k: string]: unknown;
+}
+/**
+ * Schema.org PostalAddress for structured address information.
+ */
+export interface PostalAddress {
+  "@type"?: Type3;
+  streetAddress?: Streetaddress;
+  addressLocality?: Addresslocality;
+  addressRegion?: Addressregion;
+  postalCode?: Postalcode;
+  addressCountry?: Addresscountry;
   [k: string]: unknown;
 }

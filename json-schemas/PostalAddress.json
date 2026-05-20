@@ -1,0 +1,73 @@
+{
+  "additionalProperties": true,
+  "description": "Schema.org PostalAddress for structured address information.",
+  "properties": {
+    "@type": {
+      "default": "PostalAddress",
+      "title": "@Type",
+      "type": "string"
+    },
+    "streetAddress": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Streetaddress"
+    },
+    "addressLocality": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Addresslocality"
+    },
+    "addressRegion": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Addressregion"
+    },
+    "postalCode": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Postalcode"
+    },
+    "addressCountry": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Addresscountry"
+    }
+  },
+  "title": "PostalAddress",
+  "type": "object"
+}

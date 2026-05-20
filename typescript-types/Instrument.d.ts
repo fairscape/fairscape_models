@@ -7,7 +7,7 @@
 
 export type Id = string;
 export type Name = string;
-export type Type = string | null;
+export type Type = string[] | string | null;
 export type Manufacturer = string;
 export type Model = string;
 export type Description = string;
@@ -17,6 +17,7 @@ export type Usedbyexperiment = IdentifierValue[] | null;
 export type Id1 = string;
 export type Contenturl = string | null;
 export type Ispartof = IdentifierValue[] | null;
+export type Fairscapeversion = string;
 
 export interface Instrument {
   "@id": Id;
@@ -30,6 +31,7 @@ export interface Instrument {
   usedByExperiment?: Usedbyexperiment;
   contentUrl?: Contenturl;
   isPartOf?: Ispartof;
+  fairscapeVersion?: Fairscapeversion;
   [k: string]: unknown;
 }
 export interface IdentifierValue {

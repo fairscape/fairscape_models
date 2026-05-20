@@ -123,6 +123,11 @@
     "description": {
       "title": "Description",
       "type": "string"
+    },
+    "fairscapeVersion": {
+      "default": "1.0.20",
+      "title": "Fairscapeversion",
+      "type": "string"
     }
   },
   "required": [

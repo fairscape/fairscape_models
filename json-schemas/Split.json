@@ -1,0 +1,140 @@
+{
+  "$defs": {
+    "IdentifierValue": {
+      "additionalProperties": true,
+      "properties": {
+        "@id": {
+          "title": "@Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "@id"
+      ],
+      "title": "IdentifierValue",
+      "type": "object"
+    },
+    "SplitType": {
+      "description": "Croissant-aligned split type semantics.\n\nMaps to:\n  cr:TrainingSplit   -> \"train\"\n  cr:ValidationSplit -> \"validation\"\n  cr:TestSplit       -> \"test\"\n  custom             -> \"other\"",
+      "enum": [
+        "train",
+        "validation",
+        "test",
+        "other"
+      ],
+      "title": "SplitType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "description": "A named partition or subset of a Dataset.\n\nUnifies concepts from D4D DataSubset/SamplingStrategy and Croissant cr:Split.",
+  "properties": {
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "description": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Description"
+    },
+    "splitType": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SplitType"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "query": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Query"
+    },
+    "queryType": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Querytype"
+    },
+    "sourceDatasets": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Sourcedatasets"
+    },
+    "isSample": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Issample"
+    },
+    "isRandom": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Israndom"
+    },
+    "samplingStrategy": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Samplingstrategy"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "title": "Split",
+  "type": "object"
+}

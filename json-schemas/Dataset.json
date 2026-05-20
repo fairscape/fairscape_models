@@ -13,6 +13,130 @@
       ],
       "title": "IdentifierValue",
       "type": "object"
+    },
+    "Split": {
+      "additionalProperties": true,
+      "description": "A named partition or subset of a Dataset.\n\nUnifies concepts from D4D DataSubset/SamplingStrategy and Croissant cr:Split.",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "splitType": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SplitType"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "query": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Query"
+        },
+        "queryType": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Querytype"
+        },
+        "sourceDatasets": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/IdentifierValue"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sourcedatasets"
+        },
+        "isSample": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Issample"
+        },
+        "isRandom": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Israndom"
+        },
+        "samplingStrategy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Samplingstrategy"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Split",
+      "type": "object"
+    },
+    "SplitType": {
+      "description": "Croissant-aligned split type semantics.\n\nMaps to:\n  cr:TrainingSplit   -> \"train\"\n  cr:ValidationSplit -> \"validation\"\n  cr:TestSplit       -> \"test\"\n  custom             -> \"other\"",
+      "enum": [
+        "train",
+        "validation",
+        "test",
+        "other"
+      ],
+      "title": "SplitType",
+      "type": "string"
     }
   },
   "additionalProperties": true,
@@ -28,26 +152,23 @@
     "@type": {
       "anyOf": [
         {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
           "type": "string"
         },
         {
           "type": "null"
         }
       ],
-      "default": "https://w3id.org/EVI#Dataset",
+      "default": [
+        "prov:Entity",
+        "https://w3id.org/EVI#Dataset"
+      ],
       "title": "@Type"
-    },
-    "additionalType": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": "Dataset",
-      "title": "Additionaltype"
     },
     "author": {
       "anyOf": [
@@ -55,34 +176,33 @@
           "type": "string"
         },
         {
+          "$ref": "#/$defs/IdentifierValue"
+        },
+        {
           "items": {
-            "type": "string"
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/IdentifierValue"
+              }
+            ]
           },
           "type": "array"
         }
       ],
       "title": "Author"
     },
-    "datePublished": {
-      "title": "Datepublished",
+    "description": {
+      "minLength": 10,
+      "title": "Description",
       "type": "string"
     },
     "version": {
       "default": "0.1.0",
       "title": "Version",
       "type": "string"
-    },
-    "description": {
-      "minLength": 10,
-      "title": "Description",
-      "type": "string"
-    },
-    "keywords": {
-      "items": {
-        "type": "string"
-      },
-      "title": "Keywords",
-      "type": "array"
     },
     "associatedPublication": {
       "anyOf": [
@@ -113,6 +233,205 @@
       ],
       "default": null,
       "title": "Additionaldocumentation"
+    },
+    "contentUrl": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Contenturl"
+    },
+    "isPartOf": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Ispartof"
+    },
+    "usedByComputation": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Usedbycomputation"
+    },
+    "md5": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "MD5 checksum of the digital object content",
+      "title": "Md5"
+    },
+    "hash": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Hash of the digital object content (if not MD5)",
+      "title": "Hash"
+    },
+    "sha256": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "SHA-256 checksum of the digital object content",
+      "title": "Sha256"
+    },
+    "fairscapeVersion": {
+      "default": "1.0.20",
+      "title": "Fairscapeversion",
+      "type": "string"
+    },
+    "prov:wasGeneratedBy": {
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/IdentifierValue"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Prov:Wasgeneratedby"
+    },
+    "prov:wasDerivedFrom": {
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/IdentifierValue"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Prov:Wasderivedfrom"
+    },
+    "prov:wasAttributedTo": {
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/IdentifierValue"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Prov:Wasattributedto"
+    },
+    "additionalType": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": "Dataset",
+      "title": "Additionaltype"
+    },
+    "datePublished": {
+      "title": "Datepublished",
+      "type": "string"
+    },
+    "keywords": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Keywords",
+      "type": "array"
     },
     "format": {
       "title": "Format",
@@ -162,61 +481,28 @@
       "default": [],
       "title": "Derivedfrom"
     },
-    "usedByComputation": {
+    "splits": {
       "anyOf": [
         {
           "items": {
-            "$ref": "#/$defs/IdentifierValue"
+            "$ref": "#/$defs/Split"
           },
           "type": "array"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": [],
-      "title": "Usedbycomputation"
-    },
-    "contentUrl": {
-      "anyOf": [
-        {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        {
-          "type": "string"
         },
         {
           "type": "null"
         }
       ],
       "default": null,
-      "title": "Contenturl"
-    },
-    "isPartOf": {
-      "anyOf": [
-        {
-          "items": {
-            "$ref": "#/$defs/IdentifierValue"
-          },
-          "type": "array"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": [],
-      "title": "Ispartof"
+      "title": "Splits"
     }
   },
   "required": [
     "@id",
     "name",
     "author",
-    "datePublished",
     "description",
+    "datePublished",
     "keywords",
     "format"
   ],

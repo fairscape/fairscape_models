@@ -7,35 +7,58 @@
 
 export type Id = string;
 export type Name = string;
-export type Type = string | null;
-export type Additionaltype = string | null;
-export type Author = string;
-export type Datemodified = string | null;
-export type Version = string;
-export type Description = string;
-export type Associatedpublication = string | null;
-export type Additionaldocumentation = string | null;
-export type FileFormat = string;
-export type Usedbycomputation = IdentifierValue[] | null;
+export type Type = string[] | string | null;
+export type Author = string | IdentifierValue | (string | IdentifierValue)[];
 export type Id1 = string;
-export type Contenturl = string | null;
+export type Description = string;
+export type Version = string;
+export type Associatedpublication = string[] | string | null;
+export type Additionaldocumentation = string | null;
+export type Contenturl = string[] | string | null;
 export type Ispartof = IdentifierValue[] | null;
+export type Usedbycomputation = IdentifierValue[] | null;
+/**
+ * MD5 checksum of the digital object content
+ */
+export type Md5 = string[] | string | null;
+/**
+ * Hash of the digital object content (if not MD5)
+ */
+export type Hash = string[] | string | null;
+/**
+ * SHA-256 checksum of the digital object content
+ */
+export type Sha256 = string[] | string | null;
+export type Fairscapeversion = string;
+export type ProvWasgeneratedby = (string | IdentifierValue)[] | null;
+export type ProvWasderivedfrom = (string | IdentifierValue)[] | null;
+export type ProvWasattributedto = (string | IdentifierValue)[] | null;
+export type Additionaltype = string | null;
+export type Datemodified = string | null;
+export type FileFormat = string;
 
 export interface Software {
   "@id": Id;
   name: Name;
   "@type"?: Type;
-  additionalType?: Additionaltype;
   author: Author;
-  dateModified: Datemodified;
-  version?: Version;
   description: Description;
+  version?: Version;
   associatedPublication?: Associatedpublication;
   additionalDocumentation?: Additionaldocumentation;
-  format: FileFormat;
-  usedByComputation?: Usedbycomputation;
   contentUrl?: Contenturl;
   isPartOf?: Ispartof;
+  usedByComputation?: Usedbycomputation;
+  md5?: Md5;
+  hash?: Hash;
+  sha256?: Sha256;
+  fairscapeVersion?: Fairscapeversion;
+  "prov:wasGeneratedBy"?: ProvWasgeneratedby;
+  "prov:wasDerivedFrom"?: ProvWasderivedfrom;
+  "prov:wasAttributedTo"?: ProvWasattributedto;
+  additionalType?: Additionaltype;
+  dateModified?: Datemodified;
+  format: FileFormat;
   [k: string]: unknown;
 }
 export interface IdentifierValue {

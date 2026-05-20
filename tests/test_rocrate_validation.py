@@ -749,3 +749,27 @@ def test_generate_file_elem():
     assert isinstance(file_elem, ROCrateMetadataFileElem)
     assert file_elem.guid == "ro-crate-metadata.json"
     assert file_elem.about.guid == elem.guid
+
+
+def test_root_type_never_contains_profile():
+    # Release crates declare conformance via `conformsTo`, not by typing themselves as a Profile.
+    # Only the hand-authored Profile Crate at https://w3id.org/fairscape/profile/0.1 is Profile-typed.
+    elem = _minimal_rocrate_elem()
+    assert "Profile" not in elem.metadataType
+    assert "prof:Profile" not in elem.metadataType
+    assert "http://www.w3.org/ns/dx/prof/Profile" not in elem.metadataType
+
+    for rocrate_file_path in test_files:
+        rocrate = ROCrateV1_2.model_validate_json(rocrate_file_path.read_text(encoding="utf-8"))
+        root = rocrate.getCrateMetadata()
+        assert "Profile" not in root.metadataType, f"{rocrate_file_path} leaks 'Profile' into Root @type"
+
+
+def test_root_conforms_to_fairscape_profile():
+    # The default conformsTo on a freshly constructed Root entity points at the v0.1 profile URI.
+    elem = _minimal_rocrate_elem()
+    target = "https://w3id.org/fairscape/profile/0.1"
+    if isinstance(elem.conformsTo, list):
+        assert any(c.guid == target for c in elem.conformsTo)
+    else:
+        assert elem.conformsTo.guid == target

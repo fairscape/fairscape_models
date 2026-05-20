@@ -1,0 +1,49 @@
+{
+  "additionalProperties": true,
+  "description": "Schema.org ContactPoint for structured contact information.",
+  "properties": {
+    "@type": {
+      "default": "ContactPoint",
+      "title": "@Type",
+      "type": "string"
+    },
+    "contactType": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Contacttype"
+    },
+    "email": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Email"
+    },
+    "telephone": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Telephone"
+    }
+  },
+  "title": "ContactPoint",
+  "type": "object"
+}

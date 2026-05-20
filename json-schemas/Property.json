@@ -107,9 +107,5 @@
       "type": "object"
     }
   },
-  "allOf": [
-    {
-      "$ref": "#/$defs/Property"
-    }
-  ]
+  "$ref": "#/$defs/Property"
 }

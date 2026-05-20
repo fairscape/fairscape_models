@@ -7,37 +7,43 @@
 
 export type Id = string;
 export type Name = string;
-export type Type = string | null;
-export type Experimenttype = string;
-export type Runby = string;
+export type Type = string[] | string | null;
 export type Description = string;
-export type Dateperformed = string;
 export type Associatedpublication = string | null;
+export type Generated = IdentifierValue[] | null;
+export type Id1 = string;
+export type Ispartof = IdentifierValue[] | null;
+export type ProvUsed = (string | IdentifierValue)[] | null;
+export type ProvWasassociatedwith = (string | IdentifierValue)[] | null;
+export type Fairscapeversion = string;
+export type Experimenttype = string;
+export type Runby = string | IdentifierValue;
+export type Dateperformed = string;
 export type Protocol = string | null;
 export type Usedinstrument = IdentifierValue[] | null;
-export type Id1 = string;
 export type Usedsample = IdentifierValue[] | null;
 export type Usedtreatment = IdentifierValue[] | null;
 export type Usedstain = IdentifierValue[] | null;
-export type Generated = IdentifierValue[] | null;
-export type Ispartof = IdentifierValue[] | null;
 
 export interface Experiment {
   "@id": Id;
   name: Name;
   "@type"?: Type;
+  description: Description;
+  associatedPublication?: Associatedpublication;
+  generated?: Generated;
+  isPartOf?: Ispartof;
+  "prov:used"?: ProvUsed;
+  "prov:wasAssociatedWith"?: ProvWasassociatedwith;
+  fairscapeVersion?: Fairscapeversion;
   experimentType: Experimenttype;
   runBy: Runby;
-  description: Description;
   datePerformed: Dateperformed;
-  associatedPublication?: Associatedpublication;
   protocol?: Protocol;
   usedInstrument?: Usedinstrument;
   usedSample?: Usedsample;
   usedTreatment?: Usedtreatment;
   usedStain?: Usedstain;
-  generated?: Generated;
-  isPartOf?: Ispartof;
   [k: string]: unknown;
 }
 export interface IdentifierValue {

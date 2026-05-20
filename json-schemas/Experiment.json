@@ -28,30 +28,27 @@
     "@type": {
       "anyOf": [
         {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
           "type": "string"
         },
         {
           "type": "null"
         }
       ],
-      "default": "https://w3id.org/EVI#Experiment",
+      "default": [
+        "prov:Activity",
+        "https://w3id.org/EVI#Experiment"
+      ],
       "title": "@Type"
-    },
-    "experimentType": {
-      "title": "Experimenttype",
-      "type": "string"
-    },
-    "runBy": {
-      "title": "Runby",
-      "type": "string"
     },
     "description": {
       "minLength": 10,
       "title": "Description",
-      "type": "string"
-    },
-    "datePerformed": {
-      "title": "Dateperformed",
       "type": "string"
     },
     "associatedPublication": {
@@ -65,6 +62,104 @@
       ],
       "default": null,
       "title": "Associatedpublication"
+    },
+    "generated": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Generated"
+    },
+    "isPartOf": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Ispartof"
+    },
+    "prov:used": {
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/IdentifierValue"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Prov:Used"
+    },
+    "prov:wasAssociatedWith": {
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/IdentifierValue"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Prov:Wasassociatedwith"
+    },
+    "fairscapeVersion": {
+      "default": "1.0.20",
+      "title": "Fairscapeversion",
+      "type": "string"
+    },
+    "experimentType": {
+      "title": "Experimenttype",
+      "type": "string"
+    },
+    "runBy": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/IdentifierValue"
+        }
+      ],
+      "title": "Runby"
+    },
+    "datePerformed": {
+      "title": "Dateperformed",
+      "type": "string"
     },
     "protocol": {
       "anyOf": [
@@ -137,44 +232,14 @@
       ],
       "default": [],
       "title": "Usedstain"
-    },
-    "generated": {
-      "anyOf": [
-        {
-          "items": {
-            "$ref": "#/$defs/IdentifierValue"
-          },
-          "type": "array"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": [],
-      "title": "Generated"
-    },
-    "isPartOf": {
-      "anyOf": [
-        {
-          "items": {
-            "$ref": "#/$defs/IdentifierValue"
-          },
-          "type": "array"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": [],
-      "title": "Ispartof"
     }
   },
   "required": [
     "@id",
     "name",
+    "description",
     "experimentType",
     "runBy",
-    "description",
     "datePerformed"
   ],
   "title": "Experiment",

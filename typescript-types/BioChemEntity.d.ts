@@ -6,7 +6,7 @@
  */
 
 export type Id = string;
-export type Type = string | null;
+export type Type = string[] | string | null;
 export type Name = string;
 export type Identifier = IdentifierPropertyValue[] | null;
 export type Type1 = string;
@@ -16,6 +16,7 @@ export type Id1 = string;
 export type Usedby = IdentifierValue[] | null;
 export type Description = string | null;
 export type Ispartof = IdentifierValue[] | null;
+export type Fairscapeversion = string;
 
 /**
  * Pydantic model for the Schema.org BioChemEntity datatype
@@ -31,6 +32,7 @@ export interface BioChemEntity {
   usedBy?: Usedby;
   description?: Description;
   isPartOf?: Ispartof;
+  fairscapeVersion?: Fairscapeversion;
   [k: string]: unknown;
 }
 export interface IdentifierPropertyValue {

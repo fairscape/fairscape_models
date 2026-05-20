@@ -48,13 +48,22 @@
     "@type": {
       "anyOf": [
         {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
           "type": "string"
         },
         {
           "type": "null"
         }
       ],
-      "default": "BioChemEntity",
+      "default": [
+        "prov:Entity",
+        "evi:BioChemEntity"
+      ],
       "title": "@Type"
     },
     "name": {
@@ -128,6 +137,11 @@
       ],
       "default": [],
       "title": "Ispartof"
+    },
+    "fairscapeVersion": {
+      "default": "1.0.20",
+      "title": "Fairscapeversion",
+      "type": "string"
     }
   },
   "required": [

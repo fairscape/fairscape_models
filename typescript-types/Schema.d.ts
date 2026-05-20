@@ -36,6 +36,7 @@ export type Examples =
   | null;
 export type Ispartof = IdentifierValue[] | null;
 export type Id = string;
+export type Fairscapeversion = string;
 
 export interface Schema {
   "@id": Guid;
@@ -55,6 +56,7 @@ export interface Schema {
   header?: Header;
   examples?: Examples;
   isPartOf?: Ispartof;
+  fairscapeVersion?: Fairscapeversion;
   [k: string]: unknown;
 }
 export interface Context {

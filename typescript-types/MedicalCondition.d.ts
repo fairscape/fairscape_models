@@ -17,6 +17,7 @@ export type Id1 = string;
 export type Usedby = IdentifierValue[] | null;
 export type Ispartof = IdentifierValue[] | null;
 export type Description = string;
+export type Fairscapeversion = string;
 
 /**
  * Pydantic model for the Schema.org MedicalCondition datatype
@@ -32,6 +33,7 @@ export interface MedicalCondition {
   usedBy?: Usedby;
   isPartOf?: Ispartof;
   description: Description;
+  fairscapeVersion?: Fairscapeversion;
   [k: string]: unknown;
 }
 export interface IdentifierPropertyValue {

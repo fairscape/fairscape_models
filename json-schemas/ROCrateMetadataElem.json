@@ -1,5 +1,96 @@
 {
   "$defs": {
+    "ContactPoint": {
+      "additionalProperties": true,
+      "description": "Schema.org ContactPoint for structured contact information.",
+      "properties": {
+        "@type": {
+          "default": "ContactPoint",
+          "title": "@Type",
+          "type": "string"
+        },
+        "contactType": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Contacttype"
+        },
+        "email": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Email"
+        },
+        "telephone": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Telephone"
+        }
+      },
+      "title": "ContactPoint",
+      "type": "object"
+    },
+    "IRB": {
+      "additionalProperties": true,
+      "description": "Institutional Review Board with structured contact and address info.",
+      "properties": {
+        "@type": {
+          "default": "IRB",
+          "title": "@Type",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "contactPoint": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ContactPoint"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "address": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PostalAddress"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "IRB",
+      "type": "object"
+    },
     "IdentifierValue": {
       "additionalProperties": true,
       "properties": {
@@ -13,36 +104,147 @@
       ],
       "title": "IdentifierValue",
       "type": "object"
+    },
+    "PostalAddress": {
+      "additionalProperties": true,
+      "description": "Schema.org PostalAddress for structured address information.",
+      "properties": {
+        "@type": {
+          "default": "PostalAddress",
+          "title": "@Type",
+          "type": "string"
+        },
+        "streetAddress": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Streetaddress"
+        },
+        "addressLocality": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Addresslocality"
+        },
+        "addressRegion": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Addressregion"
+        },
+        "postalCode": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Postalcode"
+        },
+        "addressCountry": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Addresscountry"
+        }
+      },
+      "title": "PostalAddress",
+      "type": "object"
     }
   },
   "additionalProperties": true,
-  "description": "Metadata Element of ROCrate that represents the crate as a whole\n\nExample\n    ```\n    {\n        '@id': 'https://fairscape.net/ark:59852/rocrate-2.cm4ai_chromatin_mda-mb-468_untreated_imageembedfold1_initialrun0.1alpha',\n        '@type': ['Dataset', 'https://w3id.org/EVI#ROCrate'],\n        'name': 'Initial integration run',\n        'description': 'Ideker Lab CM4AI 0.1 alpha MDA-MB-468 untreated chromatin Initial integration run IF Image Embedding IF microscopy images embedding fold1',\n        'keywords': ['Ideker Lab', 'fold1'],\n        'isPartOf': [\n            {'@id': 'ark:/Ideker_Lab'}, \n            {'@id': 'ark:/Ideker_Lab/CM4AI'}\n            ],\n        'version': '0.5alpha',\n        'license': 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en',\n        'associatedPublication': 'Clark T, Schaffer L, Obernier K, Al Manir S, Churas CP, Dailamy A, Doctor Y, Forget A, Hansen JN, Hu M, Lenkiewicz J, Levinson MA, Marquez C, Mohan J, Nourreddine S, Niestroy J, Pratt D, Qian G, Thaker S, Belisle-Pipon J-C, Brandt C, Chen J, Ding Y, Fodeh S, Krogan N, Lundberg E, Mali P, Payne-Foster P, Ratcliffe S, Ravitsky V, Sali A, Schulz W, Ideker T. Cell Maps for Artificial Intelligence: AI-Ready Maps of Human Cell Architecture from Disease-Relevant Cell Lines. BioRXiv 2024.',\n        'author': ['Test']\n        'conditionsOfAccess': 'This dataset was created by investigators and staff of the Cell Maps for Artificial Intelligence project (CM4AI - https://cm4ai.org), a Data Generation Project of the NIH Bridge2AI program, and is copyright (c) 2024 by The Regents of the University of California and, for cellular imaging data, by The Board of Trustees of the Leland Stanford Junior University. It is licensed for reuse under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC-BY-NC-SA 4.0) license, whose terms are summarized here: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en.  Proper attribution credit as required by the license includes citation of the copyright holders and of the attribution parties, which includes citation of the following article: Clark T, Schaffer L, Obernier K, Al Manir S, Churas CP, Dailamy A, Doctor Y, Forget A, Hansen JN, Hu M, Lenkiewicz J, Levinson MA, Marquez C, Mohan J, Nourreddine S, Niestroy J, Pratt D, Qian G, Thaker S, Belisle-Pipon J-C, Brandt C, Chen J, Ding Y, Fodeh S, Krogan N, Lundberg E, Mali P, Payne-Foster P, Ratcliffe S, Ravitsky V, Sali A, Schulz W, Ideker T. Cell Maps for Artificial Intelligence: AI-Ready Maps of Human Cell Architecture from Disease-Relevant Cell Lines. BioRXiv 2024.\"',\n        'copyrightNotice': 'Copyright (c) 2024 by The Regents of the University of California',\n        'hasPart': [\n            {'@id': 'https://fairscape.net/ark:59852/software-cellmaps_image_embedding-N2ux5jg'},\n            {'@id': 'https://fairscape.net/ark:59852/dataset-cellmaps_image_embedding-output-file-N2ux5jg'},\n            {'@id': 'https://fairscape.net/ark:59852/dataset-Densenet-model-file-N2ux5jg'},\n            {'@id': 'https://fairscape.net/ark:59852/computation-IF-Image-Embedding-N2ux5jg'}\n        ]\n    }\n    ```",
+  "description": "Metadata Element of ROCrate that represents the crate as a whole\n\nExample\n    ```\n    {\n        '@id': 'https://fairscape.net/ark:59852/rocrate-2.cm4ai_chromatin_mda-mb-468_untreated_imageembedfold1_initialrun0.1alpha',\n        '@type': ['Dataset', 'https://w3id.org/EVI#ROCrate'],\n        'conformsTo': {'@id': 'https://w3id.org/fairscape/profile/0.1'},\n        'name': 'Initial integration run',\n        'description': 'Ideker Lab CM4AI 0.1 alpha MDA-MB-468 untreated chromatin Initial integration run IF Image Embedding IF microscopy images embedding fold1',\n        'keywords': ['Ideker Lab', 'fold1'],\n        'isPartOf': [\n            {'@id': 'ark:/Ideker_Lab'}, \n            {'@id': 'ark:/Ideker_Lab/CM4AI'}\n            ],\n        'version': '0.5alpha',\n        'license': 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en',\n        'associatedPublication': 'Clark T, Schaffer L, Obernier K, Al Manir S, Churas CP, Dailamy A, Doctor Y, Forget A, Hansen JN, Hu M, Lenkiewicz J, Levinson MA, Marquez C, Mohan J, Nourreddine S, Niestroy J, Pratt D, Qian G, Thaker S, Belisle-Pipon J-C, Brandt C, Chen J, Ding Y, Fodeh S, Krogan N, Lundberg E, Mali P, Payne-Foster P, Ratcliffe S, Ravitsky V, Sali A, Schulz W, Ideker T. Cell Maps for Artificial Intelligence: AI-Ready Maps of Human Cell Architecture from Disease-Relevant Cell Lines. BioRXiv 2024.',\n        'author': ['Test']\n        'conditionsOfAccess': 'This dataset was created by investigators and staff of the Cell Maps for Artificial Intelligence project (CM4AI - https://cm4ai.org), a Data Generation Project of the NIH Bridge2AI program, and is copyright (c) 2024 by The Regents of the University of California and, for cellular imaging data, by The Board of Trustees of the Leland Stanford Junior University. It is licensed for reuse under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC-BY-NC-SA 4.0) license, whose terms are summarized here: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en.  Proper attribution credit as required by the license includes citation of the copyright holders and of the attribution parties, which includes citation of the following article: Clark T, Schaffer L, Obernier K, Al Manir S, Churas CP, Dailamy A, Doctor Y, Forget A, Hansen JN, Hu M, Lenkiewicz J, Levinson MA, Marquez C, Mohan J, Nourreddine S, Niestroy J, Pratt D, Qian G, Thaker S, Belisle-Pipon J-C, Brandt C, Chen J, Ding Y, Fodeh S, Krogan N, Lundberg E, Mali P, Payne-Foster P, Ratcliffe S, Ravitsky V, Sali A, Schulz W, Ideker T. Cell Maps for Artificial Intelligence: AI-Ready Maps of Human Cell Architecture from Disease-Relevant Cell Lines. BioRXiv 2024.\"',\n        'copyrightNotice': 'Copyright (c) 2024 by The Regents of the University of California',\n        'hasPart': [\n            {'@id': 'https://fairscape.net/ark:59852/software-cellmaps_image_embedding-N2ux5jg'},\n            {'@id': 'https://fairscape.net/ark:59852/dataset-cellmaps_image_embedding-output-file-N2ux5jg'},\n            {'@id': 'https://fairscape.net/ark:59852/dataset-Densenet-model-file-N2ux5jg'},\n            {'@id': 'https://fairscape.net/ark:59852/computation-IF-Image-Embedding-N2ux5jg'}\n        ]\n    }\n    ```",
   "properties": {
     "@id": {
+      "description": "Persistent unique identifier for this RO-Crate (ARK, DOI, URL, etc.).",
       "title": "@Id",
       "type": "string"
     },
     "@type": {
+      "description": "RO-Crate type list; always includes 'Dataset' and 'https://w3id.org/EVI#ROCrate'. MUST NOT include 'Profile' \u2014 that type is reserved for the hand-authored Profile Crate at the profile URI.",
       "items": {
         "type": "string"
       },
       "title": "@Type",
       "type": "array"
     },
+    "conformsTo": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/IdentifierValue"
+        },
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        }
+      ],
+      "description": "Profile this crate conforms to. Defaults to the Fairscape release profile URI.",
+      "title": "Conformsto"
+    },
     "name": {
+      "description": "A human-readable name for the dataset.",
       "title": "Name",
       "type": "string"
     },
     "description": {
+      "description": "A human-readable description of the dataset.",
       "title": "Description",
       "type": "string"
     },
     "keywords": {
+      "description": "Keywords or tags describing the dataset, used for discovery and search.",
       "items": {
         "type": "string"
       },
       "title": "Keywords",
       "type": "array"
+    },
+    "version": {
+      "description": "Version string for this release of the dataset (e.g. '1.0', '2.3.1').",
+      "title": "Version",
+      "type": "string"
+    },
+    "datePublished": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Date the dataset was published or made publicly available (ISO 8601).",
+      "title": "Datepublished"
     },
     "isPartOf": {
       "anyOf": [
@@ -57,13 +259,11 @@
         }
       ],
       "default": [],
+      "description": "Parent organization(s) or project(s) this crate belongs to, referenced by identifier.",
       "title": "Ispartof"
     },
-    "version": {
-      "title": "Version",
-      "type": "string"
-    },
     "hasPart": {
+      "description": "Dataset, Software, Computation, and other entities that are part of this RO-Crate, referenced by identifier.",
       "items": {
         "$ref": "#/$defs/IdentifierValue"
       },
@@ -82,9 +282,10 @@
           "type": "array"
         }
       ],
+      "description": "Who created the dataset (e.g. which team, research group) and on behalf of which entity (e.g. company, institution, organization).",
       "title": "Author"
     },
-    "license": {
+    "publisher": {
       "anyOf": [
         {
           "type": "string"
@@ -93,7 +294,61 @@
           "type": "null"
         }
       ],
-      "title": "License"
+      "default": null,
+      "description": "Organization or person responsible for publishing or distributing the dataset.",
+      "title": "Publisher"
+    },
+    "principalInvestigator": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "A key individual (Principal Investigator) responsible for or overseeing dataset creation.",
+      "title": "Principalinvestigator"
+    },
+    "funder": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Who funded the creation of the dataset? Include grant names and numbers where applicable.",
+      "title": "Funder"
+    },
+    "contactEmail": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Email address for questions or correspondence about the dataset.",
+      "title": "Contactemail"
+    },
+    "citation": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Preferred citation string for this dataset.",
+      "title": "Citation"
     },
     "associatedPublication": {
       "anyOf": [
@@ -111,7 +366,33 @@
         }
       ],
       "default": null,
+      "description": "Publication(s) associated with or describing this dataset.",
       "title": "Associatedpublication"
+    },
+    "identifier": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "DOI or other external persistent identifier for the dataset (used for Findability and Sustainability scoring).",
+      "title": "Identifier"
+    },
+    "license": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Will the dataset be distributed under a copyright or other IP license? Provide a link to or copy of the license terms (e.g. CC BY 4.0, MIT).",
+      "title": "License"
     },
     "conditionsOfAccess": {
       "anyOf": [
@@ -123,6 +404,7 @@
         }
       ],
       "default": null,
+      "description": "Terms and conditions governing access to and use of this dataset, including any data use agreements required.",
       "title": "Conditionsofaccess"
     },
     "copyrightNotice": {
@@ -135,9 +417,10 @@
         }
       ],
       "default": null,
+      "description": "Copyright statement for the dataset, including year and rights holder.",
       "title": "Copyrightnotice"
     },
-    "rai:dataLimitations": {
+    "contentSize": {
       "anyOf": [
         {
           "type": "string"
@@ -147,11 +430,248 @@
         }
       ],
       "default": null,
+      "description": "Total size of the dataset content (e.g. '2.4 GB', '150 MB'). Used in AI-Ready Characterization scoring.",
+      "title": "Contentsize"
+    },
+    "usageInfo": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Additional usage information or instructions for working with this dataset.",
+      "title": "Usageinfo"
+    },
+    "hasSummaryStatistics": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/IdentifierValue"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Reference to a summary statistics entity describing distributions, counts, and key statistics for this dataset.",
+      "title": "Hassummarystatistics"
+    },
+    "additionalProperty": {
+      "anyOf": [
+        {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Additional schema.org PropertyValue entries for metadata not covered by other fields (e.g. [{\"name\": \"Human Subject\", \"value\": \"Yes\"}]).",
+      "title": "Additionalproperty"
+    },
+    "ethicalReview": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Were any ethical or compliance review processes conducted (e.g. by an Institutional Review Board)? If so, describe the process, frequency of review, and outcomes. Or provide a contact for ethical review information.",
+      "title": "Ethicalreview"
+    },
+    "confidentialityLevel": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "HL7 Confidentiality code indicating the level of confidentiality or sensitivity of the dataset (e.g. 'normal', 'restricted', 'very restricted').",
+      "title": "Confidentialitylevel"
+    },
+    "irb": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/IRB"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Institutional Review Board (IRB) information \u2014 approval status, approving institution, and contact details.",
+      "title": "Irb"
+    },
+    "irbProtocolId": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "IRB protocol identifier number assigned by the reviewing institution.",
+      "title": "Irbprotocolid"
+    },
+    "humanSubjectExemption": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "If human subjects research qualifies for exemption from full IRB review, the applicable exemption category (e.g. 45 CFR 46 Exemption 4).",
+      "title": "Humansubjectexemption"
+    },
+    "fdaRegulated": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Whether this dataset is subject to FDA regulations (e.g. clinical trial data, medical device data).",
+      "title": "Fdaregulated"
+    },
+    "deidentified": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Whether the dataset has been de-identified to remove or obscure personally identifiable information.",
+      "title": "Deidentified"
+    },
+    "humanSubjectResearch": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Does this dataset involve human subjects? Indicate Yes/No and describe the nature of human subjects involvement.",
+      "title": "Humansubjectresearch"
+    },
+    "dataGovernanceCommittee": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Name or contact for the data governance committee responsible for oversight, access control, and policy enforcement for this dataset.",
+      "title": "Datagovernancecommittee"
+    },
+    "md5": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "MD5 checksum of the digital object content",
+      "title": "Md5"
+    },
+    "hash": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Hash of the digital object content (if not MD5)",
+      "title": "Hash"
+    },
+    "sha256": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "SHA-256 checksum of the digital object content",
+      "title": "Sha256"
+    },
+    "rai:dataLimitations": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Documents known limitations of the dataset that may affect its use or interpretation \u2014 data generalization limits (e.g. related to data distribution, data quality issues, or data sources) and non-recommended uses. Distinct from biases (systematic errors) and anomalies (data quality issues). (rai:dataLimitations)",
       "title": "Rai:Datalimitations"
     },
     "rai:dataBiases": {
       "anyOf": [
         {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
           "type": "string"
         },
         {
@@ -159,11 +679,18 @@
         }
       ],
       "default": null,
+      "description": "Documents known biases present in the dataset \u2014 systematic errors or prejudices that may affect the representativeness or fairness of the data. Distinct from anomalies (data quality issues) and limitations (scope constraints). (rai:dataBiases)",
       "title": "Rai:Databiases"
     },
     "rai:dataUseCases": {
       "anyOf": [
         {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
           "type": "string"
         },
         {
@@ -171,11 +698,18 @@
         }
       ],
       "default": null,
+      "description": "Explicit statement of intended uses for this dataset, focusing on positive, recommended applications. Recommended use categories: Training, Testing, Validation, Development or Production Use, Fine Tuning, others. Include usage guidelines and caveats. (rai:dataUseCases)",
       "title": "Rai:Datausecases"
     },
     "rai:dataReleaseMaintenancePlan": {
       "anyOf": [
         {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
           "type": "string"
         },
         {
@@ -183,6 +717,7 @@
         }
       ],
       "default": null,
+      "description": "Will the dataset be updated (e.g. to correct labeling errors, add new instances, delete instances)? If so, how often, by whom, and how will updates be communicated? Covers versioning timeframe, maintainers, and deprecation policies. (rai:dataReleaseMaintenancePlan)",
       "title": "Rai:Datareleasemaintenanceplan"
     },
     "rai:dataCollection": {
@@ -195,6 +730,7 @@
         }
       ],
       "default": null,
+      "description": "What mechanisms or procedures were used to collect the data (e.g. hardware sensors, manual curation, software APIs)? Also covers how these mechanisms were validated. (rai:dataCollection)",
       "title": "Rai:Datacollection"
     },
     "rai:dataCollectionType": {
@@ -210,6 +746,7 @@
         }
       ],
       "default": null,
+      "description": "Data collection type(s). Recommended values: Surveys, Secondary Data Analysis, Physical Data Collection, Direct Measurement, Document Analysis, Manual Human Curator, Software Collection, Experiments, Web Scraping, Web API, Focus Groups, Self-Reporting, Customer Feedback Data, User-Generated Content Data, Passive Data Collection, Others. (rai:dataCollectionType)",
       "title": "Rai:Datacollectiontype"
     },
     "rai:dataCollectionMissingData": {
@@ -222,6 +759,7 @@
         }
       ],
       "default": null,
+      "description": "Documentation of missing data in the dataset, including patterns (e.g. MCAR, MAR, MNAR), known or suspected causes (e.g. sensor failures, participant dropout, privacy constraints), and strategies used to handle missing values. (rai:dataCollectionMissingData)",
       "title": "Rai:Datacollectionmissingdata"
     },
     "rai:dataCollectionRawData": {
@@ -234,6 +772,7 @@
         }
       ],
       "default": null,
+      "description": "Description of raw data sources before preprocessing, cleaning, or labeling. Documents where the original data comes from and how it can be accessed. (rai:dataCollectionRawData)",
       "title": "Rai:Datacollectionrawdata"
     },
     "rai:dataCollectionTimeframe": {
@@ -249,6 +788,7 @@
         }
       ],
       "default": null,
+      "description": "Over what timeframe was the data collected, and does this timeframe match the creation timeframe of the underlying data? Provide start and end dates where possible. (rai:dataCollectionTimeframe)",
       "title": "Rai:Datacollectiontimeframe"
     },
     "rai:dataImputationProtocol": {
@@ -261,10 +801,17 @@
         }
       ],
       "default": null,
+      "description": "Description of data imputation methodology, including techniques used to handle missing values (e.g. mean/median imputation, forward fill, model-based imputation) and rationale for chosen approaches. (rai:dataImputationProtocol)",
       "title": "Rai:Dataimputationprotocol"
     },
     "rai:dataManipulationProtocol": {
       "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         {
           "type": "string"
         },
@@ -273,6 +820,7 @@
         }
       ],
       "default": null,
+      "description": "Was any cleaning of the data done (e.g. removal of instances, processing of missing values, deduplication, filtering)? If so, describe the cleaning procedures applied. (rai:dataManipulationProtocol)",
       "title": "Rai:Datamanipulationprotocol"
     },
     "rai:dataPreprocessingProtocol": {
@@ -288,6 +836,7 @@
         }
       ],
       "default": null,
+      "description": "Was any preprocessing of the data done (e.g. discretization or bucketing, tokenization, feature extraction, normalization)? Describe the steps required to bring collected data to a state that can be processed by an ML model or algorithm. (rai:dataPreprocessingProtocol)",
       "title": "Rai:Datapreprocessingprotocol"
     },
     "rai:dataAnnotationProtocol": {
@@ -300,6 +849,7 @@
         }
       ],
       "default": null,
+      "description": "Annotation methodology, tasks, and protocols followed during labeling. Includes annotation guidelines, quality control procedures, task definitions, workforce type, annotation characteristics, and label distributions. (rai:dataAnnotationProtocol)",
       "title": "Rai:Dataannotationprotocol"
     },
     "rai:dataAnnotationPlatform": {
@@ -315,6 +865,7 @@
         }
       ],
       "default": null,
+      "description": "Platform or tool used for annotation (e.g. Label Studio, Prodigy, Amazon Mechanical Turk, custom annotation tool). (rai:dataAnnotationPlatform)",
       "title": "Rai:Dataannotationplatform"
     },
     "rai:dataAnnotationAnalysis": {
@@ -330,6 +881,7 @@
         }
       ],
       "default": null,
+      "description": "Analysis of annotation quality, inter-annotator agreement metrics (e.g. Cohen's kappa, Fleiss' kappa), and systematic patterns in disagreements between annotators of different socio-demographic groups. Covers how final dataset labels relate to individual annotator responses. (rai:dataAnnotationAnalysis)",
       "title": "Rai:Dataannotationanalysis"
     },
     "rai:personalSensitiveInformation": {
@@ -345,6 +897,7 @@
         }
       ],
       "default": null,
+      "description": "Does the dataset contain data that might be considered sensitive (e.g. race, sexual orientation, religion, biometrics)? List sensitive attribute types present: Gender, Socio-economic status, Geography, Language, Age, Culture, Experience or Seniority, others. (rai:personalSensitiveInformation)",
       "title": "Rai:Personalsensitiveinformation"
     },
     "rai:dataSocialImpact": {
@@ -357,6 +910,7 @@
         }
       ],
       "default": null,
+      "description": "Is there anything about the dataset's composition or collection that might impact future uses or create risks/harm (e.g. unfair treatment, legal or financial risks)? Describe potential impacts and any mitigation strategies. (rai:dataSocialImpact)",
       "title": "Rai:Datasocialimpact"
     },
     "rai:annotationsPerItem": {
@@ -369,6 +923,7 @@
         }
       ],
       "default": null,
+      "description": "Number of annotations collected per data item. Multiple annotations per item enable calculation of inter-annotator agreement. (rai:annotationsPerItem)",
       "title": "Rai:Annotationsperitem"
     },
     "rai:annotatorDemographics": {
@@ -384,6 +939,7 @@
         }
       ],
       "default": null,
+      "description": "Demographic information about annotators, if available and relevant (e.g. geographic location, language background, expertise level, age group, gender). (rai:annotatorDemographics)",
       "title": "Rai:Annotatordemographics"
     },
     "rai:machineAnnotationTools": {
@@ -399,7 +955,232 @@
         }
       ],
       "default": null,
+      "description": "Automated or machine-learning-based annotation tools used in dataset creation, including NLP pipelines, computer vision models, or other automated labeling systems. Format each entry as 'ToolName version' (e.g. 'spaCy 3.5.0'). (rai:machineAnnotationTools)",
       "title": "Rai:Machineannotationtools"
+    },
+    "completeness": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Assessment of how complete the dataset is relative to its intended scope (e.g. percentage of expected records present, known gaps).",
+      "title": "Completeness"
+    },
+    "prohibitedUses": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Explicit statement of prohibited or forbidden uses for this dataset \u2014 uses that are not permitted by license, ethics, or policy. Stronger than discouraged uses.",
+      "title": "Prohibiteduses"
+    },
+    "evi:datasetCount": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Pre-aggregated count of Dataset entities across all sub-crates. Used in AI-Ready Provenance scoring in place of counting entities at query time.",
+      "title": "Evi:Datasetcount"
+    },
+    "evi:computationCount": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Pre-aggregated count of Computation and Experiment entities across all sub-crates. Used in AI-Ready Provenance scoring.",
+      "title": "Evi:Computationcount"
+    },
+    "evi:softwareCount": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Pre-aggregated count of Software entities across all sub-crates. Used in AI-Ready Provenance scoring.",
+      "title": "Evi:Softwarecount"
+    },
+    "evi:schemaCount": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Pre-aggregated count of Schema entities across all sub-crates. Used in AI-Ready Characterization scoring.",
+      "title": "Evi:Schemacount"
+    },
+    "evi:totalContentSizeBytes": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Pre-aggregated total content size in bytes across all sub-crate datasets. Used in AI-Ready Characterization scoring.",
+      "title": "Evi:Totalcontentsizebytes"
+    },
+    "evi:entitiesWithSummaryStats": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Pre-aggregated count of entities that have hasSummaryStatistics set. Used in AI-Ready Characterization scoring.",
+      "title": "Evi:Entitieswithsummarystats"
+    },
+    "evi:entitiesWithChecksums": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Pre-aggregated count of entities that have md5, sha256, or hash set. Used with evi:totalEntities to compute checksum coverage percentage.",
+      "title": "Evi:Entitieswithchecksums"
+    },
+    "evi:totalEntities": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Pre-aggregated total count of Dataset and Software entities. Used as denominator for checksum coverage in AI-Ready Pre-Model Explainability scoring.",
+      "title": "Evi:Totalentities"
+    },
+    "evi:formats": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Pre-aggregated list of unique file format values (up to 5) across all entities. Used in AI-Ready Computability scoring.",
+      "title": "Evi:Formats"
+    },
+    "evi:processed": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Flag indicating whether this release-level RO-Crate has been processed and aggregated metrics computed.",
+      "title": "Evi:Processed"
+    },
+    "d4d:addressingGaps": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Was there a specific knowledge or resource gap that needed to be filled by creation of this dataset? (D4D_Motivation: AddressingGap)",
+      "title": "D4D:Addressinggaps"
+    },
+    "d4d:dataAnomalies": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Are there any errors, sources of noise, or redundancies in the dataset? (D4D_Composition: DataAnomaly)",
+      "title": "D4D:Dataanomalies"
+    },
+    "d4d:contentWarning": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Does the dataset contain any data that might be offensive, insulting, threatening, or otherwise anxiety-provoking if viewed directly? (D4D_Composition: ContentWarning)",
+      "title": "D4D:Contentwarning"
+    },
+    "d4d:informedConsent": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Details about informed consent procedures used in human subjects research \u2014 consent type, documentation, withdrawal mechanisms, and scope. (D4D_Human: InformedConsent)",
+      "title": "D4D:Informedconsent"
+    },
+    "d4d:atRiskPopulations": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Information about protections for at-risk populations (e.g. children, pregnant women, prisoners, cognitively impaired individuals) included in human subjects research. (D4D_Human: AtRiskPopulations)",
+      "title": "D4D:Atriskpopulations"
     }
   },
   "required": [

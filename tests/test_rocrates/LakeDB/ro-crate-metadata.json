@@ -8,7 +8,7 @@
       "@id": "ro-crate-metadata.json",
       "@type": "CreativeWork",
       "conformsTo": {
-        "@id": "https://w3id.org/ro/crate/1.2-DRAFT"
+        "@id": "https://w3id.org/ro/crate/1.2"
       },
       "about": {
         "@id": "ark:59852/rocrate-test-analysis-workflow-qt7fpvq3pq/"
@@ -20,6 +20,9 @@
         "Dataset",
         "https://w3id.org/EVI#ROCrate"
       ],
+      "conformsTo": {
+        "@id": "https://w3id.org/fairscape/profile/0.1"
+      },
       "name": "Test Analysis Workflow",
       "description": "Testing fairscape workflow with input data, software, computation, and output",
       "keywords": [
