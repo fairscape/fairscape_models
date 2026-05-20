@@ -26,6 +26,10 @@ ANNOTATION_TYPE = "Annotation"
 ANNOTATED_COMPUTATION_TYPE = "AnnotatedComputation"
 ANNOTATED_EVIDENCE_GRAPH_TYPE = "AnnotatedEvidenceGraph"
 ROCRATE_TYPE = "ROCrate"
+ARTICLE_TYPE = "Article"
+CLAIM_TYPE = "Claim"
+CONTAINER_TYPE = "Container"
+SERVICE_TYPE = "Service"
 
 # TODO get from config
 DEFAULT_ARK_NAAN = "59853"

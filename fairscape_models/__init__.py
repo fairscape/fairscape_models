@@ -10,6 +10,7 @@ from fairscape_models.fairscape_base import IdentifierValue, IdentifierPropertyV
 from fairscape_models.medical_condition import MedicalCondition
 from fairscape_models.schema import Schema
 from fairscape_models.rocrate import ROCrateV1_2, ROCrateMetadataElem, ROCrateMetadataFileElem, ROCrateDistribution, GenericMetadataElem, IRB, ContactPoint, PostalAddress
+from fairscape_models.person import Person, Organization
 from fairscape_models.sample import Sample
 from fairscape_models.model_card import ModelCard
 from fairscape_models.experiment import Experiment
