@@ -18,6 +18,8 @@ from fairscape_models.model_card import ModelCard
 from fairscape_models.sample import Sample
 from fairscape_models.activity import Activity
 from fairscape_models.digital_object import DigitalObject
+from fairscape_models.person import Person, Organization
+from fairscape_models.defined_term import DefinedTerm
 from fairscape_models._version import __version__
 
 class ContactPoint(BaseModel):
@@ -129,10 +131,10 @@ class ROCrateMetadataElem(BaseModel):
     hasPart: List[IdentifierValue] = Field(description="Dataset, Software, Computation, and other entities that are part of this RO-Crate, referenced by identifier.")
 
     # Attribution — D4D_Motivation: Creator, FundingMechanism
-    author: Union[str, List[str]] = Field(description="Who created the dataset (e.g. which team, research group) and on behalf of which entity (e.g. company, institution, organization).")
+    author: Union[str, IdentifierValue, Person, List[Union[str, IdentifierValue, Person]]] = Field(description="Who created the dataset. Accepts a plain name string, a Person object (with optional ORCID identifier), a {\"@id\": \"...\"} reference stub to a Person in @graph, or a list of any of those. Plain strings remain valid for backwards compatibility.")
     publisher: Optional[str] = Field(default=None, description="Organization or person responsible for publishing or distributing the dataset.")
-    principalInvestigator: Optional[str] = Field(default=None, description="A key individual (Principal Investigator) responsible for or overseeing dataset creation.")
-    funder: Optional[str] = Field(default=None, description="Who funded the creation of the dataset? Include grant names and numbers where applicable.")
+    principalInvestigator: Optional[Union[str, IdentifierValue, Person]] = Field(default=None, description="A key individual (Principal Investigator) responsible for or overseeing dataset creation. Accepts a plain name string, a reference stub ({\"@id\": \"...\"}) to a Person in @graph, or an inline Person object.")
+    funder: Optional[Union[str, IdentifierValue, Person]] = Field(default=None, description="Who funded the creation of the dataset? Include grant names and numbers where applicable. Accepts a plain name string, a reference stub, or an inline Person/Organization object.")
     contactEmail: Optional[str] = Field(default=None, description="Email address for questions or correspondence about the dataset.")
     citation: Optional[str] = Field(default=None, description="Preferred citation string for this dataset.")
     associatedPublication: Optional[Union[str, List[str]]] = Field(default=None, description="Publication(s) associated with or describing this dataset.")
@@ -158,7 +160,9 @@ class ROCrateMetadataElem(BaseModel):
     fdaRegulated: Optional[bool] = Field(default=None, description="Whether this dataset is subject to FDA regulations (e.g. clinical trial data, medical device data).")
     deidentified: Optional[bool] = Field(default=None, description="Whether the dataset has been de-identified to remove or obscure personally identifiable information.")
     humanSubjectResearch: Optional[str] = Field(default=None, description="Does this dataset involve human subjects? Indicate Yes/No and describe the nature of human subjects involvement.")
-    dataGovernanceCommittee: Optional[str] = Field(default=None, description="Name or contact for the data governance committee responsible for oversight, access control, and policy enforcement for this dataset.")
+    dataGovernanceCommittee: Optional[Union[str, IdentifierValue, Person]] = Field(default=None, description="Name or contact for the data governance committee responsible for oversight, access control, and policy enforcement for this dataset. Accepts a plain name string, a reference stub, or an inline Person.")
+    ethicalReviewContacts: Optional[List[Union[IdentifierValue, Person]]] = Field(default=None, description="People to contact about the ethical review process for this dataset. Each entry is a Person in @graph (by-reference stub) or an inline Person.")
+    about: Optional[List[Union[IdentifierValue, DefinedTerm, str]]] = Field(default=None, description="Subjects this dataset is about, ideally as ontology-grounded DefinedTerm entries (MeSH, EDAM, Cellosaurus, etc.) referenced from @graph. Supports AI-Ready Rubric 2.a (Semantics).")
 
     # Checksums
     md5: Optional[str] = Field(default=None, description="MD5 checksum of the digital object content")
@@ -353,6 +357,9 @@ class ROCrateV1_2(BaseModel):
         Activity,
         Annotation,
         DigitalObject,
+        Person,
+        Organization,
+        DefinedTerm,
         GenericMetadataElem
     ]] = Field(alias="@graph")
     
@@ -374,7 +381,10 @@ class ROCrateV1_2(BaseModel):
             "Schema": Schema,
             "BioChemEntity": BioChemEntity,
             "MedicalCondition": MedicalCondition,
-            "ROCrate": ROCrateMetadataElem
+            "ROCrate": ROCrateMetadataElem,
+            "Person": Person,
+            "Organization": Organization,
+            "DefinedTerm": DefinedTerm,
         }
         
         def normalize_type(type_str):
