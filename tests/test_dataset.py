@@ -1,6 +1,13 @@
 import pytest
+from pathlib import Path
 from pydantic import ValidationError
-from fairscape_models.dataset import Dataset
+from fairscape_models.dataset import (
+    Dataset,
+    Split,
+    SplitType,
+    _count_csv,
+    _human_size,
+)
 from fairscape_models.fairscape_base import IdentifierValue
 
 def test_dataset_instantiation(dataset_minimal_data):
@@ -127,3 +134,179 @@ def test_dataset_custom_type_overwritten_by_validator(dataset_minimal_data):
     dataset_minimal_data["@type"] = "CustomType"
     dataset = Dataset.model_validate(dataset_minimal_data)
     assert dataset.metadataType == ["prov:Entity", "https://w3id.org/EVI#Dataset"]
+
+
+def test_count_csv_with_data(tmp_path):
+    p = tmp_path / "data.csv"
+    p.write_text("a,b,c\n1,2,3\n4,5,6\n")
+    rows, cols = _count_csv(p, ",")
+    assert rows == 2
+    assert cols == 3
+
+
+def test_count_csv_empty_file(tmp_path):
+    p = tmp_path / "empty.csv"
+    p.write_text("")
+    rows, cols = _count_csv(p, ",")
+    assert rows == 0
+    assert cols == 0
+
+
+def test_count_csv_tsv(tmp_path):
+    p = tmp_path / "data.tsv"
+    p.write_text("a\tb\n1\t2\n")
+    rows, cols = _count_csv(p, "\t")
+    assert rows == 1
+    assert cols == 2
+
+
+def test_human_size_bytes():
+    assert _human_size(500) == "500 B"
+
+
+def test_human_size_kb():
+    assert _human_size(2048) == "2.0 KB"
+
+
+def test_human_size_mb():
+    assert _human_size(5 * 1024 * 1024) == "5.0 MB"
+
+
+def test_human_size_terabytes_clamps():
+    # Forces the `unit == "TB"` early-return branch
+    big = 5 * 1024 ** 4
+    assert _human_size(big).endswith("TB")
+
+
+def test_split_model_defaults():
+    split = Split(name="train")
+    assert split.name == "train"
+    assert split.splitType is None
+    assert split.isSample is None
+
+
+def test_split_model_with_fields():
+    split = Split(
+        name="train",
+        description="training split",
+        splitType=SplitType.TRAIN,
+        query="SELECT *",
+        queryType="sql",
+        sourceDatasets=[IdentifierValue(**{"@id": "ark:59852/src"})],
+        isSample=True,
+        isRandom=False,
+        samplingStrategy="stratified",
+    )
+    assert split.splitType == SplitType.TRAIN
+    assert split.sourceDatasets[0].guid == "ark:59852/src"
+
+
+def _make_dataset(tmp_path, content_url=None, file_format="text/csv"):
+    return Dataset.model_validate({
+        "@id": "ark:59852/tabular",
+        "name": "Tabular",
+        "author": "A",
+        "datePublished": "2024-01-01",
+        "description": "A tabular dataset for testing summary stats.",
+        "keywords": ["t"],
+        "format": file_format,
+        "contentUrl": content_url,
+    })
+
+
+def test_add_summary_stats_with_explicit_file_path(tmp_path):
+    csv_path = tmp_path / "data.csv"
+    csv_path.write_text("a,b\n1,2\n3,4\n5,6\n")
+    ds = _make_dataset(tmp_path)
+    stats = ds.add_summary_stats(file_path=csv_path)
+    assert ds.rowCount == 3
+    assert ds.columnCount == 2
+    assert ds.sampleSize == 3
+    assert ds.contentSize.endswith("B")
+    assert isinstance(ds.hasSummaryStatistics, IdentifierValue)
+    assert stats.guid == f"{ds.guid}/summary-stats"
+    assert stats.rowCount == 3
+    assert stats.fileFormat == "application/json"
+    assert "summary-statistics" in stats.keywords
+
+
+def test_add_summary_stats_preserves_sample_size(tmp_path):
+    csv_path = tmp_path / "data.csv"
+    csv_path.write_text("a,b\n1,2\n")
+    ds = _make_dataset(tmp_path)
+    ds.sampleSize = 42
+    ds.add_summary_stats(file_path=csv_path)
+    assert ds.sampleSize == 42
+
+
+def test_add_summary_stats_tsv_via_file_format(tmp_path):
+    # Use .tsv extension so _require_tabular passes, and a tab-formatted file
+    tsv_path = tmp_path / "data.tsv"
+    tsv_path.write_text("a\tb\n1\t2\n")
+    ds = _make_dataset(tmp_path, file_format="tab-separated-values")
+    ds.add_summary_stats(file_path=tsv_path)
+    assert ds.columnCount == 2
+    assert ds.rowCount == 1
+
+
+def test_add_summary_stats_file_path_missing(tmp_path):
+    ds = _make_dataset(tmp_path)
+    with pytest.raises(FileNotFoundError):
+        ds.add_summary_stats(file_path=tmp_path / "nope.csv")
+
+
+def test_add_summary_stats_no_content_url(tmp_path):
+    ds = _make_dataset(tmp_path)
+    with pytest.raises(ValueError, match="no contentUrl"):
+        ds.add_summary_stats()
+
+
+def test_add_summary_stats_remote_url_not_supported(tmp_path):
+    ds = _make_dataset(tmp_path, content_url="https://example.org/data.csv")
+    with pytest.raises(NotImplementedError):
+        ds.add_summary_stats()
+
+
+def test_add_summary_stats_file_url_without_crate_root(tmp_path):
+    ds = _make_dataset(tmp_path, content_url="file:///data.csv")
+    with pytest.raises(ValueError, match="crate-relative"):
+        ds.add_summary_stats()
+
+
+def test_add_summary_stats_file_url_with_crate_root(tmp_path):
+    csv_path = tmp_path / "inner.csv"
+    csv_path.write_text("a,b\n1,2\n")
+    ds = _make_dataset(tmp_path, content_url="file:///inner.csv")
+    ds.add_summary_stats(crate_root=tmp_path)
+    assert ds.rowCount == 1
+    assert ds.columnCount == 2
+
+
+def test_add_summary_stats_content_url_list(tmp_path):
+    csv_path = tmp_path / "data.csv"
+    csv_path.write_text("a\n1\n")
+    ds = _make_dataset(tmp_path, content_url=[str(csv_path)])
+    ds.add_summary_stats()
+    assert ds.rowCount == 1
+
+
+def test_add_summary_stats_relative_content_url_with_crate_root(tmp_path):
+    csv_path = tmp_path / "rel.csv"
+    csv_path.write_text("a,b\n1,2\n")
+    ds = _make_dataset(tmp_path, content_url="rel.csv")
+    ds.add_summary_stats(crate_root=tmp_path)
+    assert ds.rowCount == 1
+
+
+def test_add_summary_stats_resolved_path_missing(tmp_path):
+    ds = _make_dataset(tmp_path, content_url=str(tmp_path / "missing.csv"))
+    with pytest.raises(FileNotFoundError, match="Resolved contentUrl"):
+        ds.add_summary_stats()
+
+
+def test_add_summary_stats_non_tabular_format(tmp_path):
+    bad_path = tmp_path / "data.parquet"
+    bad_path.write_bytes(b"not tabular")
+    ds = _make_dataset(tmp_path, file_format="application/parquet")
+    with pytest.raises(ValueError, match="not csv/tsv"):
+        ds.add_summary_stats(file_path=bad_path)

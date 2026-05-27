@@ -123,10 +123,10 @@ OVERVIEW_MAPPING_CONFIGURATION = {
 
 
 USECASES_MAPPING = {
-    "intended_use":          {"source_key": "rai:dataUseCases"},
-    "limitations":           {"source_key": "rai:dataLimitations"},
+    "intended_use":          {"source_key": "rai:dataUseCases", "parser": _list_to_str},
+    "limitations":           {"source_key": "rai:dataLimitations", "parser": _list_to_str},
     "prohibited_uses":        {"source_key": "prohibitedUses", "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("Prohibited Uses")},
-    "potential_sources_of_bias": {"source_key": "rai:dataBiases"},
+    "potential_sources_of_bias": {"source_key": "rai:dataBiases", "parser": _list_to_str},
     "maintenance_plan":      {"source_key": "rai:dataReleaseMaintenancePlan"},
 
     # Additional RAI fields

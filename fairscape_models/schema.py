@@ -69,6 +69,7 @@ class Schema(FairscapeEVIBaseModel):
         alias="@context" 
     )
     metadataType: str = Field(alias="@type", default= "evi:Schema")
+    conformsTo: Optional[Union[List[IdentifierValue],IdentifierValue]] = Field(default={"@id": "https://json-schema.org/draft/2020-12/schema"})
     properties: Dict[str, Property]
     schemaType: Optional[str] = Field(default="object", alias="type")
     additionalProperties: Optional[bool] = Field(default=True)

@@ -57,19 +57,19 @@ class OverviewSection(BaseModel):
 class UseCasesSection(BaseModel):
     """Datasheet section for describing dataset use cases, limitations, and biases."""
 
-    intended_use: Optional[str] = Field(
+    intended_use: Optional[Union[str, List[str]]] = Field(
         default=None, description="Recommended dataset uses (e.g., training, validation)"
     )
-    limitations: Optional[str] = Field(
+    limitations: Optional[Union[str, List[str]]] = Field(
         default=None, description="Known limitations and non-recommended uses"
     )
     prohibited_uses: Optional[str] = Field(
         default=None, description="Explicitly prohibited uses (subset of limitations)"
     )
-    potential_sources_of_bias: Optional[str] = Field(
+    potential_sources_of_bias: Optional[Union[str, List[str]]] = Field(
         default=None, description="Description of known biases in the dataset"
     )
-    maintenance_plan: Optional[str] = Field(
+    maintenance_plan: Optional[Union[str, List[str]]] = Field(
         default=None, description="Versioning, maintainers, and deprecation policies"
     )
 
@@ -77,7 +77,7 @@ class UseCasesSection(BaseModel):
     data_collection: Optional[str] = Field(
         default=None, description="Description of data collection methodology"
     )
-    data_collection_type: Optional[str] = Field(
+    data_collection_type: Optional[Union[str, List[str]]] = Field(
         default=None, description="Type of data collection"
     )
     data_collection_missing_data: Optional[str] = Field(
@@ -86,28 +86,28 @@ class UseCasesSection(BaseModel):
     data_collection_raw_data: Optional[str] = Field(
         default=None, description="Description of raw data from collection"
     )
-    data_collection_timeframe: Optional[str] = Field(
+    data_collection_timeframe: Optional[Union[str, List[str]]] = Field(
         default=None, description="Timeframe of data collection"
     )
     data_imputation_protocol: Optional[str] = Field(
         default=None, description="Protocol used for data imputation"
     )
-    data_manipulation_protocol: Optional[str] = Field(
+    data_manipulation_protocol: Optional[Union[str, List[str]]] = Field(
         default=None, description="Protocol used for data manipulation"
     )
-    data_preprocessing_protocol: Optional[str] = Field(
+    data_preprocessing_protocol: Optional[Union[str, List[str]]] = Field(
         default=None, description="Protocol used for data preprocessing"
     )
     data_annotation_protocol: Optional[str] = Field(
         default=None, description="Protocol used for data annotation"
     )
-    data_annotation_platform: Optional[str] = Field(
+    data_annotation_platform: Optional[Union[str, List[str]]] = Field(
         default=None, description="Platform used for data annotation"
     )
-    data_annotation_analysis: Optional[str] = Field(
+    data_annotation_analysis: Optional[Union[str, List[str]]] = Field(
         default=None, description="Analysis of data annotations"
     )
-    personal_sensitive_information: Optional[str] = Field(
+    personal_sensitive_information: Optional[Union[str, List[str]]] = Field(
         default=None, description="Description of personal/sensitive information"
     )
     data_social_impact: Optional[str] = Field(
@@ -116,10 +116,10 @@ class UseCasesSection(BaseModel):
     annotations_per_item: Optional[str] = Field(
         default=None, description="Number of annotations per item"
     )
-    annotator_demographics: Optional[str] = Field(
+    annotator_demographics: Optional[Union[str, List[str]]] = Field(
         default=None, description="Demographics of annotators"
     )
-    machine_annotation_tools: Optional[str] = Field(
+    machine_annotation_tools: Optional[Union[str, List[str]]] = Field(
         default=None, description="Machine tools used for annotation"
     )
 
