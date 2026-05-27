@@ -161,7 +161,6 @@ class ROCrateMetadataElem(BaseModel):
     deidentified: Optional[bool] = Field(default=None, description="Whether the dataset has been de-identified to remove or obscure personally identifiable information.")
     humanSubjectResearch: Optional[str] = Field(default=None, description="Does this dataset involve human subjects? Indicate Yes/No and describe the nature of human subjects involvement.")
     dataGovernanceCommittee: Optional[Union[str, IdentifierValue, Person]] = Field(default=None, description="Name or contact for the data governance committee responsible for oversight, access control, and policy enforcement for this dataset. Accepts a plain name string, a reference stub, or an inline Person.")
-    ethicalReviewContacts: Optional[List[Union[IdentifierValue, Person]]] = Field(default=None, description="People to contact about the ethical review process for this dataset. Each entry is a Person in @graph (by-reference stub) or an inline Person.")
     about: Optional[List[Union[IdentifierValue, DefinedTerm, str]]] = Field(default=None, description="Subjects this dataset is about, ideally as ontology-grounded DefinedTerm entries (MeSH, EDAM, Cellosaurus, etc.) referenced from @graph. Supports AI-Ready Rubric 2.a (Semantics).")
 
     # Checksums
@@ -192,7 +191,7 @@ class ROCrateMetadataElem(BaseModel):
         alias="rai:dataCollection", default=None,
         description="What mechanisms or procedures were used to collect the data (e.g. hardware sensors, manual curation, software APIs)? Also covers how these mechanisms were validated. (rai:dataCollection)"
     )
-    rai_data_collection_type: Optional[List[str]] = Field(
+    rai_data_collection_type: Optional[Union[str, List[str]]] = Field(
         alias="rai:dataCollectionType", default=None,
         description="Data collection type(s). Recommended values: Surveys, Secondary Data Analysis, Physical Data Collection, Direct Measurement, Document Analysis, Manual Human Curator, Software Collection, Experiments, Web Scraping, Web API, Focus Groups, Self-Reporting, Customer Feedback Data, User-Generated Content Data, Passive Data Collection, Others. (rai:dataCollectionType)"
     )
@@ -204,7 +203,7 @@ class ROCrateMetadataElem(BaseModel):
         alias="rai:dataCollectionRawData", default=None,
         description="Description of raw data sources before preprocessing, cleaning, or labeling. Documents where the original data comes from and how it can be accessed. (rai:dataCollectionRawData)"
     )
-    rai_data_collection_timeframe: Optional[List[str]] = Field(
+    rai_data_collection_timeframe: Optional[Union[str, List[str]]] = Field(
         alias="rai:dataCollectionTimeframe", default=None,
         description="Over what timeframe was the data collected, and does this timeframe match the creation timeframe of the underlying data? Provide start and end dates where possible. (rai:dataCollectionTimeframe)"
     )
@@ -216,7 +215,7 @@ class ROCrateMetadataElem(BaseModel):
         alias="rai:dataManipulationProtocol", default=None,
         description="Was any cleaning of the data done (e.g. removal of instances, processing of missing values, deduplication, filtering)? If so, describe the cleaning procedures applied. (rai:dataManipulationProtocol)"
     )
-    rai_data_preprocessing_protocol: Optional[List[str]] = Field(
+    rai_data_preprocessing_protocol: Optional[Union[str, List[str]]] = Field(
         alias="rai:dataPreprocessingProtocol", default=None,
         description="Was any preprocessing of the data done (e.g. discretization or bucketing, tokenization, feature extraction, normalization)? Describe the steps required to bring collected data to a state that can be processed by an ML model or algorithm. (rai:dataPreprocessingProtocol)"
     )
@@ -224,15 +223,15 @@ class ROCrateMetadataElem(BaseModel):
         alias="rai:dataAnnotationProtocol", default=None,
         description="Annotation methodology, tasks, and protocols followed during labeling. Includes annotation guidelines, quality control procedures, task definitions, workforce type, annotation characteristics, and label distributions. (rai:dataAnnotationProtocol)"
     )
-    rai_data_annotation_platform: Optional[List[str]] = Field(
+    rai_data_annotation_platform: Optional[Union[str, List[str]]] = Field(
         alias="rai:dataAnnotationPlatform", default=None,
         description="Platform or tool used for annotation (e.g. Label Studio, Prodigy, Amazon Mechanical Turk, custom annotation tool). (rai:dataAnnotationPlatform)"
     )
-    rai_data_annotation_analysis: Optional[List[str]] = Field(
+    rai_data_annotation_analysis: Optional[Union[str, List[str]]] = Field(
         alias="rai:dataAnnotationAnalysis", default=None,
         description="Analysis of annotation quality, inter-annotator agreement metrics (e.g. Cohen's kappa, Fleiss' kappa), and systematic patterns in disagreements between annotators of different socio-demographic groups. Covers how final dataset labels relate to individual annotator responses. (rai:dataAnnotationAnalysis)"
     )
-    rai_personal_sensitive_information: Optional[List[str]] = Field(
+    rai_personal_sensitive_information: Optional[Union[str, List[str]]] = Field(
         alias="rai:personalSensitiveInformation", default=None,
         description="Does the dataset contain data that might be considered sensitive (e.g. race, sexual orientation, religion, biometrics)? List sensitive attribute types present: Gender, Socio-economic status, Geography, Language, Age, Culture, Experience or Seniority, others. (rai:personalSensitiveInformation)"
     )
@@ -244,11 +243,7 @@ class ROCrateMetadataElem(BaseModel):
         alias="rai:annotationsPerItem", default=None,
         description="Number of annotations collected per data item. Multiple annotations per item enable calculation of inter-annotator agreement. (rai:annotationsPerItem)"
     )
-    rai_annotator_demographics: Optional[List[str]] = Field(
-        alias="rai:annotatorDemographics", default=None,
-        description="Demographic information about annotators, if available and relevant (e.g. geographic location, language background, expertise level, age group, gender). (rai:annotatorDemographics)"
-    )
-    rai_machine_annotation_tools: Optional[List[str]] = Field(
+    rai_machine_annotation_tools: Optional[Union[str, List[str]]] = Field(
         alias="rai:machineAnnotationTools", default=None,
         description="Automated or machine-learning-based annotation tools used in dataset creation, including NLP pipelines, computer vision models, or other automated labeling systems. Format each entry as 'ToolName version' (e.g. 'spaCy 3.5.0'). (rai:machineAnnotationTools)"
     )
