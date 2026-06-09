@@ -61,8 +61,9 @@ def build_composition_details(converter_instance, source_entity_model) -> Compos
         else:
             details.other_count += 1
     
-    details.file_formats = dict(Counter(file_formats))
-    details.software_formats = dict(Counter(software_formats))
+    # Drop blank/unknown formats so the Files card only lists real formats.
+    details.file_formats = {fmt: count for fmt, count in Counter(file_formats).items() if fmt and fmt != "unknown"}
+    details.software_formats = {fmt: count for fmt, count in Counter(software_formats).items() if fmt and fmt != "unknown"}
     details.file_access = dict(Counter(file_access_types))
     details.software_access = dict(Counter(software_access_types))
     details.computation_patterns = list(set(computation_patterns))

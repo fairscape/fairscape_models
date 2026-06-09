@@ -226,7 +226,7 @@ def _score_characterization(characterization: CharacterizationScore, root_data: 
             entity_type = _get_type(entity)
 
             if "Dataset" in entity_type or "ROCrate" in entity_type:
-                size = entity.get("contentSize", "")
+                size = entity.get("contentSize", "").upper()
                 if size:
                     try:
                         if isinstance(size, str):
