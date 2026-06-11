@@ -71,6 +71,21 @@ def _get_type(entity: Dict[str, Any]) -> List[str]:
         return type_val
     return type_val[-1]
 
+def _parse_content_size_bytes(value: Any) -> float:
+    """Parse a contentSize value ("1.2 TB", "500 MB", raw bytes) into bytes; 0 if unparseable."""
+    if isinstance(value, (int, float)):
+        return float(value)
+    if not isinstance(value, str) or not value.strip():
+        return 0
+    size = value.strip().upper()
+    try:
+        for unit, multiplier in (("TB", 1e12), ("GB", 1e9), ("MB", 1e6), ("KB", 1e3), ("B", 1)):
+            if size.endswith(unit):
+                return float(size[:-len(unit)].strip()) * multiplier
+        return float(size)
+    except ValueError:
+        return 0
+
 def _get_format(entity: Dict[str, Any]) -> str:
     """Get format from either fileFormat field."""
     return entity.get("format", "")
@@ -218,29 +233,29 @@ def _score_characterization(characterization: CharacterizationScore, root_data: 
         total_size = total_size_bytes
         stats_count = stats_count_agg
     else:
-        # Fall back to iterating metadata_graph
-        total_size = 0
+        # Fall back to the metadata_graph. The root's own contentSize is
+        # authoritative when present (it already covers the entities below it);
+        # only sum the child entities when the root doesn't declare a size.
         stats_count = 0
+        summed_size = 0
+        root_id = root_data.get("@id")
+        seen_ids = set()
 
         for entity in metadata_graph:
             entity_type = _get_type(entity)
 
             if "Dataset" in entity_type or "ROCrate" in entity_type:
-                size = entity.get("contentSize", "").upper()
-                if size:
-                    try:
-                        if isinstance(size, str):
-                            if "TB" in size:
-                                total_size += float(size.replace("TB", "").strip()) * 1e12
-                            elif "GB" in size:
-                                total_size += float(size.replace("GB", "").strip()) * 1e9
-                            elif "MB" in size:
-                                total_size += float(size.replace("MB", "").strip()) * 1e6
-                    except:
-                        pass
-
                 if entity.get("hasSummaryStatistics"):
                     stats_count += 1
+
+                entity_id = entity.get("@id")
+                if entity_id == root_id or entity_id in seen_ids:
+                    continue
+                if entity_id:
+                    seen_ids.add(entity_id)
+                summed_size += _parse_content_size_bytes(entity.get("contentSize"))
+
+        total_size = _parse_content_size_bytes(root_data.get("contentSize")) or summed_size
     
     details = []
     if total_size > 0:
