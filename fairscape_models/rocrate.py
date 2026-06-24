@@ -1,5 +1,6 @@
 import urllib.parse
 from typing import Any, Dict, List, Literal, Optional, Union
+import re
 from pydantic import BaseModel, Field, ConfigDict, model_validator
 
 from fairscape_models.fairscape_base import IdentifierValue, DEFAULT_CONTEXT
@@ -430,7 +431,20 @@ class ROCrateV1_2(BaseModel):
             """ Clean metadata guid property from full urls to ark:{NAAN}/{postfix}
             """
             if hasattr(metadata, 'guid') and isinstance(metadata.guid, str) and "http" in metadata.guid:
-                metadata.guid = urllib.parse.urlparse(metadata.guid).path.lstrip('/')
+                # old metadata parsing
+                #metadata.guid = urllib.parse.urlparse(metadata.guid).path.lstrip('/')
+
+                # find ark:NAAN within string
+                try:
+                    match = re.search(
+                        pattern="ark:[0-9]{5}/.+$",
+                        string=metadata.guid
+                    )
+                    metadata.guid = match.group()
+                except AttributeError:
+                    # TODO warm about missing ark in guid
+                    pass
+
 
         def cleanIdentifierList(identifier_list):
             """Helper to clean a list of identifiers"""
