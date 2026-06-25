@@ -1,10 +1,11 @@
-from pydantic import BaseModel, Field, ConfigDict, model_validator
-from typing import Optional, List, Union
+from pydantic import BaseModel, Field, ConfigDict, model_validator, field_validator
+from typing import Optional, List, Union, Any
+import re
 
-from fairscape_models.fairscape_base import IdentifierValue
+from fairscape_models.fairscape_base import IdentifierValue, Identifier
 from fairscape_models._version import __version__
 
-class Activity(BaseModel):
+class Activity(Identifier):
     """Base class for Activity types (Computation, Annotation, Experiment)"""
     guid: str = Field(alias="@id")
     name: str
@@ -20,3 +21,9 @@ class Activity(BaseModel):
     fairscapeVersion: str = __version__
 
     model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    @field_validator('generated', mode='before')
+    @classmethod
+    def extract_guid_generated():
+        pass
+    

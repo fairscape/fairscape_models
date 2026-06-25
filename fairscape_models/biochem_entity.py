@@ -1,10 +1,10 @@
 from pydantic import BaseModel, Field, ConfigDict, model_validator
 from typing import Optional, List, Union
 
-from fairscape_models.fairscape_base import IdentifierValue, IdentifierPropertyValue
+from fairscape_models.fairscape_base import IdentifierValue, IdentifierPropertyValue, Identifier
 from fairscape_models._version import __version__
 
-class BioChemEntity(BaseModel):
+class BioChemEntity(Identifier):
     """ Pydantic model for the Schema.org BioChemEntity datatype
 
     This class can apply to Protiens, Genes, Chemical Entities, or Biological Samples

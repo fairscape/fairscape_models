@@ -2,15 +2,18 @@ from pydantic import (
     BaseModel, 
     ConfigDict,
     Field,
-    BeforeValidator
+    BeforeValidator,
+    field_validator
 )
 from pydantic.networks import AnyUrl
 from typing import (
     List,
     Optional,
     Dict,
-    Union
+    Union,
+    Any
 )
+import re
 from typing_extensions import Annotated
 from enum import Enum
 
@@ -126,13 +129,35 @@ class Identifier(BaseModel):
     model_config = ConfigDict(extra='allow')
     guid: str = Field(
         title="guid",
-        alias="@id"
+        alias="@id",
+        pattern=IdentifierPattern
     )
-    metadataType: ValidatedClassType = Field(
+    metadataType: Optional[Union[List[str], str]] = Field(
         title="metadataType",
         alias="@type"
     )
     name: str = Field(...)
+
+    @field_validator('guid', mode='before')
+    @classmethod
+    def extract_guid(cls, value: Any)-> Any:
+        """ Extract the ARK from the guid field, runs before validation against regex
+        """
+
+        try:
+            match = re.search(
+                pattern="ark:[0-9]{5}/.+$",
+                string=value
+            )
+            return match.group()
+        except AttributeError:
+            return value
+ 
+    #   TODO extract guids from isPartOf
+    #    @field_validator('generated', mode='before')
+    #    @classmethod
+    #    def extract_guid_is_part_of():
+    #        pass
 
 
 class FairscapeBaseModel(Identifier):
