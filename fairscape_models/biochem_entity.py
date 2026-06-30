@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, ConfigDict, model_validator
+from pydantic import Field, ConfigDict, model_validator
 from typing import Optional, List, Union
 
 from fairscape_models.fairscape_base import IdentifierValue, IdentifierPropertyValue, Identifier

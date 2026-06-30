@@ -1,8 +1,7 @@
-from pydantic import BaseModel, Field, ConfigDict, model_validator, field_validator
+from pydantic import Field, ConfigDict, field_validator
 from typing import Optional, List, Union, Any
-import re
 
-from fairscape_models.fairscape_base import IdentifierValue, Identifier
+from fairscape_models.fairscape_base import IdentifierValue, Identifier, extractGUID
 from fairscape_models._version import __version__
 
 class Activity(Identifier):
@@ -25,6 +24,5 @@ class Activity(Identifier):
 #   TODO extract guids from all subfields
 #    @field_validator('generated', mode='before')
 #    @classmethod
-#    def extract_guid_generated():
+#    def extract_guid_generated(cls, value: Any) -> Any:
 #        pass
-    
