@@ -2,15 +2,18 @@ from pydantic import (
     BaseModel, 
     ConfigDict,
     Field,
-    BeforeValidator
+    BeforeValidator,
+    field_validator
 )
 from pydantic.networks import AnyUrl
 from typing import (
     List,
     Optional,
     Dict,
-    Union
+    Union,
+    Any
 )
+import re
 from typing_extensions import Annotated
 from enum import Enum
 
@@ -66,6 +69,20 @@ DEFAULT_CONTEXT = {
         "@type": "@id"
     }
 }
+
+def extractGUID(inputString: str | None) -> str|None:
+    """
+    Given an input ARK extract the normalized ARK, if validation fails return the input.
+    """
+    try:
+        match = re.search(
+            pattern="ark:[0-9]{5}/.+$",
+            string=inputString
+        )
+        return match.group()
+    except AttributeError:
+        return inputString
+
 
 class ClassType(str, Enum):
     DATASET = 'Dataset'
@@ -123,16 +140,55 @@ class IdentifierPropertyValue(BaseModel):
 
 
 class Identifier(BaseModel):
+    """     
+    The Base Model for any Metadata element in FAIRSCAPE.
+
+    Every instance must have a GUID in the form of an ARK (archival resource key), 
+    a metadata type (https://www.w3.org/TR/json-ld/#specifying-the-type), and a name specified as a string.
+    Every model must have these attributes, and may have any other attributes as specified by the `ConfigDict(extra='allow')`.
+    
+    For the guid property, preprocessing is preformed by the field validator `Identifier.extract_guid`.
+    This method preforms a regex search to find the identifier within the passed value. 
+    As ARKs may be specified as full IRIS or URLs pointing to several different resolvers, arks are stripped.
+    The guid for all fairscape_models clases should follow the regex `"ark:[0-9]{5}/.+$"`.
+
+    This guid preprocessing is also preformed on isPartOf.
+    """
     model_config = ConfigDict(extra='allow')
     guid: str = Field(
         title="guid",
-        alias="@id"
+        alias="@id",
+        pattern=IdentifierPattern
     )
-    metadataType: ValidatedClassType = Field(
+    metadataType: Optional[Union[List[str], str]] = Field(
         title="metadataType",
         alias="@type"
     )
     name: str = Field(...)
+    isPartOf: Optional[Union[List[str], str]] = Field(default=[])
+
+    @field_validator('guid', mode='before')
+    @classmethod
+    def extract_guid(cls, value: Any)-> Any:
+        """ 
+        Extract the ARK from the guid field, runs before validation against regex.
+        """
+        return extractGUID(value)
+
+
+    @field_validator('isPartOf', mode='before')
+    @classmethod
+    def extract_guid_is_part_of(cls, value: Any)-> Any:
+        """
+        Extract GUID from isPartOf Properties, normalizing the form of the ark.
+        """
+        if value:
+            if isinstance(value, str):
+                return extractGUID(value)
+            if isinstance(value, list):
+                return [extractGUID(elem) for elem in value]
+        else:
+            return value
 
 
 class FairscapeBaseModel(Identifier):
