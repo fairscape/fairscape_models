@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.6] - 2026-06-30
+
+Uses the Base Class `fairscape_models.fairscape_base.Identifier` to preprocess ARK identifiers in the `guid` and `isPartOf` properties. This Base Class also uses a regex to validate ARK identifiers.
+
 ## [1.0.29] - 2026-03-20
 
 Added D4DConverter class for converting ROCrateV1_2 into LinkML D4D yaml.
