@@ -22,8 +22,9 @@ class Activity(Identifier):
 
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    @field_validator('generated', mode='before')
-    @classmethod
-    def extract_guid_generated():
-        pass
+#   TODO extract guids from all subfields
+#    @field_validator('generated', mode='before')
+#    @classmethod
+#    def extract_guid_generated():
+#        pass
     

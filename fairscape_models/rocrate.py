@@ -430,6 +430,8 @@ class ROCrateV1_2(BaseModel):
         def cleanGUID(metadata):
             """ Clean metadata guid property from full urls to ark:{NAAN}/{postfix}
             """
+            # TODO should be removed 
+
             if hasattr(metadata, 'guid') and isinstance(metadata.guid, str) and "http" in metadata.guid:
                 # old metadata parsing
                 #metadata.guid = urllib.parse.urlparse(metadata.guid).path.lstrip('/')
