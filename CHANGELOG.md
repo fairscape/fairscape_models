@@ -1,5 +1,10 @@
 # Changelog
 
+
+## [1.1.7] - 2026-06-30
+
+Corrected regex for `fairscape_models.fairscape_base.IdentifierPattern`
+
 ## [1.1.6] - 2026-06-30
 
 Uses the Base Class `fairscape_models.fairscape_base.Identifier` to preprocess ARK identifiers in the `guid` and `isPartOf` properties. This Base Class also uses a regex to validate ARK identifiers.

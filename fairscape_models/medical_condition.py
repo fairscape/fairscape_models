@@ -1,10 +1,10 @@
 from pydantic import BaseModel, Field
 from typing import Optional, List
 
-from fairscape_models.fairscape_base import IdentifierValue, IdentifierPropertyValue
+from fairscape_models.fairscape_base import Identifier, IdentifierValue, IdentifierPropertyValue
 from fairscape_models._version import __version__
 
-class MedicalCondition(BaseModel):
+class MedicalCondition(Identifier):
     """ Pydantic model for the Schema.org MedicalCondition datatype
 
     This class represents any condition of the human body that affects the normal functioning of a person, whether physically or mentally. Includes diseases, injuries, disabilities, disorders, syndromes, etc.

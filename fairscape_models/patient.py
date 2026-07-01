@@ -9,10 +9,10 @@ from typing import (
   List,
   Union
 )
-from fairscape_models.fairscape_base import IdentifierValue
+from fairscape_models.fairscape_base import Identifier, IdentifierValue
 from fairscape_models._version import __version__
 
-class Patient(BaseModel):
+class Patient(Identifier):
   guid: str = Field(alias="@id")
   name: str
   metadataType: Optional[str] = Field(
@@ -20,7 +20,6 @@ class Patient(BaseModel):
     alias="@type"
   )
   sdPublisher: str = Field(min_length=4)
-  isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
   diagnosis: Optional[List[IdentifierValue]] = Field(default=[])
   drug: Optional[List[IdentifierValue]] = Field(default=[])
   healthCondition: Optional[List[IdentifierValue]] = Field(default=[])

@@ -18,7 +18,7 @@ from typing_extensions import Annotated
 from enum import Enum
 
 
-IdentifierPattern = "^ark:[0-9]{5}\\/[a-zA-Z0-9_\\-]*.$"
+IdentifierPattern = "^ark:[0-9]{5}\\/[a-zA-Z0-9_\\-]+.$"
 
 DATASET_TYPE = "Dataset"
 DATASET_CONTAINER_TYPE = "DatasetContainer"
@@ -165,7 +165,7 @@ class Identifier(BaseModel):
         alias="@type"
     )
     name: str = Field(...)
-    isPartOf: Optional[Union[List[str], str]] = Field(default=[])
+    isPartOf: Optional[List[IdentifierValue]]  = Field(default=[])
 
     @field_validator('guid', mode='before')
     @classmethod
@@ -182,38 +182,13 @@ class Identifier(BaseModel):
         """
         Extract GUID from isPartOf Properties, normalizing the form of the ark.
         """
-        if value:
-            if isinstance(value, str):
-                return extractGUID(value)
-            if isinstance(value, list):
-                return [extractGUID(elem) for elem in value]
-        else:
-            return value
+        # TODO handle value of Optional[List[IdentifierValue]]
 
-
-class FairscapeBaseModel(Identifier):
-    """Refers to the Fairscape BaseModel inherited from Pydantic
-
-    Args:
-        BaseModel (Default Pydantic): Every instance of the Fairscape BaseModel must contain
-        an id, a type, and a name
-    """
-    model_config = ConfigDict(
-        populate_by_name=True,
-        validate_assignment=True,
-        extra='allow'
-    )
-    context: Optional[Dict[str, str]] = Field(
-        default=DEFAULT_CONTEXT,
-        title="context",
-        alias="@context"
-    )
-    url: Optional[AnyUrl] = Field(default=None)
-
-
-class FairscapeEVIBaseModel(FairscapeBaseModel):
-    description: str = Field(min_length=5)
-    workLicense: Optional[str] = Field(default=DEFAULT_LICENSE, alias="license")
-    keywords: List[str] = Field(default=[])
-    published: bool = Field(default=True)
-
+        #if value:
+        #    if isinstance(value, str):
+        #        return extractGUID(value)
+        #    if isinstance(value, list):
+        #        return [extractGUID(elem) for elem in value]
+        #else:
+        #    return value
+        return value

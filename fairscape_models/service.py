@@ -1,11 +1,11 @@
 from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional, List, Union
 
-from fairscape_models.fairscape_base import IdentifierValue, SERVICE_TYPE
+from fairscape_models.fairscape_base import IdentifierValue, SERVICE_TYPE, Identifier
 from fairscape_models._version import __version__
 
 
-class Service(BaseModel):
+class Service(Identifier):
     guid: str = Field(alias="@id")
     name: str
     metadataType: Optional[Union[List[str], str]] = Field(

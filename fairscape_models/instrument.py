@@ -1,9 +1,9 @@
 from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional, List, Union
-from fairscape_models.fairscape_base import IdentifierValue
+from fairscape_models.fairscape_base import Identifier, IdentifierValue
 from fairscape_models._version import __version__
 
-class Instrument(BaseModel):
+class Instrument(Identifier):
     guid: str = Field(alias="@id")
     name: str
     metadataType: Optional[Union[List[str], str]] = Field(default=['prov:Entity', "https://w3id.org/EVI#Instrument"], alias="@type")
