@@ -3,7 +3,7 @@
 
 ## [1.1.7] - 2026-06-30
 
-Corrected regex for `fairscape_models.fairscape_base.IdentifierPattern`
+Corrected regex for `fairscape_models.fairscape_base.IdentifierPattern`. Added base class `fairscape_models.fairscape_base.Identifier` to all other EVI models. Corrected `Identifier.isPartOf` preprocessing for instances of `fairscape_models.fairscape_base.IdentifierValue`.
 
 ## [1.1.6] - 2026-06-30
 
