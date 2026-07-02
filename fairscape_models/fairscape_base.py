@@ -70,19 +70,6 @@ DEFAULT_CONTEXT = {
     }
 }
 
-def extractGUID(inputString: str | None) -> str|None:
-    """
-    Given an input ARK extract the normalized ARK, if validation fails return the input.
-    """
-    try:
-        match = re.search(
-            pattern="ark:[0-9]{5}/.+$",
-            string=inputString
-        )
-        return match.group()
-    except AttributeError:
-        return inputString
-
 
 class ClassType(str, Enum):
     DATASET = 'Dataset'
@@ -139,6 +126,32 @@ class IdentifierPropertyValue(BaseModel):
     name: str
 
 
+def extractGUID(input: str | IdentifierValue | None) -> str|None:
+    """
+    Given an input ARK extract the normalized ARK, if validation fails return the input.
+    """
+    if isinstance(input, str):
+        try:
+            match = re.search(
+                pattern="ark:[0-9]{5}/.+$",
+                string=input
+            )
+            return match.group()
+        except AttributeError:
+            return input
+    elif isinstance(input, IdentifierValue):
+        try:
+            match = re.search(
+                pattern="ark:[0-9]{5}/.+$",
+                string=input.guid
+            )
+            # set the guid to the changed string
+            input.guid = match.group()
+            return input
+        except AttributeError:
+            return input
+
+
 class Identifier(BaseModel):
     """     
     The Base Model for any Metadata element in FAIRSCAPE.
@@ -182,13 +195,10 @@ class Identifier(BaseModel):
         """
         Extract GUID from isPartOf Properties, normalizing the form of the ark.
         """
-        # TODO handle value of Optional[List[IdentifierValue]]
-
-        #if value:
-        #    if isinstance(value, str):
-        #        return extractGUID(value)
-        #    if isinstance(value, list):
-        #        return [extractGUID(elem) for elem in value]
-        #else:
-        #    return value
-        return value
+        if value:
+            if isinstance(value, list):
+                return [extractGUID(elem) for elem in value]
+            else:
+                return extractGUID(value)
+        else:
+            return value
