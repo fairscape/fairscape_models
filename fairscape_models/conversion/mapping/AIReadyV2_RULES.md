@@ -311,12 +311,19 @@ Evidence: persistent-ID pattern on the identifier AND an archival host.
 - **0**: neither.
 
 ### 5.b Domain Appropriate
-Evidence: `cov = cov(datasets_with_accession, dataset_count)` — Datasets
-whose `contentUrl` carries a specialist-repo accession (GEO, SRA, PRIDE,
-MassIVE, BioStudies, dbGaP, EGA, ENA, ArrayExpress).
-- **2**: `cov >= T_SUBSTANTIVE`.
-- **1**: some accessions present.
-- **0**: none.
+Evidence: deposit in a recognized, supported data repository — judged
+broadly, NOT against a fixed allow-list. A repository is recognized from a
+distribution **host** (Zenodo, Dataverse, Figshare, Dryad, OSF, PhysioNet,
+BioStudies, …), a specialist-repo **accession**, or a persistent-identifier
+pattern (DOI / ARK / handle). Hundreds of repositories qualify (see the NIH
+BMIC and ELIXIR catalogs); a well-known generalist is sufficient on its own —
+a specialist is **not** required. `release_repo` = the publisher or the root's
+own distribution is in a recognized repository; `cov = cov(datasets_in_repository,
+dataset_count)`. The crate's own root identifier is rubric 5.a and is not
+consulted here. A bare code host (GitHub) does not count on its own.
+- **2**: `release_repo`, or `cov >= T_SUBSTANTIVE`.
+- **1**: some datasets in a recognized repository (`cov >= T_PARTIAL`).
+- **0**: no recognized repository anywhere.
 
 ### 5.c Well-Governed  *(OR → AND)*
 Evidence: `rai:dataReleaseMaintenancePlan` AND a responsible party

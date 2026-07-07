@@ -20,6 +20,7 @@ from fairscape_models.activity import Activity
 from fairscape_models.digital_object import DigitalObject
 from fairscape_models.person import Person, Organization
 from fairscape_models.defined_term import DefinedTerm
+from fairscape_models.dataset_property import DatasetProperty
 from fairscape_models._version import __version__
 
 class ContactPoint(BaseModel):
@@ -125,6 +126,13 @@ class ROCrateMetadataElem(BaseModel):
     keywords: List[str] = Field(description="Keywords or tags describing the dataset, used for discovery and search.")
     version: str = Field(description="Version string for this release of the dataset (e.g. '1.0', '2.3.1').")
     datePublished: Optional[str] = Field(default=None, description="Date the dataset was published or made publicly available (ISO 8601).")
+    dateCreated: Optional[str] = Field(default=None, description="Date the dataset was created (ISO 8601). schema.org/dateCreated; maps from D4D created_on.")
+    dateModified: Optional[str] = Field(default=None, description="Date the dataset was most recently modified or updated (ISO 8601). schema.org/dateModified; maps from D4D last_updated_on.")
+    url: Optional[str] = Field(default=None, description="Landing page or canonical URL for the dataset. schema.org/url; maps from D4D page.")
+    language: Optional[Union[str, List[str]]] = Field(default=None, description="Language(s) of the dataset content, ideally as BCP-47 codes (e.g. 'en'). schema.org/inLanguage; maps from D4D language.")
+    creativeWorkStatus: Optional[str] = Field(default=None, description="Publication/lifecycle status of the dataset (e.g. 'Draft', 'Published', 'Deprecated'). schema.org/creativeWorkStatus; maps from D4D status.")
+    about: Optional[str] = Field(default=None, description="The subject matter of an object.")
+    correction: Optional[Union[str, List[str]]] = Field(default=None, description="Corrections, errata, or amendments to the dataset. schema.org/correction; maps from D4D errata.")
 
     # Relationships
     isPartOf: Optional[List[IdentifierValue]] = Field(default=[], description="Parent organization(s) or project(s) this crate belongs to, referenced by identifier.")
@@ -134,9 +142,9 @@ class ROCrateMetadataElem(BaseModel):
     author: Union[str, IdentifierValue, Person, List[Union[str, IdentifierValue, Person]]] = Field(description="Who created the dataset. Accepts a plain name string, a Person object (with optional ORCID identifier), a {\"@id\": \"...\"} reference stub to a Person in @graph, or a list of any of those. Plain strings remain valid for backwards compatibility.")
     publisher: Optional[str] = Field(default=None, description="Organization or person responsible for publishing or distributing the dataset.")
     principalInvestigator: Optional[Union[str, IdentifierValue, Person]] = Field(default=None, description="A key individual (Principal Investigator) responsible for or overseeing dataset creation. Accepts a plain name string, a reference stub ({\"@id\": \"...\"}) to a Person in @graph, or an inline Person object.")
-    funder: Optional[Union[str, IdentifierValue, Person]] = Field(default=None, description="Who funded the creation of the dataset? Include grant names and numbers where applicable. Accepts a plain name string, a reference stub, or an inline Person/Organization object.")
+    funder: Optional[Union[str, IdentifierValue, Person, List[Union[str, IdentifierValue, Person]]]] = Field(default=None, description="Who funded the creation of the dataset? Include grant names and numbers where applicable. Accepts a plain name string, a reference stub, an inline Person/Organization object, or a list of any of those.")
     contactEmail: Optional[str] = Field(default=None, description="Email address for questions or correspondence about the dataset.")
-    citation: Optional[str] = Field(default=None, description="Preferred citation string for this dataset.")
+    citation: Optional[Union[str, List[str]]] = Field(default=None, description="Preferred citation(s) for this dataset. Accepts a single string or a list of citation strings.")
     associatedPublication: Optional[Union[str, List[str]]] = Field(default=None, description="Publication(s) associated with or describing this dataset.")
     identifier: Optional[str] = Field(default=None, description="DOI or other external persistent identifier for the dataset (used for Findability and Sustainability scoring).")
 
@@ -152,7 +160,7 @@ class ROCrateMetadataElem(BaseModel):
     additionalProperty: Optional[List[Dict[str, Any]]] = Field(default=None, description="Additional schema.org PropertyValue entries for metadata not covered by other fields (e.g. [{\"name\": \"Human Subject\", \"value\": \"Yes\"}]).")
 
     # Compliance / ethics — D4D_Ethics, D4D_Human, D4D_Data_Governance
-    ethicalReview: Optional[str] = Field(default=None, description="Were any ethical or compliance review processes conducted (e.g. by an Institutional Review Board)? If so, describe the process, frequency of review, and outcomes. Or provide a contact for ethical review information.")
+    ethicalReview: Optional[Union[str, List[str]]] = Field(default=None, description="Were any ethical or compliance review processes conducted (e.g. by an Institutional Review Board)? If so, describe the process, frequency of review, and outcomes. Or provide a contact for ethical review information.")
     confidentialityLevel: Optional[str] = Field(default=None, description="HL7 Confidentiality code indicating the level of confidentiality or sensitivity of the dataset (e.g. 'normal', 'restricted', 'very restricted').")
     irb: Optional[Union[str, IRB]] = Field(default=None, description="Institutional Review Board (IRB) information — approval status, approving institution, and contact details.")
     irbProtocolId: Optional[str] = Field(default=None, description="IRB protocol identifier number assigned by the reviewing institution.")
@@ -161,7 +169,7 @@ class ROCrateMetadataElem(BaseModel):
     deidentified: Optional[bool] = Field(default=None, description="Whether the dataset has been de-identified to remove or obscure personally identifiable information.")
     humanSubjectResearch: Optional[str] = Field(default=None, description="Does this dataset involve human subjects? Indicate Yes/No and describe the nature of human subjects involvement.")
     dataGovernanceCommittee: Optional[Union[str, IdentifierValue, Person]] = Field(default=None, description="Name or contact for the data governance committee responsible for oversight, access control, and policy enforcement for this dataset. Accepts a plain name string, a reference stub, or an inline Person.")
-    about: Optional[List[Union[IdentifierValue, DefinedTerm, str]]] = Field(default=None, description="Subjects this dataset is about, ideally as ontology-grounded DefinedTerm entries (MeSH, EDAM, Cellosaurus, etc.) referenced from @graph. Supports AI-Ready Rubric 2.a (Semantics).")
+    about: Optional[Union[str, List[Union[IdentifierValue, DefinedTerm, str]]]] = Field(default=None, description="Subjects this dataset is about — a summary string, or ontology-grounded DefinedTerm entries (MeSH, EDAM, Cellosaurus, etc.) referenced from @graph. Supports AI-Ready Rubric 2.a (Semantics).")
 
     # Checksums
     md5: Optional[str] = Field(default=None, description="MD5 checksum of the digital object content")
@@ -187,7 +195,7 @@ class ROCrateMetadataElem(BaseModel):
         alias="rai:dataReleaseMaintenancePlan", default=None,
         description="Will the dataset be updated (e.g. to correct labeling errors, add new instances, delete instances)? If so, how often, by whom, and how will updates be communicated? Covers versioning timeframe, maintainers, and deprecation policies. (rai:dataReleaseMaintenancePlan)"
     )
-    rai_data_collection: Optional[str] = Field(
+    rai_data_collection:  Optional[Union[str, List[str]]] = Field(
         alias="rai:dataCollection", default=None,
         description="What mechanisms or procedures were used to collect the data (e.g. hardware sensors, manual curation, software APIs)? Also covers how these mechanisms were validated. (rai:dataCollection)"
     )
@@ -195,11 +203,11 @@ class ROCrateMetadataElem(BaseModel):
         alias="rai:dataCollectionType", default=None,
         description="Data collection type(s). Recommended values: Surveys, Secondary Data Analysis, Physical Data Collection, Direct Measurement, Document Analysis, Manual Human Curator, Software Collection, Experiments, Web Scraping, Web API, Focus Groups, Self-Reporting, Customer Feedback Data, User-Generated Content Data, Passive Data Collection, Others. (rai:dataCollectionType)"
     )
-    rai_data_collection_missing_data: Optional[str] = Field(
+    rai_data_collection_missing_data:  Optional[Union[str, List[str]]] = Field(
         alias="rai:dataCollectionMissingData", default=None,
         description="Documentation of missing data in the dataset, including patterns (e.g. MCAR, MAR, MNAR), known or suspected causes (e.g. sensor failures, participant dropout, privacy constraints), and strategies used to handle missing values. (rai:dataCollectionMissingData)"
     )
-    rai_data_collection_raw_data: Optional[str] = Field(
+    rai_data_collection_raw_data:  Optional[Union[str, List[str]]] = Field(
         alias="rai:dataCollectionRawData", default=None,
         description="Description of raw data sources before preprocessing, cleaning, or labeling. Documents where the original data comes from and how it can be accessed. (rai:dataCollectionRawData)"
     )
@@ -207,7 +215,7 @@ class ROCrateMetadataElem(BaseModel):
         alias="rai:dataCollectionTimeframe", default=None,
         description="Over what timeframe was the data collected, and does this timeframe match the creation timeframe of the underlying data? Provide start and end dates where possible. (rai:dataCollectionTimeframe)"
     )
-    rai_data_imputation_protocol: Optional[str] = Field(
+    rai_data_imputation_protocol:  Optional[Union[str, List[str]]] = Field(
         alias="rai:dataImputationProtocol", default=None,
         description="Description of data imputation methodology, including techniques used to handle missing values (e.g. mean/median imputation, forward fill, model-based imputation) and rationale for chosen approaches. (rai:dataImputationProtocol)"
     )
@@ -219,7 +227,7 @@ class ROCrateMetadataElem(BaseModel):
         alias="rai:dataPreprocessingProtocol", default=None,
         description="Was any preprocessing of the data done (e.g. discretization or bucketing, tokenization, feature extraction, normalization)? Describe the steps required to bring collected data to a state that can be processed by an ML model or algorithm. (rai:dataPreprocessingProtocol)"
     )
-    rai_data_annotation_protocol: Optional[str] = Field(
+    rai_data_annotation_protocol:  Optional[Union[str, List[str]]] = Field(
         alias="rai:dataAnnotationProtocol", default=None,
         description="Annotation methodology, tasks, and protocols followed during labeling. Includes annotation guidelines, quality control procedures, task definitions, workforce type, annotation characteristics, and label distributions. (rai:dataAnnotationProtocol)"
     )
@@ -235,11 +243,11 @@ class ROCrateMetadataElem(BaseModel):
         alias="rai:personalSensitiveInformation", default=None,
         description="Does the dataset contain data that might be considered sensitive (e.g. race, sexual orientation, religion, biometrics)? List sensitive attribute types present: Gender, Socio-economic status, Geography, Language, Age, Culture, Experience or Seniority, others. (rai:personalSensitiveInformation)"
     )
-    rai_data_social_impact: Optional[str] = Field(
+    rai_data_social_impact:  Optional[Union[str, List[str]]] = Field(
         alias="rai:dataSocialImpact", default=None,
         description="Is there anything about the dataset's composition or collection that might impact future uses or create risks/harm (e.g. unfair treatment, legal or financial risks)? Describe potential impacts and any mitigation strategies. (rai:dataSocialImpact)"
     )
-    rai_annotations_per_item: Optional[str] = Field(
+    rai_annotations_per_item:  Optional[Union[str, List[str]]] = Field(
         alias="rai:annotationsPerItem", default=None,
         description="Number of annotations collected per data item. Multiple annotations per item enable calculation of inter-annotator agreement. (rai:annotationsPerItem)"
     )
@@ -247,8 +255,8 @@ class ROCrateMetadataElem(BaseModel):
         alias="rai:machineAnnotationTools", default=None,
         description="Automated or machine-learning-based annotation tools used in dataset creation, including NLP pipelines, computer vision models, or other automated labeling systems. Format each entry as 'ToolName version' (e.g. 'spaCy 3.5.0'). (rai:machineAnnotationTools)"
     )
-    completeness: Optional[str] = Field(alias="completeness", default=None, description="Assessment of how complete the dataset is relative to its intended scope (e.g. percentage of expected records present, known gaps).")
-    prohibitedUses: Optional[str] = Field(alias="prohibitedUses", default=None, description="Explicit statement of prohibited or forbidden uses for this dataset — uses that are not permitted by license, ethics, or policy. Stronger than discouraged uses.")
+    completeness:  Optional[Union[str, List[str]]] = Field(alias="completeness", default=None, description="Assessment of how complete the dataset is relative to its intended scope (e.g. percentage of expected records present, known gaps).")
+    prohibitedUses:  Optional[Union[str, List[str]]] = Field(alias="prohibitedUses", default=None, description="Explicit statement of prohibited or forbidden uses for this dataset — uses that are not permitted by license, ethics, or policy. Stronger than discouraged uses.")
 
     # Aggregated metrics for AI-Ready scoring (roll-up properties from release-level sub-crates)
     evi_dataset_count: Optional[int] = Field(alias="evi:datasetCount", default=None, description="Pre-aggregated count of Dataset entities across all sub-crates. Used in AI-Ready Provenance scoring in place of counting entities at query time.")
@@ -263,11 +271,16 @@ class ROCrateMetadataElem(BaseModel):
     evi_proccesed: Optional[bool] = Field(alias="evi:processed", default=None, description="Flag indicating whether this release-level RO-Crate has been processed and aggregated metrics computed.")
 
     # D4D Placeholders — flat string versions of D4D_Motivation / D4D_Composition / D4D_Human classes
-    addressingGaps: Optional[str] = Field(alias="d4d:addressingGaps", default=None, description="Was there a specific knowledge or resource gap that needed to be filled by creation of this dataset? (D4D_Motivation: AddressingGap)")
-    dataAnomalies: Optional[str] = Field(alias="d4d:dataAnomalies", default=None, description="Are there any errors, sources of noise, or redundancies in the dataset? (D4D_Composition: DataAnomaly)")
-    contentWarning: Optional[str] = Field(alias="d4d:contentWarning", default=None, description="Does the dataset contain any data that might be offensive, insulting, threatening, or otherwise anxiety-provoking if viewed directly? (D4D_Composition: ContentWarning)")
-    informedConsent: Optional[str] = Field(alias="d4d:informedConsent", default=None, description="Details about informed consent procedures used in human subjects research — consent type, documentation, withdrawal mechanisms, and scope. (D4D_Human: InformedConsent)")
-    atRiskPopulations: Optional[str] = Field(alias="d4d:atRiskPopulations", default=None, description="Information about protections for at-risk populations (e.g. children, pregnant women, prisoners, cognitively impaired individuals) included in human subjects research. (D4D_Human: AtRiskPopulations)")
+    addressingGaps: Optional[Union[str, List[IdentifierValue], List[str]]] = Field(alias="d4d:addressingGaps", default=None, description="Was there a specific knowledge or resource gap that needed to be filled by creation of this dataset? Accepts a summary string or a list of {\"@id\": ...} references to AddressingGap DatasetProperty nodes. (D4D_Motivation: AddressingGap)")
+    dataAnomalies: Optional[Union[str, List[IdentifierValue], List[str]]]  = Field(alias="d4d:dataAnomalies", default=None, description="Are there any errors, sources of noise, or redundancies in the dataset? Accepts a summary string or a list of {\"@id\": ...} references to DataAnomaly DatasetProperty nodes. (D4D_Composition: DataAnomaly)")
+    contentWarning: Optional[Union[str, List[IdentifierValue], List[str]]]  = Field(alias="d4d:contentWarning", default=None, description="Does the dataset contain any data that might be offensive, insulting, threatening, or otherwise anxiety-provoking if viewed directly? (D4D_Composition: ContentWarning)")
+    informedConsent: Optional[Union[str, List[IdentifierValue], List[str]]]  = Field(alias="d4d:informedConsent", default=None, description="Details about informed consent procedures used in human subjects research — consent type, documentation, withdrawal mechanisms, and scope. (D4D_Human: InformedConsent)")
+    atRiskPopulations: Optional[Union[str, List[IdentifierValue], List[str]]]  = Field(alias="d4d:atRiskPopulations", default=None, description="Information about protections for at-risk populations (e.g. children, pregnant women, prisoners, cognitively impaired individuals) included in human subjects research. Accepts a summary string or {\"@id\": ...} reference(s) to an AtRiskPopulations DatasetProperty node. (D4D_Human: AtRiskPopulations)")
+    participantPrivacy: Optional[Union[str, List[IdentifierValue], List[str]]]  = Field(alias="d4d:participantPrivacy", default=None, description="How is the privacy of human subjects protected — anonymization, access controls, third-party sharing limits, and compensation arrangements? Accepts a summary string or {\"@id\": ...} reference(s) to a ParticipantPrivacy DatasetProperty node. (D4D_Human: ParticipantPrivacy)")
+    subpopulations: Optional[Union[str, List[IdentifierValue], List[str]]]  = Field(alias="d4d:subpopulations", default=None, description="Does the dataset identify any subpopulations (e.g. by age, gender)? Accepts a summary string or a list of {\"@id\": ...} references to Subpopulation DatasetProperty nodes. (D4D_Composition: Subpopulation)")
+    subsets: Optional[Union[str, List[IdentifierValue], List[str]]]  = Field(alias="d4d:subsets", default=None, description="Is the dataset partitioned into named subsets (e.g. train/validation/test splits)? Accepts a summary string or a list of {\"@id\": ...} references to Subset DatasetProperty nodes. (D4D_Composition: Subsets)")
+    samplingStrategies: Optional[Union[str, List[IdentifierValue], List[str]]]  = Field(alias="d4d:samplingStrategies", default=None, description="If the dataset is a sample from a larger set, what was the sampling strategy (e.g. deterministic, probabilistic, representativeness)? Accepts a summary string or a list of {\"@id\": ...} references to SamplingStrategy DatasetProperty nodes. (D4D_Composition: SamplingStrategy)")
+    distributionDates: Optional[Union[str, List[IdentifierValue], List[str]]]  = Field(alias="d4d:distributionDates", default=None, description="When was/will the dataset be distributed, and over what dates were its distributions or versions released? Accepts a summary string or a list of {\"@id\": ...} references to DistributionDate DatasetProperty nodes. (D4D_Distribution: DistributionDate)")
 
     def generateFileElem(self) -> ROCrateMetadataFileElem:
         """ Given an ROCrate Element create an appropriate ROCrateMetadataFileElem
@@ -355,6 +368,7 @@ class ROCrateV1_2(BaseModel):
         Person,
         Organization,
         DefinedTerm,
+        DatasetProperty,
         GenericMetadataElem
     ]] = Field(alias="@graph")
     
@@ -371,6 +385,9 @@ class ROCrateV1_2(BaseModel):
             "Computation": Computation,
             "Annotation": Annotation,
             "Experiment": Experiment,
+            "Sample": Sample,
+            "Instrument": Instrument,
+            "Patient": Patient,
             "Activity": Activity,
             "CreativeWork": ROCrateMetadataFileElem,
             "Schema": Schema,
@@ -380,6 +397,7 @@ class ROCrateV1_2(BaseModel):
             "Person": Person,
             "Organization": Organization,
             "DefinedTerm": DefinedTerm,
+            "DatasetProperty": DatasetProperty,
         }
         
         def normalize_type(type_str):

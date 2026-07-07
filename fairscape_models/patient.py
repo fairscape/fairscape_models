@@ -13,6 +13,7 @@ from fairscape_models.fairscape_base import IdentifierValue
 from fairscape_models._version import __version__
 
 class Patient(BaseModel):
+  model_config = ConfigDict(extra="allow")
   guid: str = Field(alias="@id")
   name: str
   metadataType: Optional[str] = Field(
@@ -24,7 +25,7 @@ class Patient(BaseModel):
   diagnosis: Optional[List[IdentifierValue]] = Field(default=[])
   drug: Optional[List[IdentifierValue]] = Field(default=[])
   healthCondition: Optional[List[IdentifierValue]] = Field(default=[])
-  gender: Optional[str]
+  gender: Optional[str] = Field(default=None)
   birthDate: Optional[str] = Field(default=None)
   deathDate: Optional[str] = Field(default=None)
   fairscapeVersion: str = __version__

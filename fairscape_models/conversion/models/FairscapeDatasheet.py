@@ -24,10 +24,10 @@ class OverviewSection(BaseModel):
     principal_investigator: Optional[str] = None
     contact_email: Optional[str] = None
 
-    # Legal 
+    # Legal
     copyright: Optional[str] = None
-    terms_of_use: Optional[str] = None  
-    citation: Optional[str] = None
+    terms_of_use: Optional[str] = None
+    citation: Optional[Union[str, List[str]]] = None
 
     # Versioning 
     version: Optional[str] = None
@@ -258,7 +258,7 @@ class Preview(BaseModel):
 
     # Misc
     keywords: List[str] = Field(default_factory=list)
-    citation: Optional[str] = None
+    citation: Optional[Union[str, List[str]]] = None
     related_publications: List[str] = Field(default_factory=list)
 
     # Linked QC/summary stats report

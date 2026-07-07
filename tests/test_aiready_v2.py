@@ -85,6 +85,30 @@ def test_findable_needs_pid_and_archive():
     assert v2.score_findable(neither).score == 0
 
 
+# --- 5.b Domain Appropriate: any recognized repo, specialist OR generalist -
+
+def test_domain_appropriate_accepts_generalist_and_release_deposit():
+    # A release deposited in a well-known generalist (Zenodo DOI on the root's
+    # distribution) is Substantive even when individual files are local — no
+    # specialist required, no fixed allow-list.
+    zenodo_release = mk_ev(root={"distribution": "https://doi.org/10.5281/zenodo.1"},
+                           dataset_count=4, datasets_in_repository=0)
+    assert v2.score_domain_appropriate(zenodo_release).score == 2
+    # Publisher pointing at Dataverse is enough on its own.
+    dataverse_pub = mk_ev(root={"publisher": {"@id": "https://dataverse.harvard.edu"}},
+                          dataset_count=4, datasets_in_repository=0)
+    assert v2.score_domain_appropriate(dataverse_pub).score == 2
+    # All datasets individually in a recognized repo -> Substantive.
+    assert v2.score_domain_appropriate(mk_ev(dataset_count=4, datasets_in_repository=4)).score == 2
+    # Partial coverage and no release-level deposit -> Partial.
+    assert v2.score_domain_appropriate(mk_ev(dataset_count=4, datasets_in_repository=1)).score == 1
+    # Nothing recognized -> Absent. The crate's own ARK identifier is rubric 5.a
+    # and must NOT rescue 5.b.
+    self_id_only = mk_ev(root={"@id": "ark:1234/abc", "identifier": "ark:1234/abc"},
+                         dataset_count=4, datasets_in_repository=0)
+    assert v2.score_domain_appropriate(self_id_only).score == 0
+
+
 # --- 0.d Reusable: resolvable license -------------------------------------
 
 def test_reusable_license_resolvability():

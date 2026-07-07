@@ -524,19 +524,37 @@ def score_persistent(ev: Evidence) -> RubricScoreV2:
 
 
 def score_domain_appropriate(ev: Evidence) -> RubricScoreV2:
-    cov = ev.cov(ev.datasets_with_accession, ev.dataset_count)
-    evid = [f"datasets with specialist-repo accessions: {_pct(ev.datasets_with_accession, ev.dataset_count)}"]
+    # Recognized either by a release-level deposit (the publisher or the root's
+    # own distribution points at a recognized data repository) or by datasets
+    # individually hosted in one. We do NOT require a specialist and do NOT check
+    # against a fixed allow-list: a well-known generalist (Zenodo, Dataverse,
+    # Figshare, Dryad, OSF) is sufficient, as is any of the many specialist
+    # repositories catalogued by NIH BMIC / ELIXIR. The root's own identifier is
+    # the crate's persistent ID — that's rubric 5.a, so it is not consulted here.
+    root = ev.root
+    release_repo = ax.in_recognized_repository(
+        root.get("publisher"),
+        ax.first_present(root, "contentUrl", "url", "distribution"),
+    )
+    cov = ev.cov(ev.datasets_in_repository, ev.dataset_count)
+    evid = [f"datasets in a recognized repository: {_pct(ev.datasets_in_repository, ev.dataset_count)}"]
     gaps = []
-    if ev.datasets_with_accession and cov >= T_SUBSTANTIVE:
+    if release_repo:
+        evid.append("release deposited in a recognized data repository (publisher / distribution)")
+    if release_repo or (ev.dataset_count and cov >= T_SUBSTANTIVE):
         score = 2
-    elif ev.datasets_with_accession:
+    elif ev.datasets_in_repository or cov >= T_PARTIAL:
         score = 1
-        gaps.append("deposit major datasets in domain-appropriate specialist repositories (GEO, SRA, PRIDE, dbGaP)")
+        gaps.append("deposit the remaining datasets in a recognized data repository "
+                    "(a domain-appropriate specialist or a well-known generalist such as Zenodo, Dataverse, or Figshare)")
     else:
         score = 0
-        gaps.append("no specialist-repository accessions detected")
+        gaps.append("deposit data in a recognized, supported data repository — a domain-appropriate "
+                    "specialist (see the NIH BMIC / ELIXIR catalogs) or a well-known generalist "
+                    "(Zenodo, Dataverse, Figshare, Dryad, OSF)")
     return _mk("5.b", "Sustainability", "Domain Appropriate", score,
-               "Major datasets should live in domain-appropriate specialist repositories.",
+               "Data should live in a recognized, supported data repository — a domain-appropriate "
+               "specialist or a well-known generalist; a specialist is not required.",
                evid, gaps)
 
 
@@ -772,6 +790,7 @@ def _evidence_dict(ev: Evidence) -> Dict[str, Any]:
         "author_count": ev.author_count,
         "authors_with_orcid": ev.authors_with_orcid,
         "datasets_with_accession": ev.datasets_with_accession,
+        "datasets_in_repository": ev.datasets_in_repository,
         "distribution_link_count": ev.distribution_link_count,
         "distinct_protocols": ev.distinct_protocols,
         "published_format_count": ev.published_format_count,

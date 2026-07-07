@@ -278,6 +278,30 @@ class AccessionDetector:
         return found
 
 
+def in_recognized_repository(*texts: Any) -> bool:
+    """True if any value (a dataset contentUrl, the root's distribution, or the
+    publisher) indicates deposit in a recognized, supported data repository —
+    judged broadly, NOT against a fixed allow-list. Recognizes a specialist-repo
+    accession, a recognized archive / generalist host (Zenodo, Dataverse,
+    Figshare, Dryad, OSF, PhysioNet, BioStudies, …), or a persistent-identifier
+    pattern (DOI / ARK / handle). Hundreds of repositories qualify (see the NIH
+    BMIC and ELIXIR catalogs); recognition is by host / PID / accession rather
+    than enumeration. A bare code host (GitHub) is not a sustainable data
+    repository and does not count on its own. The crate's own root identifier is
+    deliberately NOT consulted here — that persistent ID is rubric 5.a, not
+    evidence of repository deposit."""
+    for t in texts:
+        if not t:
+            continue
+        if AccessionDetector.detect(t):
+            return True
+        if ArchiveDetector.is_persistent_id(t):
+            return True
+        if any(host != "GitHub" for host in ArchiveDetector.detect(t)):
+            return True
+    return False
+
+
 class OntologyDetector:
     """Count entities carrying ontology IRIs."""
 
@@ -578,6 +602,7 @@ class Evidence:
     distinct_protocols: List[str] = field(default_factory=list)
     api_or_access_documented: bool = False
     datasets_with_accession: int = 0
+    datasets_in_repository: int = 0   # in a recognized repository (specialist OR generalist), 5.b
     published_format_count: int = 0
     proprietary_format_count: int = 0
     software_with_env: int = 0
@@ -650,6 +675,8 @@ def build_evidence(crate, overrides: Optional[Dict[str, Any]] = None) -> Evidenc
             accs = AccessionDetector.detect(first_present(e, *CONTENT_URL_KEYS))
             if accs:
                 ev.datasets_with_accession += 1
+            if in_recognized_repository(first_present(e, *CONTENT_URL_KEYS)):
+                ev.datasets_in_repository += 1
             if not is_embargoed(e):
                 ev.hashable_entities += 1
                 if has_hash(e):
@@ -727,7 +754,7 @@ def build_evidence(crate, overrides: Optional[Dict[str, Any]] = None) -> Evidenc
     COVERAGE_ATTRS = (
         "dataset_count", "software_count", "schema_count", "computation_count", "total_entities",
         "good_computations", "computation_with_software", "entities_with_provenance_link",
-        "software_with_link", "datasets_with_accession", "datasets_sourced",
+        "software_with_link", "datasets_with_accession", "datasets_in_repository", "datasets_sourced",
         "distribution_link_count", "entities_with_hash", "hashable_entities",
         "tabular_dataset_count", "tabular_with_schema", "tabular_with_stats",
     )

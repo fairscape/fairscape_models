@@ -42,7 +42,7 @@ DEFAULT_CONTEXT = {
 
     # TODO fully specify default context
     "usedSoftware": {
-        "@id": "https://w3id.org/EVI#usefdSoftware",
+        "@id": "https://w3id.org/EVI#usedSoftware",
         "@type": "@id"
     },
     "usedDataset": {
