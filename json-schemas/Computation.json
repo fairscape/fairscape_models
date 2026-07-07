@@ -28,14 +28,119 @@
     "@type": {
       "anyOf": [
         {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
           "type": "string"
         },
         {
           "type": "null"
         }
       ],
-      "default": "https://w3id.org/EVI#Computation",
+      "default": [
+        "prov:Activity",
+        "https://w3id.org/EVI#Computation"
+      ],
       "title": "@Type"
+    },
+    "description": {
+      "minLength": 10,
+      "title": "Description",
+      "type": "string"
+    },
+    "associatedPublication": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Associatedpublication"
+    },
+    "generated": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Generated"
+    },
+    "isPartOf": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Ispartof"
+    },
+    "prov:used": {
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/IdentifierValue"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Prov:Used"
+    },
+    "prov:wasAssociatedWith": {
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/IdentifierValue"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Prov:Wasassociatedwith"
+    },
+    "fairscapeVersion": {
+      "default": "1.0.20",
+      "title": "Fairscapeversion",
+      "type": "string"
     },
     "additionalType": {
       "anyOf": [
@@ -50,29 +155,19 @@
       "title": "Additionaltype"
     },
     "runBy": {
-      "title": "Runby",
-      "type": "string"
-    },
-    "description": {
-      "minLength": 10,
-      "title": "Description",
-      "type": "string"
-    },
-    "dateCreated": {
-      "title": "Datecreated",
-      "type": "string"
-    },
-    "associatedPublication": {
       "anyOf": [
         {
           "type": "string"
         },
         {
-          "type": "null"
+          "$ref": "#/$defs/IdentifierValue"
         }
       ],
-      "default": null,
-      "title": "Associatedpublication"
+      "title": "Runby"
+    },
+    "dateCreated": {
+      "title": "Datecreated",
+      "type": "string"
     },
     "additionalDocumentation": {
       "anyOf": [
@@ -149,7 +244,7 @@
       "default": [],
       "title": "Useddataset"
     },
-    "generated": {
+    "evi:annotatedBy": {
       "anyOf": [
         {
           "items": {
@@ -162,29 +257,14 @@
         }
       ],
       "default": [],
-      "title": "Generated"
-    },
-    "isPartOf": {
-      "anyOf": [
-        {
-          "items": {
-            "$ref": "#/$defs/IdentifierValue"
-          },
-          "type": "array"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": [],
-      "title": "Ispartof"
+      "title": "Evi:Annotatedby"
     }
   },
   "required": [
     "@id",
     "name",
-    "runBy",
     "description",
+    "runBy",
     "dateCreated"
   ],
   "title": "Computation",

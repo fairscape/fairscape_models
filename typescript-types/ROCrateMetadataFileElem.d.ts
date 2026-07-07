@@ -8,6 +8,7 @@
 export type Id = string;
 export type Type = "CreativeWork";
 export type Id1 = string;
+export type Fairscapeversion = string;
 
 /**
  * Metadata Element of an ROCrate cooresponding to the `ro-crate-metadata.json` file itself
@@ -19,7 +20,7 @@ export type Id1 = string;
  *         "@id": "ro-crate-metadata.json",
  *         "@type": "CreativeWork",
  *         "conformsTo": {
- *             "@id": "https://w3id.org/ro/crate/1.2-DRAFT"
+ *             "@id": "https://w3id.org/ro/crate/1.2"
  *         },
  *         "about": {
  *             "@id": "https://fairscape.net/ark:59852/rocrate-2.cm4ai_chromatin_mda-mb-468_untreated_apmsembed_initialrun0.1alpha"
@@ -32,6 +33,7 @@ export interface ROCrateMetadataFileElem {
   "@type": Type;
   conformsTo: IdentifierValue;
   about: IdentifierValue;
+  fairscapeVersion?: Fairscapeversion;
   [k: string]: unknown;
 }
 export interface IdentifierValue {

@@ -15,7 +15,7 @@
       "type": "object"
     }
   },
-  "description": "Metadata Element of an ROCrate cooresponding to the `ro-crate-metadata.json` file itself\n\nExample\n\n    ```\n    {\n        \"@id\": \"ro-crate-metadata.json\",\n        \"@type\": \"CreativeWork\",\n        \"conformsTo\": {\n            \"@id\": \"https://w3id.org/ro/crate/1.2-DRAFT\"\n        },\n        \"about\": {\n            \"@id\": \"https://fairscape.net/ark:59852/rocrate-2.cm4ai_chromatin_mda-mb-468_untreated_apmsembed_initialrun0.1alpha\"\n        }\n    }\n    ```",
+  "description": "Metadata Element of an ROCrate cooresponding to the `ro-crate-metadata.json` file itself\n\nExample\n\n    ```\n    {\n        \"@id\": \"ro-crate-metadata.json\",\n        \"@type\": \"CreativeWork\",\n        \"conformsTo\": {\n            \"@id\": \"https://w3id.org/ro/crate/1.2\"\n        },\n        \"about\": {\n            \"@id\": \"https://fairscape.net/ark:59852/rocrate-2.cm4ai_chromatin_mda-mb-468_untreated_apmsembed_initialrun0.1alpha\"\n        }\n    }\n    ```",
   "properties": {
     "@id": {
       "title": "@Id",
@@ -23,13 +23,19 @@
     },
     "@type": {
       "const": "CreativeWork",
-      "title": "@Type"
+      "title": "@Type",
+      "type": "string"
     },
     "conformsTo": {
       "$ref": "#/$defs/IdentifierValue"
     },
     "about": {
       "$ref": "#/$defs/IdentifierValue"
+    },
+    "fairscapeVersion": {
+      "default": "1.0.20",
+      "title": "Fairscapeversion",
+      "type": "string"
     }
   },
   "required": [

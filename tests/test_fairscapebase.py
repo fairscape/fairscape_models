@@ -5,7 +5,8 @@ from fairscape_models.fairscape_base import (
     IdentifierValue,
     IdentifierPropertyValue,
     ClassType,
-    normalize_class_type
+    normalize_class_type,
+    extractGUID
 )
 
 def test_identifier_value():
@@ -47,3 +48,25 @@ def test_normalize_class_type_invalid():
     """Test that an invalid class type string raises a ValueError."""
     with pytest.raises(ValueError, match="Invalid class type: InvalidType"):
         normalize_class_type("InvalidType")
+
+def test_extractGUID():
+
+    testARK = "ark:59853/my-guid"
+    inputIdentifierValue = IdentifierValue.model_validate({
+        "@id": f"https://example.org/{testARK}"
+    })
+
+    outputIdentifierValue = IdentifierValue.model_validate({
+        "@id": testARK
+    })
+
+    assert extractGUID(inputIdentifierValue).guid == outputIdentifierValue.guid
+
+    assert extractGUID(testARK) == testARK
+    assert extractGUID(f"htts://example.org/{testARK}") == testARK
+
+    assert extractGUID(None) is None
+
+    # test invalid arks
+    invalidARK = "ark:52/invalid"
+    assert extractGUID(invalidARK) == invalidARK

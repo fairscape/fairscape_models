@@ -4,10 +4,13 @@
       "enum": [
         "Dataset",
         "Software",
+        "MLModel",
         "Computation",
         "Annotation",
         "Schema",
         "EvidenceGraph",
+        "AnnotatedComputation",
+        "AnnotatedEvidenceGraph",
         "ROCrate"
       ],
       "title": "ClassType",
@@ -22,11 +25,7 @@
       "type": "string"
     },
     "@type": {
-      "allOf": [
-        {
-          "$ref": "#/$defs/ClassType"
-        }
-      ],
+      "$ref": "#/$defs/ClassType",
       "title": "metadataType"
     },
     "name": {
@@ -49,12 +48,13 @@
         "@vocab": "https://schema.org/",
         "evi": "https://w3id.org/EVI#",
         "rai": "http://mlcommons.org/croissant/RAI/",
+        "prov": "http://www.w3.org/ns/prov#",
         "usedSoftware": {
-          "@id": "https://w3id.org/EVI#",
+          "@id": "https://w3id.org/EVI#usefdSoftware",
           "@type": "@id"
         },
         "usedDataset": {
-          "@id": "https://w3id.org/EVI#",
+          "@id": "https://w3id.org/EVI#usedDataset",
           "@type": "@id"
         },
         "generatedBy": {
@@ -63,6 +63,10 @@
         },
         "generated": {
           "@id": "https://w3id.org/EVI#generated",
+          "@type": "@id"
+        },
+        "annotates": {
+          "@id": "https://w3id.org/EVI#annotates",
           "@type": "@id"
         },
         "hasDistribution": {

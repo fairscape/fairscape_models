@@ -6,8 +6,17 @@
  */
 
 export type Guid = string;
-export type MetadataType = ClassType;
-export type ClassType = "Dataset" | "Software" | "Computation" | "Annotation" | "Schema" | "EvidenceGraph" | "ROCrate";
+export type MetadataType =
+  | "Dataset"
+  | "Software"
+  | "MLModel"
+  | "Computation"
+  | "Annotation"
+  | "Schema"
+  | "EvidenceGraph"
+  | "AnnotatedComputation"
+  | "AnnotatedEvidenceGraph"
+  | "ROCrate";
 export type Name = string;
 export type Context = {
   [k: string]: string;

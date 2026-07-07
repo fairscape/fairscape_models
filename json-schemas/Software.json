@@ -28,55 +28,66 @@
     "@type": {
       "anyOf": [
         {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
           "type": "string"
         },
         {
           "type": "null"
         }
       ],
-      "default": "https://w3id.org/EVI#Software",
+      "default": [
+        "prov:Entity",
+        "https://w3id.org/EVI#Software"
+      ],
       "title": "@Type"
     },
-    "additionalType": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": "Software",
-      "title": "Additionaltype"
-    },
     "author": {
-      "minLength": 4,
-      "title": "Author",
-      "type": "string"
-    },
-    "dateModified": {
       "anyOf": [
         {
           "type": "string"
         },
         {
-          "type": "null"
+          "$ref": "#/$defs/IdentifierValue"
+        },
+        {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/IdentifierValue"
+              }
+            ]
+          },
+          "type": "array"
         }
       ],
-      "title": "Datemodified"
-    },
-    "version": {
-      "default": "0.1.0",
-      "title": "Version",
-      "type": "string"
+      "title": "Author"
     },
     "description": {
       "minLength": 10,
       "title": "Description",
       "type": "string"
     },
+    "version": {
+      "default": "0.1.0",
+      "title": "Version",
+      "type": "string"
+    },
     "associatedPublication": {
       "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         {
           "type": "string"
         },
@@ -99,27 +110,14 @@
       "default": null,
       "title": "Additionaldocumentation"
     },
-    "format": {
-      "title": "fileFormat",
-      "type": "string"
-    },
-    "usedByComputation": {
+    "contentUrl": {
       "anyOf": [
         {
           "items": {
-            "$ref": "#/$defs/IdentifierValue"
+            "type": "string"
           },
           "type": "array"
         },
-        {
-          "type": "null"
-        }
-      ],
-      "default": [],
-      "title": "Usedbycomputation"
-    },
-    "contentUrl": {
-      "anyOf": [
         {
           "type": "string"
         },
@@ -144,13 +142,183 @@
       ],
       "default": [],
       "title": "Ispartof"
+    },
+    "usedByComputation": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Usedbycomputation"
+    },
+    "md5": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "MD5 checksum of the digital object content",
+      "title": "Md5"
+    },
+    "hash": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Hash of the digital object content (if not MD5)",
+      "title": "Hash"
+    },
+    "sha256": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "SHA-256 checksum of the digital object content",
+      "title": "Sha256"
+    },
+    "fairscapeVersion": {
+      "default": "1.0.20",
+      "title": "Fairscapeversion",
+      "type": "string"
+    },
+    "prov:wasGeneratedBy": {
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/IdentifierValue"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Prov:Wasgeneratedby"
+    },
+    "prov:wasDerivedFrom": {
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/IdentifierValue"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Prov:Wasderivedfrom"
+    },
+    "prov:wasAttributedTo": {
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/IdentifierValue"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Prov:Wasattributedto"
+    },
+    "additionalType": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": "Software",
+      "title": "Additionaltype"
+    },
+    "dateModified": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Datemodified"
+    },
+    "format": {
+      "title": "fileFormat",
+      "type": "string"
     }
   },
   "required": [
     "@id",
     "name",
     "author",
-    "dateModified",
     "description",
     "format"
   ],

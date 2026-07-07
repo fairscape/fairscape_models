@@ -1,12 +1,12 @@
-from pydantic import BaseModel, Field, ConfigDict, model_validator
+from pydantic import Field, ConfigDict, field_validator
 from typing import Optional, List, Union
 
-from fairscape_models.fairscape_base import IdentifierValue
+from fairscape_models.fairscape_base import IdentifierValue, Identifier
 from fairscape_models._version import __version__
 
-class DigitalObject(BaseModel):
+class DigitalObject(Identifier):
     """Base class for DigitalObject types (Dataset, Software, MLModel)"""
-    guid: str = Field(alias="@id")
+    guid: str = Field(alias="@id", pattern="^ark:[0-9]{5}/.+$")
     name: str
     metadataType: Optional[Union[List[str], str]] = Field(default=['prov:Entity', "https://w3id.org/EVI#DigitalObject"], alias="@type")
     author: Union[str, IdentifierValue, List[Union[str, IdentifierValue]]]
@@ -28,3 +28,5 @@ class DigitalObject(BaseModel):
     wasAttributedTo: Optional[List[Union[str, IdentifierValue]]] = Field(default=[], alias="prov:wasAttributedTo")
 
     model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+#   TODO extract guids from all subfields

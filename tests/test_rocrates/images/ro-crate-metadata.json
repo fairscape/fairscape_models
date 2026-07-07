@@ -8,7 +8,7 @@
       "@id": "ro-crate-metadata.json",
       "@type": "CreativeWork",
       "conformsTo": {
-        "@id": "https://w3id.org/ro/crate/1.2-DRAFT"
+        "@id": "https://w3id.org/ro/crate/1.2"
       },
       "about": {
         "@id": "ark:59852/rocrate-untreated-if-data-release-blue"
@@ -19,6 +19,9 @@
         "Dataset",
         "https://w3id.org/EVI#ROCrate"
       ],
+      "conformsTo": {
+        "@id": "https://w3id.org/fairscape/profile/0.1"
+      },
       "isPartOf": [],
       "version": "0.1.0",
       "MD5": "0b4d129f5fbc3bb7f7ea564cd032cef7",

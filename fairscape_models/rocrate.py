@@ -1,5 +1,6 @@
 import urllib.parse
 from typing import Any, Dict, List, Literal, Optional, Union
+import re
 from pydantic import BaseModel, Field, ConfigDict, model_validator
 
 from fairscape_models.fairscape_base import IdentifierValue, DEFAULT_CONTEXT
@@ -20,7 +21,6 @@ from fairscape_models.activity import Activity
 from fairscape_models.digital_object import DigitalObject
 from fairscape_models.person import Person, Organization
 from fairscape_models.defined_term import DefinedTerm
-from fairscape_models.dataset_property import DatasetProperty
 from fairscape_models._version import __version__
 
 class ContactPoint(BaseModel):
@@ -71,7 +71,7 @@ class ROCrateMetadataFileElem(BaseModel):
             "@id": "ro-crate-metadata.json",
             "@type": "CreativeWork",
             "conformsTo": {
-                "@id": "https://w3id.org/ro/crate/1.2-DRAFT"
+                "@id": "https://w3id.org/ro/crate/1.2"
             },
             "about": {
                 "@id": "https://fairscape.net/ark:59852/rocrate-2.cm4ai_chromatin_mda-mb-468_untreated_apmsembed_initialrun0.1alpha"
@@ -94,6 +94,7 @@ class ROCrateMetadataElem(BaseModel):
         {
             '@id': 'https://fairscape.net/ark:59852/rocrate-2.cm4ai_chromatin_mda-mb-468_untreated_imageembedfold1_initialrun0.1alpha',
             '@type': ['Dataset', 'https://w3id.org/EVI#ROCrate'],
+            'conformsTo': {'@id': 'https://w3id.org/fairscape/profile/0.1'},
             'name': 'Initial integration run',
             'description': 'Ideker Lab CM4AI 0.1 alpha MDA-MB-468 untreated chromatin Initial integration run IF Image Embedding IF microscopy images embedding fold1',
             'keywords': ['Ideker Lab', 'fold1'],
@@ -121,6 +122,10 @@ class ROCrateMetadataElem(BaseModel):
     # Core identity
     guid: str = Field(alias="@id", description="Persistent unique identifier for this RO-Crate (ARK, DOI, URL, etc.).")
     metadataType: List[str] = Field(alias="@type", description="RO-Crate type list; always includes 'Dataset' and 'https://w3id.org/EVI#ROCrate'.")
+    conformsTo: Union[IdentifierValue, List[IdentifierValue]] = Field(
+        default_factory=lambda: IdentifierValue.model_validate({"@id": "https://w3id.org/fairscape/profile/0.1"}),
+        description="Profile this crate conforms to. Defaults to the Fairscape release profile URI.",
+    )
     name: str = Field(description="A human-readable name for the dataset.")
     description: str = Field(description="A human-readable description of the dataset.")
     keywords: List[str] = Field(description="Keywords or tags describing the dataset, used for discovery and search.")
@@ -368,7 +373,6 @@ class ROCrateV1_2(BaseModel):
         Person,
         Organization,
         DefinedTerm,
-        DatasetProperty,
         GenericMetadataElem
     ]] = Field(alias="@graph")
     
@@ -397,7 +401,6 @@ class ROCrateV1_2(BaseModel):
             "Person": Person,
             "Organization": Organization,
             "DefinedTerm": DefinedTerm,
-            "DatasetProperty": DatasetProperty,
         }
         
         def normalize_type(type_str):
@@ -442,8 +445,23 @@ class ROCrateV1_2(BaseModel):
         def cleanGUID(metadata):
             """ Clean metadata guid property from full urls to ark:{NAAN}/{postfix}
             """
+            # TODO should be removed 
+
             if hasattr(metadata, 'guid') and isinstance(metadata.guid, str) and "http" in metadata.guid:
-                metadata.guid = urllib.parse.urlparse(metadata.guid).path.lstrip('/')
+                # old metadata parsing
+                #metadata.guid = urllib.parse.urlparse(metadata.guid).path.lstrip('/')
+
+                # find ark:NAAN within string
+                try:
+                    match = re.search(
+                        pattern="ark:[0-9]{5}/.+$",
+                        string=metadata.guid
+                    )
+                    metadata.guid = match.group()
+                except AttributeError:
+                    # TODO warm about missing ark in guid
+                    pass
+
 
         def cleanIdentifierList(identifier_list):
             """Helper to clean a list of identifiers"""

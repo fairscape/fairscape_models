@@ -1,10 +1,10 @@
 from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional, Union
 
-from fairscape_models.fairscape_base import IdentifierValue
+from fairscape_models.fairscape_base import Identifier, IdentifierValue
 
 
-class Organization(BaseModel):
+class Organization(Identifier):
     """Schema.org Organization. `identifier` is the ROR URI when available."""
     guid: Optional[str] = Field(default=None, alias="@id")
     metadataType: str = Field(default="Organization", alias="@type")
@@ -17,7 +17,7 @@ class Organization(BaseModel):
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
 
-class Person(BaseModel):
+class Person(Identifier):
     """Schema.org Person. `identifier` is the ORCID URI when available."""
     guid: Optional[str] = Field(default=None, alias="@id")
     metadataType: str = Field(default="Person", alias="@type")

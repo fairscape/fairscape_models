@@ -1,0 +1,77 @@
+{
+  "$defs": {
+    "IdentifierValue": {
+      "additionalProperties": true,
+      "properties": {
+        "@id": {
+          "title": "@Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "@id"
+      ],
+      "title": "IdentifierValue",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "description": "Analysis of a software entity used in the computation.",
+  "properties": {
+    "software": {
+      "$ref": "#/$defs/IdentifierValue"
+    },
+    "name": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Name"
+    },
+    "summary": {
+      "title": "Summary",
+      "type": "string"
+    },
+    "keyFunctions": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Keyfunctions"
+    },
+    "concerns": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Concerns"
+    }
+  },
+  "required": [
+    "software",
+    "summary"
+  ],
+  "title": "CodeAnalysis",
+  "type": "object"
+}

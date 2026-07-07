@@ -37,29 +37,9 @@
       "default": "https://w3id.org/EVI#Annotation",
       "title": "@Type"
     },
-    "additionalType": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": "Annotation",
-      "title": "Additionaltype"
-    },
-    "createdBy": {
-      "title": "Createdby",
-      "type": "string"
-    },
     "description": {
       "minLength": 10,
       "title": "Description",
-      "type": "string"
-    },
-    "dateCreated": {
-      "title": "Datecreated",
       "type": "string"
     },
     "associatedPublication": {
@@ -73,21 +53,6 @@
       ],
       "default": null,
       "title": "Associatedpublication"
-    },
-    "usedDataset": {
-      "anyOf": [
-        {
-          "items": {
-            "$ref": "#/$defs/IdentifierValue"
-          },
-          "type": "array"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": [],
-      "title": "Useddataset"
     },
     "generated": {
       "anyOf": [
@@ -118,13 +83,104 @@
       ],
       "default": [],
       "title": "Ispartof"
+    },
+    "prov:used": {
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/IdentifierValue"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Prov:Used"
+    },
+    "prov:wasAssociatedWith": {
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/IdentifierValue"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Prov:Wasassociatedwith"
+    },
+    "fairscapeVersion": {
+      "default": "1.0.20",
+      "title": "Fairscapeversion",
+      "type": "string"
+    },
+    "additionalType": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": "Annotation",
+      "title": "Additionaltype"
+    },
+    "createdBy": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/IdentifierValue"
+        }
+      ],
+      "title": "Createdby"
+    },
+    "dateCreated": {
+      "title": "Datecreated",
+      "type": "string"
+    },
+    "usedDataset": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/IdentifierValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Useddataset"
     }
   },
   "required": [
     "@id",
     "name",
-    "createdBy",
     "description",
+    "createdBy",
     "dateCreated"
   ],
   "title": "Annotation",

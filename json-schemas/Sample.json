@@ -28,13 +28,22 @@
     "@type": {
       "anyOf": [
         {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
           "type": "string"
         },
         {
           "type": "null"
         }
       ],
-      "default": "https://w3id.org/EVI#Sample",
+      "default": [
+        "prov:Entity",
+        "https://w3id.org/EVI#Sample"
+      ],
       "title": "@Type"
     },
     "author": {
@@ -106,6 +115,11 @@
       ],
       "default": [],
       "title": "Ispartof"
+    },
+    "fairscapeVersion": {
+      "default": "1.0.20",
+      "title": "Fairscapeversion",
+      "type": "string"
     }
   },
   "required": [

@@ -1,0 +1,85 @@
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix prof:    <http://www.w3.org/ns/dx/prof/> .
+@prefix role:    <http://www.w3.org/ns/dx/prof/role/> .
+@prefix schema:  <https://schema.org/> .
+
+#──────────────────────────────────────────────────────────────────────────────
+# Fairscape Release RO-Crate Profile v0.1
+#
+# This file is the W3C PROF manifest describing the Fairscape profile. It
+# enumerates the artifacts that together make up the profile (prose spec,
+# vocabulary, JSON Schemas, mapping, example crate, validator) and links to
+# the base specifications the profile constrains/extends.
+#
+# Note: this file is the profile MANIFEST. The class/property OWL vocabulary
+# lives separately in evi-vocabulary.ttl (referenced below under role:vocabulary).
+#──────────────────────────────────────────────────────────────────────────────
+
+<https://w3id.org/fairscape/profile/0.1>
+    a prof:Profile, schema:CreativeWork ;
+    dcterms:title "Fairscape Release RO-Crate Profile" ;
+    schema:version "0.1" ;
+    rdfs:comment "A profile for AI-Ready RO-Crate releases produced by the Fairscape framework. Constrains and extends RO-Crate 1.2 with the EVI ontology, PROV-O provenance, Schema.org core types, and the Croissant / Croissant-RAI mapping." ;
+
+    # Base specifications this profile constrains or extends.
+    prof:isProfileOf <https://w3id.org/ro/crate/1.2> ,
+                     <https://w3id.org/EVI> ,
+                     <http://www.w3.org/ns/prov> ,
+                     <http://mlcommons.org/croissant/1.0> ;
+
+    # Constituent resources, by PROF role.
+    prof:hasResource
+        <https://w3id.org/fairscape/profile/0.1/specification> ,
+        <https://w3id.org/fairscape/profile/0.1/vocabulary> ,
+        <https://w3id.org/fairscape/profile/0.1/schema> ,
+        <https://w3id.org/fairscape/profile/0.1/mapping> ,
+        <https://w3id.org/fairscape/profile/0.1/example> ,
+        <https://w3id.org/fairscape/profile/0.1/validation> .
+
+#──────────────────────────────────────────────────────────────────────────────
+# Resource descriptors
+#──────────────────────────────────────────────────────────────────────────────
+
+<https://w3id.org/fairscape/profile/0.1/specification>
+    a prof:ResourceDescriptor ;
+    rdfs:label "Human-readable specification" ;
+    prof:hasRole role:specification ;
+    prof:hasArtifact <https://fairscape.github.io/profile/0.1/> ;
+    dcterms:format "text/html" .
+
+<https://w3id.org/fairscape/profile/0.1/vocabulary>
+    a prof:ResourceDescriptor ;
+    rdfs:label "EVI ontology (classes and properties)" ;
+    prof:hasRole role:vocabulary ;
+    prof:hasArtifact <https://fairscape.github.io/profile/0.1/evi-vocabulary.ttl> ;
+    dcterms:format "text/turtle" .
+
+<https://w3id.org/fairscape/profile/0.1/schema>
+    a prof:ResourceDescriptor ;
+    rdfs:label "Per-class JSON Schemas (auto-generated from Pydantic)" ;
+    prof:hasRole role:schema ;
+    prof:hasArtifact <https://fairscape.github.io/profile/0.1/schemas/> ;
+    dcterms:format "application/schema+json" .
+
+<https://w3id.org/fairscape/profile/0.1/mapping>
+    a prof:ResourceDescriptor ;
+    rdfs:label "Croissant / Croissant-RAI 1.0 crosswalk" ;
+    prof:hasRole role:mapping ;
+    prof:hasArtifact <https://fairscape.github.io/profile/0.1/croissant-mapping.md> ;
+    dcterms:format "text/markdown" .
+
+<https://w3id.org/fairscape/profile/0.1/example>
+    a prof:ResourceDescriptor ;
+    rdfs:label "Canonical conforming RO-Crate (CM4AI June 2025 release)" ;
+    prof:hasRole role:example ;
+    prof:hasArtifact <https://fairscape.github.io/profile/0.1/examples/release/ro-crate-metadata.json> ;
+    dcterms:format "application/ld+json" .
+
+<https://w3id.org/fairscape/profile/0.1/validation>
+    a prof:ResourceDescriptor ;
+    rdfs:label "Validator: fairscape-cli rocrate validate (Pydantic structural check)" ;
+    prof:hasRole role:validation ;
+    prof:hasArtifact <https://github.com/fairscape/fairscape-cli#validate> ;
+    dcterms:format "text/x-python" ;
+    rdfs:comment "v0.1 uses Pydantic-based structural validation only. SHACL shapes and a file-presence checker are planned for v0.2." .

@@ -1,0 +1,166 @@
+{
+  "$defs": {
+    "ContactPoint": {
+      "additionalProperties": true,
+      "description": "Schema.org ContactPoint for structured contact information.",
+      "properties": {
+        "@type": {
+          "default": "ContactPoint",
+          "title": "@Type",
+          "type": "string"
+        },
+        "contactType": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Contacttype"
+        },
+        "email": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Email"
+        },
+        "telephone": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Telephone"
+        }
+      },
+      "title": "ContactPoint",
+      "type": "object"
+    },
+    "PostalAddress": {
+      "additionalProperties": true,
+      "description": "Schema.org PostalAddress for structured address information.",
+      "properties": {
+        "@type": {
+          "default": "PostalAddress",
+          "title": "@Type",
+          "type": "string"
+        },
+        "streetAddress": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Streetaddress"
+        },
+        "addressLocality": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Addresslocality"
+        },
+        "addressRegion": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Addressregion"
+        },
+        "postalCode": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Postalcode"
+        },
+        "addressCountry": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Addresscountry"
+        }
+      },
+      "title": "PostalAddress",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "description": "Institutional Review Board with structured contact and address info.",
+  "properties": {
+    "@type": {
+      "default": "IRB",
+      "title": "@Type",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "contactPoint": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ContactPoint"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "address": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PostalAddress"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "title": "IRB",
+  "type": "object"
+}

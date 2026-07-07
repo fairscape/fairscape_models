@@ -2,20 +2,23 @@ from pydantic import (
     BaseModel, 
     ConfigDict,
     Field,
-    BeforeValidator
+    BeforeValidator,
+    field_validator
 )
 from pydantic.networks import AnyUrl
 from typing import (
     List,
     Optional,
     Dict,
-    Union
+    Union,
+    Any
 )
+import re
 from typing_extensions import Annotated
 from enum import Enum
 
 
-IdentifierPattern = "^ark:[0-9]{5}\\/[a-zA-Z0-9_\\-]*.$"
+IdentifierPattern = "^ark:[0-9]{5}\\/[a-zA-Z0-9_\\-]+.$"
 
 DATASET_TYPE = "Dataset"
 DATASET_CONTAINER_TYPE = "DatasetContainer"
@@ -66,6 +69,7 @@ DEFAULT_CONTEXT = {
         "@type": "@id"
     }
 }
+
 
 class ClassType(str, Enum):
     DATASET = 'Dataset'
@@ -122,42 +126,79 @@ class IdentifierPropertyValue(BaseModel):
     name: str
 
 
+def extractGUID(input: str | IdentifierValue | None) -> str|None:
+    """
+    Given an input ARK extract the normalized ARK, if validation fails return the input.
+    """
+    if isinstance(input, str):
+        try:
+            match = re.search(
+                pattern="ark:[0-9]{5}/.+$",
+                string=input
+            )
+            return match.group()
+        except AttributeError:
+            return input
+    elif isinstance(input, IdentifierValue):
+        try:
+            match = re.search(
+                pattern="ark:[0-9]{5}/.+$",
+                string=input.guid
+            )
+            # set the guid to the changed string
+            input.guid = match.group()
+            return input
+        except AttributeError:
+            return input
+
+
 class Identifier(BaseModel):
+    """     
+    The Base Model for any Metadata element in FAIRSCAPE.
+
+    Every instance must have a GUID in the form of an ARK (archival resource key), 
+    a metadata type (https://www.w3.org/TR/json-ld/#specifying-the-type), and a name specified as a string.
+    Every model must have these attributes, and may have any other attributes as specified by the `ConfigDict(extra='allow')`.
+    
+    For the guid property, preprocessing is preformed by the field validator `Identifier.extract_guid`.
+    This method preforms a regex search to find the identifier within the passed value. 
+    As ARKs may be specified as full IRIS or URLs pointing to several different resolvers, arks are stripped.
+    The guid for all fairscape_models clases should follow the regex `"ark:[0-9]{5}/.+$"`.
+
+    This guid preprocessing is also preformed on isPartOf.
+    """
     model_config = ConfigDict(extra='allow')
     guid: str = Field(
         title="guid",
-        alias="@id"
+        alias="@id",
+        pattern=IdentifierPattern
     )
-    metadataType: ValidatedClassType = Field(
+    metadataType: Optional[Union[List[str], str]] = Field(
         title="metadataType",
         alias="@type"
     )
     name: str = Field(...)
+    isPartOf: Optional[List[IdentifierValue]]  = Field(default=[])
+
+    @field_validator('guid', mode='before')
+    @classmethod
+    def extract_guid(cls, value: Any)-> Any:
+        """ 
+        Extract the ARK from the guid field, runs before validation against regex.
+        """
+        return extractGUID(value)
 
 
-class FairscapeBaseModel(Identifier):
-    """Refers to the Fairscape BaseModel inherited from Pydantic
-
-    Args:
-        BaseModel (Default Pydantic): Every instance of the Fairscape BaseModel must contain
-        an id, a type, and a name
-    """
-    model_config = ConfigDict(
-        populate_by_name=True,
-        validate_assignment=True,
-        extra='allow'
-    )
-    context: Optional[Dict[str, str]] = Field(
-        default=DEFAULT_CONTEXT,
-        title="context",
-        alias="@context"
-    )
-    url: Optional[AnyUrl] = Field(default=None)
-
-
-class FairscapeEVIBaseModel(FairscapeBaseModel):
-    description: str = Field(min_length=5)
-    workLicense: Optional[str] = Field(default=DEFAULT_LICENSE, alias="license")
-    keywords: List[str] = Field(default=[])
-    published: bool = Field(default=True)
-
+    @field_validator('isPartOf', mode='before')
+    @classmethod
+    def extract_guid_is_part_of(cls, value: Any)-> Any:
+        """
+        Extract GUID from isPartOf Properties, normalizing the form of the ark.
+        """
+        if value:
+            if isinstance(value, list):
+                return [extractGUID(elem) for elem in value]
+            else:
+                return extractGUID(value)
+        else:
+            return value

@@ -12,7 +12,7 @@ from pydantic import (
     )
 import re
 from enum import Enum 
-from fairscape_models.fairscape_base import IdentifierValue, FairscapeEVIBaseModel
+from fairscape_models.fairscape_base import Identifier, IdentifierValue
 from fairscape_models._version import __version__
 
 # TODO switch to ENUM for better clarification
@@ -63,7 +63,7 @@ class Property(BaseModel):
                 raise ValueError(f"Type must be one of {valid_types}")
         return value
 
-class Schema(FairscapeEVIBaseModel):
+class Schema(Identifier):
     context: Dict[str, str] = Field( 
         default= {"@vocab": "https://schema.org/", "evi": "https://w3id.org/EVI#"},
         alias="@context" 

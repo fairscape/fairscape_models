@@ -6,58 +6,87 @@
  */
 
 export type Id = string;
-export type Type = string | string[];
 export type Name = string;
-export type Description = string;
+export type Type = string[] | string | null;
 export type Author = string | string[];
-export type Keywords = string[];
+export type Description = string;
 export type Version = string;
-export type Modeltype = string | string[];
-export type Framework = string | string[];
-export type Modelformat = string | string[];
-export type Trainingdataset = string | IdentifierValue[];
+export type Associatedpublication = string[] | string | null;
+export type Additionaldocumentation = string | null;
+export type Contenturl = string | string[];
+export type Ispartof = IdentifierValue[] | null;
 export type Id1 = string;
+export type Usedbycomputation = IdentifierValue[] | null;
+/**
+ * MD5 checksum of the digital object content
+ */
+export type Md5 = string[] | string | null;
+/**
+ * Hash of the digital object content (if not MD5)
+ */
+export type Hash = string[] | string | null;
+/**
+ * SHA-256 checksum of the digital object content
+ */
+export type Sha256 = string[] | string | null;
+export type Fairscapeversion = string;
+export type ProvWasgeneratedby = (string | IdentifierValue)[] | null;
+export type ProvWasderivedfrom = (string | IdentifierValue)[] | null;
+export type ProvWasattributedto = (string | IdentifierValue)[] | null;
+export type Keywords = string[];
+export type Modeltype = string[] | string | null;
+export type Framework = string[] | string | null;
+export type Modelformat = string[] | string | null;
+export type Trainingdataset = string | IdentifierValue[] | null;
+export type Derivedfrom = IdentifierValue[] | null;
 export type Parameters = number | null;
 export type Inputsize = string | null;
 export type Hasbias = string | null;
 export type Intendedusecase = string | null;
 export type Usageinformation = string | null;
 export type Basemodel = string | null;
-export type Associatedpublication = string[] | string | null;
-export type Contenturl = string | string[];
 export type Url = string | null;
 export type License = string | null;
 export type Citation = string | null;
-export type Ispartof = IdentifierValue[] | null;
 
 /**
  * Model Card for ML models as RO-Crate Dataset elements
  */
 export interface ModelCard {
   "@id": Id;
-  "@type"?: Type;
   name: Name;
-  description: Description;
+  "@type"?: Type;
   author: Author;
-  keywords: Keywords;
+  description: Description;
   version: Version;
-  modelType: Modeltype;
-  framework: Framework;
-  modelFormat: Modelformat;
-  trainingDataset: Trainingdataset;
-  generatedBy: IdentifierValue;
+  associatedPublication?: Associatedpublication;
+  additionalDocumentation?: Additionaldocumentation;
+  contentUrl?: Contenturl;
+  isPartOf?: Ispartof;
+  usedByComputation?: Usedbycomputation;
+  md5?: Md5;
+  hash?: Hash;
+  sha256?: Sha256;
+  fairscapeVersion?: Fairscapeversion;
+  "prov:wasGeneratedBy"?: ProvWasgeneratedby;
+  "prov:wasDerivedFrom"?: ProvWasderivedfrom;
+  "prov:wasAttributedTo"?: ProvWasattributedto;
+  keywords: Keywords;
+  modelType?: Modeltype;
+  framework?: Framework;
+  modelFormat?: Modelformat;
+  trainingDataset?: Trainingdataset;
+  generatedBy?: IdentifierValue | null;
+  derivedFrom?: Derivedfrom;
   parameters?: Parameters;
   inputSize?: Inputsize;
   hasBias?: Hasbias;
   intendedUseCase?: Intendedusecase;
   usageInformation?: Usageinformation;
   baseModel?: Basemodel;
-  associatedPublication?: Associatedpublication;
-  contentUrl?: Contenturl;
   url?: Url;
   license?: License;
   citation?: Citation;
-  isPartOf?: Ispartof;
   [k: string]: unknown;
 }
 export interface IdentifierValue {
