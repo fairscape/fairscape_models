@@ -17,6 +17,18 @@ def test_property_instantiation(property_data):
     assert prop.index == 1
     assert prop.value_url == "http://example.com/value"
 
+
+def test_property_value_url_alias_choices():
+    # All three spellings parse; serialization always emits camelCase 'valueURL'.
+    for key in ("valueURL", "value-url", "value_url"):
+        prop = Property.model_validate({
+            "description": "p", "index": 0, "type": "string", key: "http://x/v",
+        })
+        assert prop.value_url == "http://x/v"
+        dumped = prop.model_dump(by_alias=True, exclude_none=True)
+        assert dumped["valueURL"] == "http://x/v"
+        assert "value-url" not in dumped
+
 def test_property_invalid_type(property_data):
     property_data["type"] = "invalid_type"
     with pytest.raises(ValueError, match="Type must be one of"):

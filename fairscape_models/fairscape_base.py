@@ -126,7 +126,7 @@ class IdentifierPropertyValue(BaseModel):
     name: str
 
 
-def extractGUID(input: str | IdentifierValue | None) -> str|None:
+def extractGUID(input: str | IdentifierValue | dict | None) -> str | IdentifierValue | dict | None:
     """
     Given an input ARK extract the normalized ARK, if validation fails return the input.
     """
@@ -150,6 +150,19 @@ def extractGUID(input: str | IdentifierValue | None) -> str|None:
             return input
         except AttributeError:
             return input
+    elif isinstance(input, dict):
+        guid = input.get("@id")
+        if isinstance(guid, str):
+            try:
+                input["@id"] = re.search(
+                    pattern="ark:[0-9]{5}/.+$",
+                    string=guid
+                ).group()
+            except AttributeError:
+                # not an ARK; leave as-is
+                pass
+        return input
+    return input
 
 
 class Identifier(BaseModel):
