@@ -3,7 +3,7 @@
     "@type": "SoftwareSourceCode",
     "name": "fairscape-models",
     "description": "Pydantic models defining the canonical data shape for FAIRSCAPE RO-Crate releases. The JSON Schemas, TypeScript types, and the EVI OWL/RDFS vocabulary are all generated from these classes, which implement the Fairscape Release RO-Crate Profile.",
-    "version": "1.2.0",
+    "version": "1.2.2",
     "license": "https://spdx.org/licenses/Apache-2.0",
     "codeRepository": "https://github.com/fairscape/fairscape_models",
     "issueTracker": "https://github.com/fairscape/fairscape_models/issues",
