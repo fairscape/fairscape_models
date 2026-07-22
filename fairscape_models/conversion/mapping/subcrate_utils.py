@@ -78,6 +78,8 @@ def build_composition_details(converter_instance, source_entity_model) -> Compos
         
         if item_type == "Dataset":
             details.files_count += 1
+            if _has_provenance(item):
+                details.datasets_with_provenance_count += 1
             _process_dataset(item, file_formats, file_access_types)
             
         elif item_type == "Software":
@@ -127,6 +129,24 @@ def build_composition_details(converter_instance, source_entity_model) -> Compos
     details.inputs_count = details.samples_count + details.input_datasets_count
     
     return details
+
+
+# Provenance link keys, in the forms they appear on parsed graph entities: the EVI
+# generatedBy field (https://w3id.org/EVI#generatedBy) parsed or raw, and PROV-O
+# prov:wasGeneratedBy (http://www.w3.org/ns/prov#wasGeneratedBy) aliased or raw.
+_PROVENANCE_KEYS = (
+    'generatedBy',
+    'EVI:generatedBy',
+    'evi:generatedBy',
+    'https://w3id.org/EVI#generatedBy',
+    'wasGeneratedBy',
+    'prov:wasGeneratedBy',
+    'http://www.w3.org/ns/prov#wasGeneratedBy',
+)
+
+
+def _has_provenance(item) -> bool:
+    return any(getattr(item, key, None) for key in _PROVENANCE_KEYS)
 
 
 def _normalize_type(item) -> str:

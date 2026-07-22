@@ -148,6 +148,7 @@ class CompositionDetails(BaseModel):
     computations_count: int = 0
     schemas_count: int = 0
     other_count: int = 0
+    datasets_with_provenance_count: int = 0
 
     # formats & access summaries
     file_formats: Dict[str, int] = {}
