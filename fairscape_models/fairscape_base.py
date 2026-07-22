@@ -126,7 +126,7 @@ class IdentifierPropertyValue(BaseModel):
     name: str
 
 
-def extractGUID(input: str | IdentifierValue | dict | None) -> str | IdentifierValue | dict | None:
+def extractGUID(input: Optional[Union[str, IdentifierValue, dict]]) -> Optional[Union[str, IdentifierValue, dict]]:
     """
     Given an input ARK extract the normalized ARK, if validation fails return the input.
     """
