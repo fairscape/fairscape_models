@@ -21,7 +21,12 @@ raw string is passed through for the human `schema add-*` annotation step.
 
 import csv
 from collections import namedtuple
-from importlib import resources
+try:
+    # importlib.resources.files() is Python 3.9+
+    from importlib.resources import files as _resource_files
+except ImportError:
+    # Python 3.8 falls back to the importlib_resources backport
+    from importlib_resources import files as _resource_files
 
 __all__ = [
     "UNIT_MAP",
