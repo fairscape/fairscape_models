@@ -11,6 +11,7 @@ class Computation(Activity):
     dateCreated: str
     additionalDocumentation: Optional[str] = Field(default=None)
     command: Optional[Union[List[str], str]] = Field(default=None)
+    parameter: Optional[Union[List[str], str]] = Field(default=None)
     usedSoftware: Optional[List[IdentifierValue]] = Field(default=[])
     usedMLModel: Optional[List[IdentifierValue]] = Field(default=[])
     usedDataset: Optional[List[IdentifierValue]] = Field(default=[])

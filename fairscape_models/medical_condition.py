@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional, List
 
 from fairscape_models.fairscape_base import Identifier, IdentifierValue, IdentifierPropertyValue
@@ -9,6 +9,7 @@ class MedicalCondition(Identifier):
 
     This class represents any condition of the human body that affects the normal functioning of a person, whether physically or mentally. Includes diseases, injuries, disabilities, disorders, syndromes, etc.
     """
+    model_config = ConfigDict(extra="allow")
     guid: str = Field(alias="@id")
     metadataType: Optional[str] = Field(default="MedicalCondition", alias="@type")
     name: str

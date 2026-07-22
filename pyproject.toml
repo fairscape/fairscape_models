@@ -4,29 +4,53 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fairscape-models"
-version = "1.1.7"
+version = "1.2.2"
 description = "Fairscape pydantic models"
 readme = "README.md"
 authors = [
     {name = "Justin Niestroy", email = "jniestroy@gmail.com"}
 ]
-license = {text = "MIT"}
+license = {file = "LICENSE"}
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "pydantic",
+    "pydantic>=2.5",
     "pymongo",
     "typing",
     "mongomock",
     "pyyaml>=6.0.3",
+    # importlib.resources.files() is stdlib on 3.9+; backport it for 3.8
+    "importlib_resources; python_version < '3.9'",
 ]
 requires-python = ">=3.8"
 
+[project.optional-dependencies]
+# Per-format schema inference/validation deps, imported lazily by the
+# fairscape_models.schema.* infer/validate methods. The base package needs none.
+schema-tabular = ["frictionless>=5.0,<6.0", "pyarrow>=14", "pandas"]
+schema-hdf5 = ["h5py"]
+schema-signal = ["wfdb"]
+schema-image = ["pydicom"]
+schema-infer = [
+    "frictionless>=5.0,<6.0",
+    "pyarrow>=14",
+    "pandas",
+    "h5py",
+    "wfdb",
+    "pydicom",
+]
+
 [project.urls]
-"Homepage" = "https://github.com/fairscape/fairscape-models"
+"Homepage" = "https://github.com/fairscape/fairscape_models"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+"fairscape_models.schema" = ["reference_tables/*.csv"]
 
 [tool.coverage.run]
 omit = [

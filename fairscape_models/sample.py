@@ -11,7 +11,16 @@ class Sample(Identifier):
     description: str = Field(min_length=1)
     keywords: List[str] = Field(...)
     contentUrl: Optional[Union[str, List[str]]] = Field(default=None)
-    cellLineReference: Optional[IdentifierValue] = Field(default=None) 
+    
+    #Made up properties to support our projects
+    cellLineReference: Optional[Union[IdentifierValue, List[IdentifierValue]]] = Field(default=None)
+    samplePrepMethod: Optional[Union[IdentifierValue, List[IdentifierValue]]] = Field(default=None)
+
+    #BioSchemas Terms for C2M2
+    anatomicalStructure: Optional[Union[IdentifierValue, List[IdentifierValue]]] = Field(default=None)
+    associatedDisease: Optional[Union[IdentifierValue, List[IdentifierValue]]] = Field(default=None)
+    hasBioChemEntityPart: Optional[Union[IdentifierValue, List[IdentifierValue]]] = Field(default=None)
+    
     isPartOf: Optional[List[IdentifierValue]] = Field(default=[])
     fairscapeVersion: str = __version__
 

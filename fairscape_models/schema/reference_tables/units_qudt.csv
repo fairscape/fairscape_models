@@ -1,0 +1,7 @@
+raw_unit,ucum_code,qudt_uri
+mv,mV,http://qudt.org/vocab/unit/MilliV
+mm,mm,http://qudt.org/vocab/unit/MilliM
+um,um,http://qudt.org/vocab/unit/MicroM
+s,s,http://qudt.org/vocab/unit/SEC
+sec,s,http://qudt.org/vocab/unit/SEC
+hz,Hz,http://qudt.org/vocab/unit/HZ

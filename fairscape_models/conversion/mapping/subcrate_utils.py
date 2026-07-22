@@ -1,6 +1,55 @@
+import html
+import re
 from typing import Any, Dict, List, Optional, Set
 from fairscape_models.conversion.models.FairscapeDatasheet import CompositionDetails
 from collections import Counter
+
+# Computation/experiment patterns render as a small "equation": input RO-Crates combine to
+# make an output. These build the HTML fragments (rendered with the Jinja `| safe` filter);
+# all dynamic text is html-escaped here.
+_ARROW = '<strong>&rarr;</strong>'
+
+
+def _fmt_tokens(fmt: str) -> str:
+    """Escape a (possibly comma-joined) format string and join its parts with ' + '."""
+    return ' + '.join(html.escape(p.strip()) for p in fmt.split(',') if p.strip())
+
+
+def _input_fragment(rocrate_name: Optional[str], fmt: str) -> str:
+    """One input term: '**RO-Crate name**: fmt' when cross-crate, else just the format(s)."""
+    fmt_disp = _fmt_tokens(fmt)
+    if rocrate_name:
+        return f"<strong>{html.escape(rocrate_name)}</strong>: {fmt_disp}"
+    return fmt_disp
+
+
+def normalize_formats(raw) -> List[str]:
+    """Canonicalize a raw format value (str or list) into dotless, lowercase tokens.
+
+    Splits combined values on ``/ , ;`` (e.g. ".cx / .tsv" -> ["cx", "tsv"]), strips
+    surrounding whitespace and a leading dot, lowercases, and drops empty/"unknown"
+    tokens. This collapses redundant variants like "tsv" / ".tsv" / "TSV" to a single
+    canonical "tsv" so the datasheet doesn't list the same format multiple times.
+    """
+    out: List[str] = []
+    for item in (raw if isinstance(raw, list) else [raw]):
+        if not isinstance(item, str):
+            continue
+        for part in re.split(r'[\/,;]', item):
+            tok = part.strip().lstrip('.').strip().lower()
+            if tok and tok != "unknown":
+                out.append(tok)
+    return out
+
+
+def _normalize_format_str(raw) -> str:
+    """Return the normalized format token(s) for a single entity as one display string.
+
+    Joins multiple canonical tokens with ", " and returns "unknown" when nothing usable
+    remains, so callers that gate on ``!= "unknown"`` keep working.
+    """
+    tokens = normalize_formats(raw)
+    return ", ".join(tokens) if tokens else "unknown"
 
 def build_composition_details(converter_instance, source_entity_model) -> CompositionDetails:
     graph = converter_instance.source_crate.metadataGraph
@@ -29,6 +78,8 @@ def build_composition_details(converter_instance, source_entity_model) -> Compos
         
         if item_type == "Dataset":
             details.files_count += 1
+            if _has_provenance(item):
+                details.datasets_with_provenance_count += 1
             _process_dataset(item, file_formats, file_access_types)
             
         elif item_type == "Software":
@@ -61,8 +112,9 @@ def build_composition_details(converter_instance, source_entity_model) -> Compos
         else:
             details.other_count += 1
     
-    details.file_formats = dict(Counter(file_formats))
-    details.software_formats = dict(Counter(software_formats))
+    # Drop blank/unknown formats so the Files card only lists real formats.
+    details.file_formats = {fmt: count for fmt, count in Counter(file_formats).items() if fmt and fmt != "unknown"}
+    details.software_formats = {fmt: count for fmt, count in Counter(software_formats).items() if fmt and fmt != "unknown"}
     details.file_access = dict(Counter(file_access_types))
     details.software_access = dict(Counter(software_access_types))
     details.computation_patterns = list(set(computation_patterns))
@@ -77,6 +129,24 @@ def build_composition_details(converter_instance, source_entity_model) -> Compos
     details.inputs_count = details.samples_count + details.input_datasets_count
     
     return details
+
+
+# Provenance link keys, in the forms they appear on parsed graph entities: the EVI
+# generatedBy field (https://w3id.org/EVI#generatedBy) parsed or raw, and PROV-O
+# prov:wasGeneratedBy (http://www.w3.org/ns/prov#wasGeneratedBy) aliased or raw.
+_PROVENANCE_KEYS = (
+    'generatedBy',
+    'EVI:generatedBy',
+    'evi:generatedBy',
+    'https://w3id.org/EVI#generatedBy',
+    'wasGeneratedBy',
+    'prov:wasGeneratedBy',
+    'http://www.w3.org/ns/prov#wasGeneratedBy',
+)
+
+
+def _has_provenance(item) -> bool:
+    return any(getattr(item, key, None) for key in _PROVENANCE_KEYS)
 
 
 def _normalize_type(item) -> str:
@@ -110,7 +180,7 @@ def _normalize_type(item) -> str:
 
 def _process_dataset(item, formats: List[str], access_types: List[str]):
     format_val = getattr(item, 'fileFormat', 'unknown')
-    formats.append(format_val)
+    formats.extend(normalize_formats(format_val))
     
     content_url = getattr(item, 'contentUrl', '')
     if not content_url:
@@ -123,7 +193,7 @@ def _process_dataset(item, formats: List[str], access_types: List[str]):
 
 def _process_software(item, formats: List[str], access_types: List[str]):
     format_val = getattr(item, 'fileFormat', 'unknown')
-    formats.append(format_val)
+    formats.extend(normalize_formats(format_val))
     
     content_url = getattr(item, 'contentUrl', '')
     if not content_url:
@@ -177,14 +247,14 @@ def _extract_experiment_pattern(item, global_index: Dict[str, Any]) -> Optional[
         for dataset_ref in generated:
             dataset_id = _get_ref_id(dataset_ref)
             if dataset_id:
-                format_val = _lookup_format(dataset_id, global_index)
+                format_val = _normalize_format_str(_lookup_format(dataset_id, global_index))
                 if format_val and format_val != "unknown":
                     output_formats.append(format_val)
-    
+
     if output_formats:
-        output_str = ", ".join(sorted(set(output_formats)))
-        return f"Sample → {output_str}"
-    
+        output_str = " + ".join(sorted(set(_fmt_tokens(f) for f in output_formats)))
+        return f"Sample {_ARROW} {output_str}"
+
     return None
 
 
@@ -207,14 +277,14 @@ def _extract_computation_pattern(item, global_index: Dict[str, Any]) -> Optional
             dataset_id = _get_ref_id(dataset_ref)
             if dataset_id and dataset_id in global_index:
                 dataset_info = global_index[dataset_id]
-                format_val = dataset_info.get('fileFormat', 'unknown')
+                format_val = _normalize_format_str(dataset_info.get('fileFormat', 'unknown'))
                 dataset_rocrate_name = dataset_info.get('rocrateName')
                 
                 if format_val and format_val != "unknown":
                     if dataset_rocrate_name and dataset_rocrate_name != current_rocrate_name:
-                        input_formats.append(f"{dataset_rocrate_name} {format_val}")
+                        input_formats.append(_input_fragment(dataset_rocrate_name, format_val))
                     else:
-                        input_formats.append(format_val)
+                        input_formats.append(_input_fragment(None, format_val))
     
     generated = getattr(item, 'generated', [])
     if generated:
@@ -224,15 +294,15 @@ def _extract_computation_pattern(item, global_index: Dict[str, Any]) -> Optional
         for dataset_ref in generated:
             dataset_id = _get_ref_id(dataset_ref)
             if dataset_id:
-                format_val = _lookup_format(dataset_id, global_index)
+                format_val = _normalize_format_str(_lookup_format(dataset_id, global_index))
                 if format_val and format_val != "unknown":
                     output_formats.append(format_val)
-    
+
     if input_formats and output_formats:
-        input_str = ", ".join(sorted(set(input_formats)))
-        output_str = ", ".join(sorted(set(output_formats)))
-        return f"{input_str} → {output_str}"
-    
+        input_str = " + ".join(sorted(set(input_formats)))
+        output_str = " + ".join(sorted(set(_fmt_tokens(f) for f in output_formats)))
+        return f"{input_str} {_ARROW} {output_str}"
+
     return None
 
 
@@ -251,6 +321,97 @@ def _lookup_format(dataset_id: str, global_index: Dict[str, Any]) -> str:
         entity_info = global_index[dataset_id]
         return entity_info.get('fileFormat', 'unknown')
     return 'unknown'
+
+
+def _resolve_ref_entry(ref, global_index: Dict[str, Any], current_rocrate_name: Optional[str] = None,
+                       include_format: bool = True) -> Optional[Dict[str, Any]]:
+    """Resolve one usedDataset/generated/usedSoftware ref into {id, name, format[, crate]}.
+
+    Unresolvable refs fall back to the raw @id as the name so no input/output is dropped.
+    ``crate`` is set only when the referenced entity lives in a different RO-Crate than
+    the computation (same convention as _extract_computation_pattern).
+    """
+    ref_id = _get_ref_id(ref)
+    if not ref_id:
+        return None
+    info = global_index.get(ref_id)
+    entry: Dict[str, Any] = {
+        'id': ref_id,
+        'name': (info.get('name') if info else None) or ref_id,
+    }
+    if include_format:
+        fmt = _normalize_format_str(info.get('fileFormat', 'unknown')) if info else 'unknown'
+        entry['format'] = fmt if fmt != 'unknown' else None
+        ref_crate = info.get('rocrateName') if info else None
+        entry['crate'] = ref_crate if ref_crate and ref_crate != current_rocrate_name else None
+    return entry
+
+
+def _as_ref_list(refs) -> List[Any]:
+    if not refs:
+        return []
+    return refs if isinstance(refs, list) else [refs]
+
+
+def extract_computation_details(item, global_index: Dict[str, Any]) -> Dict[str, Any]:
+    """Structured provenance for one Computation: source crate, inputs, outputs, software, command.
+
+    Unlike _extract_computation_pattern (which reduces to a 'format -> format' string), this
+    keeps names and @ids so the preview can render an expandable details view.
+    """
+    guid = getattr(item, 'guid', None)
+    source_crate = None
+    if guid and guid in global_index:
+        source_crate = global_index[guid].get('rocrateName')
+
+    command = getattr(item, 'command', None)
+    if isinstance(command, list):
+        command = ' '.join(str(part) for part in command)
+
+    details: Dict[str, Any] = {
+        'id': guid,
+        'source_crate': source_crate,
+        'command': command or None,
+        'inputs': [],
+        'outputs': [],
+        'software': [],
+    }
+
+    for ref in _as_ref_list(getattr(item, 'usedDataset', None)):
+        entry = _resolve_ref_entry(ref, global_index, source_crate)
+        if entry:
+            details['inputs'].append(entry)
+
+    for ref in _as_ref_list(getattr(item, 'generated', None)):
+        entry = _resolve_ref_entry(ref, global_index, source_crate)
+        if entry:
+            details['outputs'].append(entry)
+
+    for ref in _as_ref_list(getattr(item, 'usedSoftware', None)):
+        entry = _resolve_ref_entry(ref, global_index, source_crate, include_format=False)
+        if entry:
+            details['software'].append(entry)
+
+    return details
+
+
+def enrich_preview_computations(preview, source_crate, global_index: Dict[str, Any]) -> None:
+    """Attach extract_computation_details() output to each computation PreviewItem.
+
+    PreviewItem allows extra fields, so details land on ``item.computation_details``
+    without a schema change. Safe to call with a bare per-crate index (no rocrateName
+    stamps): names/formats still resolve within the crate.
+    """
+    if not preview or not getattr(preview, 'computations', None):
+        return
+
+    items_by_id = {item.id: item for item in preview.computations if getattr(item, 'id', None)}
+    for entity in source_crate.metadataGraph:
+        if _normalize_type(entity) != "Computation":
+            continue
+        target = items_by_id.get(getattr(entity, 'guid', None))
+        if target is not None:
+            target.computation_details = extract_computation_details(entity, global_index)
 
 
 def _calculate_input_datasets(root_dataset, global_index: Dict[str, Any]) -> Dict[str, int]:
@@ -287,11 +448,11 @@ def _calculate_input_datasets(root_dataset, global_index: Dict[str, Any]) -> Dic
                     output_id = _get_ref_id(output_ref)
                     if output_id and output_id in global_index:
                         output_info = global_index[output_id]
-                        format_val = output_info.get('fileFormat', 'unknown')
+                        format_val = _normalize_format_str(output_info.get('fileFormat', 'unknown'))
                         key = f"{rocrate_name} ({format_val})"
                         input_counts[key] += 1
             else:
-                format_val = entity_info.get('fileFormat', 'unknown')
+                format_val = _normalize_format_str(entity_info.get('fileFormat', 'unknown'))
                 if format_val == 'unknown':
                     format_val = 'Sample'
                     

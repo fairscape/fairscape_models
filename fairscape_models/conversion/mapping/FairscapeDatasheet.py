@@ -19,9 +19,32 @@ def _as_list_str(value: Any) -> List[str]:
         return out
     return []
 
+def _related_publications(value: Any) -> List[str]:
+    items = value if isinstance(value, list) else ([] if value is None else [value])
+    out, seen = [], set()
+    for it in items:
+        if isinstance(it, dict):
+            s = it.get("name") or it.get("@id") or it.get("identifier") or ""
+        else:
+            s = str(it or "")
+        s = s.strip()
+        if s and s not in seen:
+            seen.add(s)
+            out.append(s)
+    return out
+
 def _list_to_str(value: Any) -> str:
     if isinstance(value, list):
         return ', '.join(str(v).strip() for v in value if str(v).strip())
+    if isinstance(value, str):
+        return value.strip()
+    if value is None:
+        return ''
+    return str(value).strip()
+
+def _list_to_str_hyphen(value: Any) -> str:
+    if isinstance(value, list):
+        return '- '.join(str(v).strip() for v in value if str(v).strip())
     if isinstance(value, str):
         return value.strip()
     if value is None:
@@ -57,6 +80,46 @@ def _extract_id(value: Any) -> Optional[str]:
         return value.get("@id")
     return None
 
+def _resolve_authors(converter_instance, source_entity_model) -> List[str]:
+    """Resolve the root crate's author field into an ordered list of name strings.
+
+    Authors may be plain name strings or reference stubs ({"@id": "..."}) that
+    point to Person entities elsewhere in the @graph (e.g. ORCID URIs). Plain
+    strings are kept as-is; reference stubs are resolved to the referenced
+    entity's name. References that cannot be resolved from the @graph are
+    skipped so they are not dropped silently as blanks.
+    """
+    raw = source_entity_model.model_dump(by_alias=True).get("author")
+    if raw is None:
+        return []
+
+    # Build a guid -> name index from the @graph.
+    name_by_id: Dict[str, str] = {}
+    for item in converter_instance.source_crate.metadataGraph:
+        guid = getattr(item, "guid", None)
+        name = getattr(item, "name", None)
+        if guid and name:
+            name_by_id[guid] = name
+
+    entries = raw if isinstance(raw, list) else [raw]
+    resolved: List[str] = []
+    for entry in entries:
+        if isinstance(entry, str):
+            s = entry.strip()
+            if s:
+                resolved.append(s)
+        elif isinstance(entry, dict):
+            # Inline Person object carries its own name.
+            inline_name = entry.get("name")
+            if isinstance(inline_name, str) and inline_name.strip():
+                resolved.append(inline_name.strip())
+                continue
+            ref_id = entry.get("@id")
+            if ref_id and ref_id in name_by_id:
+                resolved.append(name_by_id[ref_id])
+            # Unresolved reference: skip per spec (no external lookup).
+    return resolved
+
 OVERVIEW_MAPPING: Dict[str, Dict[str, Any]] = {
     
     # identity
@@ -73,7 +136,7 @@ OVERVIEW_MAPPING: Dict[str, Dict[str, Any]] = {
     "updated_date":          {"source_key": "dateModified"},
 
     # people/orgs
-    "authors":               {"source_key": "author", "parser": _as_list_str},
+    "authors":               {"builder_func": _resolve_authors},
     "publisher":             {"source_key": "publisher"},
     "principal_investigator":{"source_key": "principalInvestigator"},
     "contact_email":         {"source_key": "contactEmail"},
@@ -101,7 +164,7 @@ OVERVIEW_MAPPING: Dict[str, Dict[str, Any]] = {
     "completeness":             {"source_key": "completeness",           "fallback_source_key": "additionalProperty", "fallback_parser": from_additional_property("Completeness")},
 
     # related pubs
-    "related_publications":        {"source_key": "associatedPublication", "parser": _as_list_str},
+    "related_publications":        {"source_key": "associatedPublication", "parser": _related_publications},
 }
 
 OVERVIEW_MAPPING_CONFIGURATION = {
@@ -134,7 +197,7 @@ USECASES_MAPPING = {
     "data_collection_type":         {"source_key": "rai:dataCollectionType", "parser": _list_to_str},
     "data_collection_missing_data": {"source_key": "rai:dataCollectionMissingData"},
     "data_collection_raw_data":     {"source_key": "rai:dataCollectionRawData"},
-    "data_collection_timeframe":    {"source_key": "rai:dataCollectionTimeframe", "parser": _list_to_str},
+    "data_collection_timeframe":    {"source_key": "rai:dataCollectionTimeframe", "parser": _list_to_str_hyphen},
     "data_imputation_protocol":     {"source_key": "rai:dataImputationProtocol"},
     "data_manipulation_protocol":   {"source_key": "rai:dataManipulationProtocol"},
     "data_preprocessing_protocol":  {"source_key": "rai:dataPreprocessingProtocol", "parser": _list_to_str},
@@ -203,7 +266,7 @@ SUBCRATE_MAPPING = {
     "composition_details": {"builder_func": build_composition_details},
 
     # publications
-    "related_publications":        {"source_key": "associatedPublication", "parser": _as_list_str},
+    "related_publications":        {"source_key": "associatedPublication", "parser": _related_publications},
 }
 
 
@@ -228,20 +291,6 @@ def _keywords_as_list(v: Any) -> List[str]:
         sep = ';' if ';' in v else ','
         return [p.strip() for p in v.split(sep) if p.strip()]
     return []
-
-def _related_publications(value: Any) -> List[str]:
-    items = value if isinstance(value, list) else ([] if value is None else [value])
-    out, seen = [], set()
-    for it in items:
-        if isinstance(it, dict):
-            s = it.get("name") or it.get("@id") or it.get("identifier") or ""
-        else:
-            s = str(it or "")
-        s = s.strip()
-        if s and s not in seen:
-            seen.add(s)
-            out.append(s)
-    return out
 
 def _join_authors(value: Any) -> Optional[str]:
     names: List[str] = []

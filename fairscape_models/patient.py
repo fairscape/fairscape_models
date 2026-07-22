@@ -23,7 +23,7 @@ class Patient(Identifier):
   diagnosis: Optional[List[IdentifierValue]] = Field(default=[])
   drug: Optional[List[IdentifierValue]] = Field(default=[])
   healthCondition: Optional[List[IdentifierValue]] = Field(default=[])
-  gender: Optional[str]
+  gender: Optional[str] = Field(default=None)
   birthDate: Optional[str] = Field(default=None)
   deathDate: Optional[str] = Field(default=None)
   fairscapeVersion: str = __version__
