@@ -42,7 +42,7 @@ __all__ = [
 
 
 def _read_table(name):
-    path = resources.files("fairscape_models.schema") / "reference_tables" / name
+    path = _resource_files("fairscape_models.schema") / "reference_tables" / name
     with path.open(newline="", encoding="utf-8") as fh:
         return list(csv.DictReader(fh))
 
