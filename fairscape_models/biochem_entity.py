@@ -10,7 +10,7 @@ class BioChemEntity(Identifier):
     This class can apply to Protiens, Genes, Chemical Entities, or Biological Samples
     """
     guid: str = Field(alias="@id")
-    metadataType: Optional[Union[List[str], str]] = Field(default=['prov:Entity', 'evi:BioChemEntity'], alias="@type")
+    metadataType: Optional[Union[List[str], str]] = Field(default=['prov:Entity', 'BioChemEntity'], alias="@type")
     name: str
     identifier: Optional[List[IdentifierPropertyValue]] = Field(default=[])
     associatedDisease: Optional[IdentifierValue] = Field(default=None)
