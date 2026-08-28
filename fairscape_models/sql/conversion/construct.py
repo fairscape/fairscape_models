@@ -5,6 +5,7 @@ from fairscape_models.sql.models import (
     ComputationSQL,
     MetadataTypeEnumSQL
 )
+import re
 
 # Convert Pydantic Model to SQLAlchemy Class
 entityKeys = [
