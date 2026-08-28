@@ -1,0 +1,200 @@
+from typing import Union, Optional
+from fairscape_models.rocrate import ROCrateV1_2, ROCrateMetadataFileElem
+from fairscape_models.software import Software
+from fairscape_models.dataset import Dataset
+from fairscape_models.computation import Computation
+from fairscape_models.schema import Schema
+from fairscape_models.fairscape_base import IdentifierValue
+from fairscape_models.sql.conversion.construct import (
+    ConvertROCrateToSQL,
+)
+from fairscape_models.sql.conversion.author import (
+    TransformAuthors
+)
+from fairscape_models.sql.utils import DetermineMetadataTypeSQL
+from fairscape_models.sql.models import (
+    MetadataTypeEnumSQL,
+    ROCrateMetadataElemSQL,
+    KeywordSQL,
+    AuthorIdentifierSQL,
+    AuthorSQL,
+    IdentifiersSQL,
+    MembershipSQL,
+)
+from fairscape_models.sql.errors import (
+    NoSessionException
+)
+
+from logging import Logger
+from sqlalchemy import select, insert
+from sqlalchemy.orm import Session
+
+
+class EntityIngestRequest():
+    def __init__(
+        self, 
+        model: Union[ROCrateMetadataElemSQL, Software, Dataset, Computation],
+        session: Session,
+        writeLogger: Optional[Logger] = None
+    ):
+        self.model = model
+        self.session = session
+        self.metadataType = DetermineMetadataTypeSQL(model.metadataType)
+
+
+    def _digest_keywords(self):
+        pass
+
+
+    def _digest_authors(self):
+        pass
+
+
+    def _digest_membership(self):
+        pass
+
+
+    def _digest_prov(self):
+        pass
+
+
+    def _digest_entity(self):
+        match self.MetadataType:
+            case MetadataTypeEnumSQL.ROCrateMetadaElem:
+                pass
+            case MetadataTypeEnumSQL.ROCrateMetadaElem:
+                pass
+
+
+    def write(self):
+        entity = self._digest_entity()
+        keywords = self._digest_keywords()
+        authors = self._digest_authors()
+        membership = self._digest_authors()
+        prov = self._digest_prov() 
+
+        # insert all rows with session
+
+        pass
+
+
+
+
+class ROCrateIngestRequest():
+    def __init__(
+        self, 
+        model: Union[ROCrateV1_2],
+        session: Optional[Session] = None,
+        writeLogger: Optional[Logger] = None
+    ):
+        self.model = model
+        self.session = session
+        self.logger = writeLogger
+
+
+    def _check_exists(self):
+        """Check if ROCrate Already Exists"""
+        crate_metadata = self.model.getCrateMetadata()
+
+        if self.session:
+            crate_query = select(IdentifiersSQL).filter_by(guid=crate_metadata.guid)
+            crate_results = self.session.execute(crate_query)
+            if len(crate_results.scalars().all()) >0:
+                return True
+            else:
+                return False
+        else:
+            raise NoSessionException("No Session to Query")
+
+
+    def _digest_authors(self) -> set[tuple[str, str|None]]:
+        """ Create a set of all authors for a ROCrate
+        """
+        authorSet = set()
+        for elem in self.model.metadataGraph:
+            elemSQLType = DetermineMetadataTypeSQL(elem.metadataType)
+            if isinstance(elem, ROCrateMetadataFileElem):
+                continue
+            match elemSQLType:
+                case MetadataTypeEnumSQL.COMPUTATION:
+                    authorSet.add((elem.runBy, None))
+                case MetadataTypeEnumSQL.SCHEMA:
+                    pass
+                case _:
+                    for outputElem in TransformAuthors(elem):
+                        authorSet.add(outputElem)
+        return authorSet
+
+
+    def _check_authors(self, AuthorData: set[tuple[str, str|None]]):
+        """ Check which authors in the ROCrate already exist in the database, 
+            if they do get their row ids creating tuples of (<row_id>: int, <name>: str) and remove from AuthorData.
+            Return these tuples and the modified AuthorData
+        """
+        if self.session:
+            # check if session is alive
+            pass
+        else:
+            raise NoSessionException("No Session Available to Query")
+
+
+    def _write_authors(self, AuthorData: set[tuple[str, str| None]]) -> dict[str, int]:
+        """ Write all author data to sql and return a list of tuples containing the row id and the author's name
+        """
+
+        author_insert_data = [AuthorSQL(**{"name": auth[0], "orcid": auth[1]}) for auth in AuthorData]
+        self.session.add_all(
+            author_insert_data 
+        )
+        self.session.flush()
+        author_ids = {author_row.name: author_row.id for author_row in author_insert_data}
+        return author_ids
+
+
+    def _get_linked_authors(inputElem, AuthorIDs: dict[str, int])->list[dict[str, str | int]]:
+        entity_author_ids = [ AuthorIDs[auth[0]] for auth in TransformAuthors(inputElem)]
+        return [
+            {
+                "author_id": auth_id, 
+                "identifier_guid": inputElem.guid
+            } for auth_id in entity_author_ids
+        ]
+
+    def _write_identifier_authors(self, AuthorIDs: dict[str, int]):
+        """ Insert Statement to Link GUID to Author row IDs
+        """
+        identifier_authors = set()
+
+        for metadataElem in self.model.metadataGraph:
+            if isinstance(metadataElem, ROCrateMetadataFileElem):
+                continue
+            if isinstance(metadataElem, Schema):
+                continue
+            else:
+                self.session.execute(
+                    insert(AuthorIdentifierSQL),
+                    self._get_linked_authors(metadataElem, AuthorIDs)
+                )
+                self.session.flush()
+
+
+
+    def _digest_identifiers(self)-> set[tuple[str, MetadataTypeEnumSQL, str]]:
+        """ Iterate over metadata graph and create identifiers for all elements
+        """
+        identifiers = set()
+
+        for metadataElem in self.model.metadataGraph:
+            if isinstance(metadataElem, ROCrateMetadataFileElem):
+                continue
+            
+            metadataElemSQLType = DetermineMetadataTypeSQL(metadataElem.metadataType)
+            identifiers.add((metadataElem.guid, metadataElemSQLType, metadataElem.name))
+
+        return identifiers
+
+    def _write_identifiers(self):
+        pass 
+
+    def _digest_linked_authors(self):
+        pass
