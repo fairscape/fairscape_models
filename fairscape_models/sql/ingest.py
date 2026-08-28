@@ -7,6 +7,9 @@ from fairscape_models.schema import Schema
 from fairscape_models.fairscape_base import IdentifierValue
 from fairscape_models.sql.conversion.construct import (
     ConvertROCrateToSQL,
+    ConvertComputationToSQL,
+    ConvertSoftwareToSQL,
+    ConvertDatasetToSQL,
 )
 from fairscape_models.sql.conversion.author import (
     TransformAuthors
@@ -126,14 +129,29 @@ class ROCrateIngestRequest():
         return authorSet
 
 
-    def _check_authors(self, AuthorData: set[tuple[str, str|None]]):
+    def _check_authors(self, AuthorData: set[tuple[str, str|None]]) -> tuple[set[tuple[str, str|None]], dict[str, int]]:
         """ Check which authors in the ROCrate already exist in the database, 
             if they do get their row ids creating tuples of (<row_id>: int, <name>: str) and remove from AuthorData.
             Return these tuples and the modified AuthorData
         """
+        remove_authors = []
+        author_ids = {}
         if self.session:
+            # TODO compare to _in(AuthorSQL.name=[author[0] for author in AuthorData] query
+
             # check if session is alive
-            pass
+            for author in AuthorData:
+                single_author_query = select(AuthorSQL).filter_by(name=author[0])
+                results = self.session.scalar(single_author_query)
+
+                if results:
+                    remove_authors.append(author)
+                    author_ids[results.name] = results.id
+
+            for existing_author in remove_authors:
+                AuthorData.remove(existing_author)
+
+            return AuthorData, author_ids
         else:
             raise NoSessionException("No Session Available to Query")
 
@@ -160,10 +178,10 @@ class ROCrateIngestRequest():
             } for auth_id in entity_author_ids
         ]
 
+
     def _write_identifier_authors(self, AuthorIDs: dict[str, int]):
         """ Insert Statement to Link GUID to Author row IDs
         """
-        identifier_authors = set()
 
         for metadataElem in self.model.metadataGraph:
             if isinstance(metadataElem, ROCrateMetadataFileElem):
@@ -176,7 +194,6 @@ class ROCrateIngestRequest():
                     self._get_linked_authors(metadataElem, AuthorIDs)
                 )
                 self.session.flush()
-
 
 
     def _digest_identifiers(self)-> set[tuple[str, MetadataTypeEnumSQL, str]]:
@@ -193,8 +210,66 @@ class ROCrateIngestRequest():
 
         return identifiers
 
-    def _write_identifiers(self):
-        pass 
 
-    def _digest_linked_authors(self):
-        pass
+    def _write_identifiers(self, Identifiers: set[tuple[str, MetadataTypeEnumSQL, str]]):
+        self.session.execute(
+            insert(IdentifiersSQL),
+            [
+                {
+                    "guid": identifier_elem[0], 
+                    "metadataType": identifier_elem[1], 
+                    "name": identifier_elem[2]
+                } for identifier_elem in Identifiers
+            ]
+        )
+        self.session.flush()        
+
+
+    def _digest_iterate_elements(self):
+        """ Transform ROCrate Elements into SQLClasses 
+        """
+        metadataElements = []
+        keywordElements = []
+
+        for metadataElem in self.model.metadataGraph:
+            elemSQLType = DetermineMetadataTypeSQL(metadataElem.metadataType)
+
+            if isinstance(metadataElem, ROCrateMetadataFileElem):
+                continue
+
+            match elemSQLType:
+                # TODO: Low Priority Types
+                case MetadataTypeEnumSQL.MEDICAL_CONDITION:
+                    pass
+                case MetadataTypeEnumSQL.ORGANIZATION:
+                    pass
+                case MetadataTypeEnumSQL.ANNOTATION:
+                    pass
+                case MetadataTypeEnumSQL.CREATIVE_WORK:
+                    pass
+
+                # TODO: High Prio
+                case MetadataTypeEnumSQL.SAMPLE:
+                    pass
+                case MetadataTypeEnumSQL.BIO_CHEM_ENTITY:
+                    pass
+                case MetadataTypeEnumSQL.EXPERIMENT:
+                    pass
+                case MetadataTypeEnumSQL.SCHEMA:
+                    pass
+
+                case MetadataTypeEnumSQL.ROCRATE:
+                    metadataElements.append(ConvertROCrateToSQL(metadataElem))
+                    keywordElements += [ KeywordSQL(guid=metadataElem.guid, keywordValue=keywordElem) for keywordElem in metadataElem.keywords]
+
+                case MetadataTypeEnumSQL.DATASET:
+                    metadataElements.append(ConvertDatasetToSQL(metadataElem))
+                    keywordElements += [ KeywordSQL(guid=metadataElem.guid, keywordValue=keywordElem) for keywordElem in metadataElem.keywords]
+
+                case MetadataTypeEnumSQL.SOFTWARE:
+                    metadataElements.append(ConvertSoftwareToSQL(metadataElem))
+
+                case MetadataTypeEnumSQL.COMPUTATION:
+                    metadataElements.append(ConvertComputationToSQL(metadataElem))
+
+        return metadataElements, keywordElements
