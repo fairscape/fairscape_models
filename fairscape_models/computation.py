@@ -9,6 +9,7 @@ class Computation(Activity):
     additionalType: Optional[str] = Field(default=COMPUTATION_TYPE)
     runBy: Union[str, IdentifierValue]
     dateCreated: str
+    datePublished: Optional[str] = Field(default=None)
     additionalDocumentation: Optional[str] = Field(default=None)
     command: Optional[Union[List[str], str]] = Field(default=None)
     parameter: Optional[Union[List[str], str]] = Field(default=None)

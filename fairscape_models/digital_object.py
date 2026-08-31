@@ -12,6 +12,7 @@ class DigitalObject(Identifier):
     author: Union[str, IdentifierValue, List[Union[str, IdentifierValue]]]
     description: str = Field(min_length=10)
     version: str = Field(default="0.1.0")
+    datePublished: Optional[str] = Field(default=None)
     associatedPublication: Optional[Union[str, List[str]]] = Field(default=None)
     additionalDocumentation: Optional[str] = Field(default=None)
     contentUrl: Optional[Union[str, List[str]]] = Field(default=None)
