@@ -5,7 +5,8 @@ from fairscape_models.sql.models import (
     ComputationSQL,
     MetadataTypeEnumSQL
 )
-import re
+from fairscape_models.computation import Computation
+import datetime
 
 # Convert Pydantic Model to SQLAlchemy Class
 entityKeys = [
@@ -29,11 +30,15 @@ TypeMapping = {
 
 stripModel = lambda inputData, keyList: { key: inputData.__dict__[key] for key in keyList}
 
+def setDatePublished(inputData):
+    if not inputData.datePublished:
+        inputData.datePublished = datetime.datetime.now().strftime("%m-%d-%Y")
+    return inputData
+
 # convert elements into SQL Alchemy
 ConvertElem = lambda inputElem, modelClass, modelKeys: modelClass(**stripModel(inputElem, modelKeys))
 
-# TODO clean up the generation using ConvertElem
-ConvertROCrateToSQL = lambda inputElem: ROCrateMetadataElemSQL(**stripModel(inputElem, ROCrateKeys))
-ConvertSoftwareToSQL = lambda inputElem: SoftwareSQL(**stripModel(inputElem, SoftwareKeys))
-ConvertDatasetToSQL = lambda inputElem: DatasetSQL(**stripModel(inputElem, DatasetKeys))
-ConvertComputationToSQL = lambda inputElem: ComputationSQL(**stripModel(inputElem, ComputationKeys))
+ConvertROCrateToSQL = lambda inputElem: ROCrateMetadataElemSQL(**stripModel(setDatePublished(inputElem), ROCrateKeys))
+ConvertSoftwareToSQL = lambda inputElem: SoftwareSQL(**stripModel(setDatePublished(inputElem), SoftwareKeys))
+ConvertDatasetToSQL = lambda inputElem: DatasetSQL(**stripModel(setDatePublished(inputElem), DatasetKeys))
+ConvertComputationToSQL = lambda inputElem: ComputationSQL(**stripModel(setDatePublished(inputElem), ComputationKeys))

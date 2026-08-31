@@ -62,16 +62,18 @@ class MembershipSQL(Base):
 	childType: Mapped[MetadataTypeEnumSQL] = mapped_column(Enum(MetadataTypeEnumSQL))
 
 
-class ComputationUsedDatasetSQL():
+class ComputationUsedDatasetSQL(Base):
 	__tablename__ = "used_dataset"
 	__table_args__ = {'extend_existing': True}  
+	id: Mapped[int] = mapped_column(primary_key=True)
 	computationGUID: Mapped[str]
 	datasetGUID: Mapped[str]
 
 
-class ComputationGeneratedDatasetSQL():
+class ComputationGeneratedDatasetSQL(Base):
 	__tablename__ = "generated_dataset"
 	__table_args__ = {'extend_existing': True}  
+	id: Mapped[int] = mapped_column(primary_key=True)
 	computationGUID: Mapped[str]
 	datasetGUID: Mapped[str]
 
@@ -94,7 +96,7 @@ class Versioned():
 class ROCrateMetadataElemSQL(EntitySQL, HasContent, Versioned, Base):
 	__tablename__ = 'rocrate'
 	__table_args__ = {"extend_existing": True}  
-	license: Mapped[str]
+	license: Mapped[Optional[str]]
 
 	# is part of add to membership table 
 	#isPartOf: Mapped[Optional[List["MembershipSQL"]]] = relationship(back_populates="parentGUID")
@@ -116,4 +118,4 @@ class SoftwareSQL(EntitySQL, HasContent, Versioned, Base):
 
 class ComputationSQL(EntitySQL, Base):
 	__tablename__ = 'computation'
-	usedSoftware: Mapped[str]
+	usedSoftware: Mapped[Optional[str]]

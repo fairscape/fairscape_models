@@ -23,6 +23,8 @@ from fairscape_models.sql.models import (
     AuthorSQL,
     IdentifiersSQL,
     MembershipSQL,
+    ComputationGeneratedDatasetSQL,
+    ComputationUsedDatasetSQL
 )
 from fairscape_models.sql.errors import (
     NoSessionException
@@ -93,6 +95,7 @@ class ROCrateIngestRequest():
         self.model = model
         self.session = session
         self.logger = writeLogger
+        self.crateGUID = model.getCrateMetadata().guid
 
 
     def _check_exists(self):
@@ -169,7 +172,7 @@ class ROCrateIngestRequest():
         return author_ids
 
 
-    def _get_linked_authors(inputElem, AuthorIDs: dict[str, int])->list[dict[str, str | int]]:
+    def _get_linked_authors(self, inputElem, AuthorIDs: dict[str, int])->list[dict[str, str | int]]:
         entity_author_ids = [ AuthorIDs[auth[0]] for auth in TransformAuthors(inputElem)]
         return [
             {
@@ -230,6 +233,8 @@ class ROCrateIngestRequest():
         """
         metadataElements = []
         keywordElements = []
+        membershipElements = []
+        provElements = []
 
         for metadataElem in self.model.metadataGraph:
             elemSQLType = DetermineMetadataTypeSQL(metadataElem.metadataType)
@@ -265,11 +270,43 @@ class ROCrateIngestRequest():
                 case MetadataTypeEnumSQL.DATASET:
                     metadataElements.append(ConvertDatasetToSQL(metadataElem))
                     keywordElements += [ KeywordSQL(guid=metadataElem.guid, keywordValue=keywordElem) for keywordElem in metadataElem.keywords]
+                    membershipElements.append(
+                        MembershipSQL(parentGUID=self.crateGUID, parentType=MetadataTypeEnumSQL.ROCRATE, childGUID=metadataElem.guid, childType=elemSQLType)
+                    )
 
                 case MetadataTypeEnumSQL.SOFTWARE:
                     metadataElements.append(ConvertSoftwareToSQL(metadataElem))
+                    membershipElements.append(
+                        MembershipSQL(parentGUID=self.crateGUID, parentType=MetadataTypeEnumSQL.ROCRATE, childGUID=metadataElem.guid, childType=elemSQLType)
+                    )
 
                 case MetadataTypeEnumSQL.COMPUTATION:
                     metadataElements.append(ConvertComputationToSQL(metadataElem))
+                    membershipElements.append(
+                        MembershipSQL(parentGUID=self.crateGUID, parentType=MetadataTypeEnumSQL.ROCRATE, childGUID=metadataElem.guid, childType=elemSQLType)
+                    )
 
-        return metadataElements, keywordElements
+                    provElements += [
+                        ComputationUsedDatasetSQL(
+                            computationGUID=metadataElem.guid,
+
+                            # TODO need to consider the following
+                            #      - string value i.e. http/ftp url
+                            #      - @id
+                            datasetGUID=datasetGUID.guid,
+                        ) for datasetGUID in metadataElem.usedDataset]
+                    provElements += [
+                        ComputationGeneratedDatasetSQL(
+                            computationGUID=metadataElem.guid,
+
+                            # TODO need to consider the following
+                            #      - string value i.e. http/ftp url
+                            #      - @id
+                            datasetGUID=datasetGUID.guid,
+                        ) for datasetGUID in metadataElem.generated]
+
+        return metadataElements + keywordElements + membershipElements + provElements
+
+    def _write_elements(self):
+        self.session.add_all(self._digest_iterate_elements())
+        self.session.flush()
