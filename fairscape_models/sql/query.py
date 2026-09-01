@@ -10,6 +10,11 @@ from fairscape_models.sql.models import (
     MembershipSQL,
     KeywordSQL
 )
+
+from fairscape_models.dataset import Dataset
+from fairscape_models.software import Software
+from fairscape_models.computation import Computation
+from fairscape_models.rocrate import ROCrateMetadataElem
 from typing import Union, List
 
 import sqlalchemy as sa
@@ -19,6 +24,20 @@ TYPE_LOOKUP = {
     MetadataTypeEnumSQL.SOFTWARE: SoftwareSQL,
     MetadataTypeEnumSQL.ROCRATE: ROCrateMetadataElemSQL,
     MetadataTypeEnumSQL.COMPUTATION: ComputationSQL
+}
+
+SERIALIZE_TYPE = {
+    DatasetSQL: Dataset,
+    SoftwareSQL: Software,
+    ROCrateMetadataElemSQL: ROCrateMetadataElem,
+    ComputationSQL: Computation
+}
+
+METADATA_TYPE_PROPERTY = {
+    DatasetSQL: ["https://w3id.org/EVI#Dataset", "https://schema.org/Dataset"],
+    SoftwareSQL: ["https://w3id.org/EVI#Software"],
+    ROCrateMetadataElemSQL: ["https://schema.org/Dataset", "https://w3id.org/EVI#ROCrate"],
+    ComputationSQL: ["http://www.w3.org/ns/prov#Activity", "https://w3id.org/EVI#Computation"]
 }
 
 
@@ -68,11 +87,11 @@ class QueryByGUID():
         # TODO Provenance properties
 
         return QueryResponse(
-            rootEntityResults, 
-            keywordResults, 
-            authorResults, 
-            hasPartResults, 
-            isPartOfResults
+            rootEntity=rootEntityResults[0], 
+            keywordResults=keywordResults, 
+            authorResults=authorResults, 
+            hasPartResults=hasPartResults, 
+            isPartOfResults=isPartOfResults
         )
 
 
@@ -95,32 +114,35 @@ class QueryResponse():
         self.metadata = None
 
 
-    def _transform_authors(self):
-        authorsList = []
-        for elem in self.authorResults:
-            if elem.orcid:
-                authorsList.append({"@id": elem.orcid})
-            else:
-                authorsList.append(elem.name)
-        return authorsList
-
     def _transform_root_entity(self):	
-        metadata = self.rootEntityResults[0].__dict__.copy()
+        metadata = self.rootEntity.__dict__.copy()
         del metadata['_sa_instance_state']
         del metadata['id']
         metadata['@id'] = metadata.pop("guid")
-        metadata['@type'] = ["EVI:Dataset", "https://schema.org/Dataset"]
+        metadata['@type'] = METADATA_TYPE_PROPERTY[type(self.rootEntity)]
+
         self.metadata = metadata
 
-    def transform(self):
+    def _convert_metadata(self):
 
         self._transform_root_entity()
-        authorList = self._transform_authors()
+
+        if isinstance(self.rootEntity, ComputationSQL):
+            # TODO check that author results are not null
+            self.metadata["runBy"] = self.authorResults[0]
+            self.metadata["dateCreated"] = self.metadata["datePublished"]
 
         self.metadata = {
             **self.metadata,
-            "author": authorList,
+            "author": self.authorResults, 
             "keywords": [ elem.keywordValue for elem in self.keywordResults],
             "hasPart": [ {"@id": elem.childGUID} for elem in self.hasPartResults],
             "isPartOf": [{"@id": elem.parentGUID} for elem in self.isPartOfResults]
         }
+
+    def _convert_to_pydantic(self):
+        return SERIALIZE_TYPE[type(self.rootEntity)].model_validate(self.metadata)
+
+    def transform(self):
+        self._convert_metadata()
+        return self._convert_to_pydantic()

@@ -33,6 +33,7 @@ stripModel = lambda inputData, keyList: { key: inputData.__dict__[key] for key i
 def setDatePublished(inputData):
     if not inputData.datePublished:
         inputData.datePublished = datetime.datetime.now().strftime("%m-%d-%Y")
+    # TODO if computation dateCreated needs to exist
     return inputData
 
 # convert elements into SQL Alchemy
