@@ -1,12 +1,12 @@
 from pydantic import Field, ConfigDict, field_validator
 from typing import Optional, List, Union
 
-from fairscape_models.fairscape_base import IdentifierValue, Identifier
+from fairscape_models.fairscape_base import IdentifierValue, Identifier, PersistentIdentifierPattern
 from fairscape_models._version import __version__
 
 class DigitalObject(Identifier):
     """Base class for DigitalObject types (Dataset, Software, MLModel)"""
-    guid: str = Field(alias="@id", pattern="^ark:[0-9]{5}/.+$")
+    guid: str = Field(alias="@id", pattern=PersistentIdentifierPattern)
     name: str
     metadataType: Optional[Union[List[str], str]] = Field(default=['prov:Entity', "https://w3id.org/EVI#DigitalObject"], alias="@type")
     author: Union[str, IdentifierValue, List[Union[str, IdentifierValue]]]

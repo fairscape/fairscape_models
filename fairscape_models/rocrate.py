@@ -18,6 +18,7 @@ from fairscape_models.instrument import Instrument
 from fairscape_models.model_card import ModelCard
 from fairscape_models.sample import Sample
 from fairscape_models.activity import Activity
+from fairscape_models.container import Container
 from fairscape_models.digital_object import DigitalObject
 from fairscape_models.person import Person, Organization
 from fairscape_models.defined_term import DefinedTerm
@@ -161,7 +162,7 @@ class ROCrateMetadataElem(BaseModel):
     # Content info
     contentSize: Optional[str] = Field(default=None, description="Total size of the dataset content (e.g. '2.4 GB', '150 MB'). Used in AI-Ready Characterization scoring.")
     usageInfo: Optional[str] = Field(default=None, description="Additional usage information or instructions for working with this dataset.")
-    hasSummaryStatistics: Optional[Union[str, IdentifierValue]] = Field(default=None, description="Reference to a summary statistics entity describing distributions, counts, and key statistics for this dataset.")
+    hasSummaryStatistics: Optional[Union[str, IdentifierValue, List[IdentifierValue]]] = Field(default=None, description="Reference to a summary statistics entity describing distributions, counts, and key statistics for this dataset.")
     additionalProperty: Optional[List[Dict[str, Any]]] = Field(default=None, description="Additional schema.org PropertyValue entries for metadata not covered by other fields (e.g. [{\"name\": \"Human Subject\", \"value\": \"Yes\"}]).")
 
     # Compliance / ethics — D4D_Ethics, D4D_Human, D4D_Data_Governance
@@ -369,6 +370,7 @@ class ROCrateV1_2(BaseModel):
         Sample,
         Activity,
         Annotation,
+        Container,
         DigitalObject,
         Person,
         Organization,
@@ -398,6 +400,7 @@ class ROCrateV1_2(BaseModel):
             "BioChemEntity": BioChemEntity,
             "MedicalCondition": MedicalCondition,
             "ROCrate": ROCrateMetadataElem,
+            "Container": Container,
             "Person": Person,
             "Organization": Organization,
             "DefinedTerm": DefinedTerm,

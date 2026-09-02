@@ -216,8 +216,14 @@ class Schema(Identifier):
         """Build a schema of this type by inspecting a data file."""
         raise NotImplementedError(f"{cls.__name__} does not support inference")
 
-    def validate(self, filepath: str) -> List[ValidationErrorRecord]:
-        """Validate a data file against this schema."""
+    def validate(self, filepath: str, deep: bool = False) -> List[ValidationErrorRecord]:
+        """
+        Validate a data file against this schema.
+
+        `deep` opts in to checks that read the whole payload rather than just
+        its structural metadata. Only `SignalSchema` implements a deep tier so
+        far; the other types accept the flag and ignore it.
+        """
         raise NotImplementedError(f"{type(self).__name__} does not support file validation")
 
 

@@ -191,7 +191,8 @@ class TabularSchema(Schema):
             document["header"] = None
         return cls.model_validate(document)
 
-    def validate(self, filepath: str) -> List[ValidationErrorRecord]:
+    def validate(self, filepath: str, deep: bool = False) -> List[ValidationErrorRecord]:
+        # frictionless already reads every row, so there is no deeper tier to opt into.
         from frictionless import Resource, Dialect, formats
 
         frictionless_schema = build_frictionless_schema(self.properties)

@@ -66,9 +66,15 @@ def infer_schema(filepath: str, name: str, description: str,
     return schema_class_for_file(filepath).infer(filepath, name, description, guid=guid)
 
 
-def validate_schema(schema: Schema, filepath: str) -> List[ValidationErrorRecord]:
-    """Validate a data file against a schema, dispatching on the schema's type."""
-    return schema.validate(filepath)
+def validate_schema(schema: Schema, filepath: str,
+                    deep: bool = False) -> List[ValidationErrorRecord]:
+    """
+    Validate a data file against a schema, dispatching on the schema's type.
+
+    `deep` opts in to whole-payload checks (currently the WFDB checksum tier);
+    schema types without a deep tier ignore it.
+    """
+    return schema.validate(filepath, deep=deep)
 
 
 # --------------------------------------------------------------------------- #

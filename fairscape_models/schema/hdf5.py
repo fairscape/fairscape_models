@@ -99,11 +99,11 @@ class HDF5Schema(NonTabularSchema):
             "required": list(props),
         })
 
-    def validate(self, filepath: str) -> List[ValidationErrorRecord]:
+    def validate(self, filepath: str, deep: bool = False) -> List[ValidationErrorRecord]:
         """
         Structural validation: re-open the file and compare each declared
         dataset's path / shape / dtype / chunks against the file. Reads structure
-        only (never array data).
+        only (never array data). No deep tier yet — `deep` is accepted and ignored.
         """
         import h5py
 

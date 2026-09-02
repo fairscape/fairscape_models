@@ -20,6 +20,10 @@ from enum import Enum
 
 IdentifierPattern = "^ark:[0-9]{5}\\/[a-zA-Z0-9_\\-]+.$"
 
+# Persistent identifiers accepted for digital objects: ARKs, DOIs (bare or
+# resolver-URL form), and http(s) URIs.
+PersistentIdentifierPattern = "^(ark:[0-9]{5}/.+|doi:.+|https?://.+)$"
+
 DATASET_TYPE = "Dataset"
 DATASET_CONTAINER_TYPE = "DatasetContainer"
 SOFTWARE_TYPE = "Software"

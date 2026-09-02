@@ -6,6 +6,18 @@ header (signal-specification lines: name / units / gain / baseline / ADC
 resolution) via the `wfdb` library. Nothing is invented — units link to
 QUDT/UCUM only where verified, and the record-level LOINC panel code is attached
 only when the channel set is exactly the 12 standard ECG leads.
+
+`validate` runs in three tiers, cheapest first:
+
+    tier 0  schema <-> header   always      diff the header against what this
+                                            schema declares
+    tier 1  header <-> file     always      decode the final frame; catches a
+                                            truncated or missing .dat
+    tier 2  data   <-> header   deep=True   read the record, verify the
+                                            per-channel checksum (~200 MB/s)
+
+Only tier 2 sees corruption in the middle of a record: a WFDB gap is stored
+in-band as a sentinel sample, so nothing about the file's length changes.
 """
 
 import os
@@ -27,6 +39,24 @@ from fairscape_models.schema.ontology import (
     as_num,
     unit_terms,
 )
+
+
+# A header may store the checksum as the signed or the unsigned residue of the
+# sample sum, so compare modulo this rather than by equality.
+_CHECKSUM_MODULUS = 65536
+
+
+def _record_stem(filepath: str) -> str:
+    """WFDB addresses a record by extensionless path ('.../rec', not 'rec.hea')."""
+    return os.path.join(
+        os.path.dirname(filepath) or ".",
+        os.path.splitext(os.path.basename(filepath))[0],
+    )
+
+
+def _channel_name(raw: Optional[str], index: int) -> str:
+    """Header description fields can carry trailing punctuation (BIDMC: 'RESP,')."""
+    return re.sub(r"[^\w+-]+$", "", (raw or f"sig_{index}").strip())
 
 
 class ChannelProperty(Property):
@@ -75,14 +105,19 @@ class SignalSchema(NonTabularSchema):
               guid: Optional[str] = None) -> "SignalSchema":
         import wfdb
 
-        record_dir = os.path.dirname(filepath) or "."
-        record_name = os.path.splitext(os.path.basename(filepath))[0]
-        rec = wfdb.rdheader(os.path.join(record_dir, record_name))
+        rec = wfdb.rdheader(_record_stem(filepath))
+        if isinstance(rec, wfdb.MultiRecord):
+            # A layout header has no signal-spec lines of its own — sig_name,
+            # units and gain are all None.
+            raise ValueError(
+                f"'{os.path.basename(filepath)}' is a multi-segment WFDB record "
+                f"({len(rec.seg_name or ())} segments); signal schema inference "
+                "supports single-segment records only"
+            )
 
         props: Dict[str, ChannelProperty] = {}
         for i in range(rec.n_sig):
-            # Header description fields can carry trailing punctuation (BIDMC: 'RESP,').
-            channel = re.sub(r"[^\w+-]+$", "", (rec.sig_name[i] or f"sig_{i}").strip())
+            channel = _channel_name(rec.sig_name[i], i)
             ucum, qudt = unit_terms(rec.units[i] if rec.units else None)
             props[channel] = ChannelProperty(
                 description=f"Signal channel '{channel}'",
@@ -124,11 +159,14 @@ class SignalSchema(NonTabularSchema):
             "required": list(props),
         })
 
-    def validate(self, filepath: str) -> List[ValidationErrorRecord]:
+    def validate(self, filepath: str, deep: bool = False) -> List[ValidationErrorRecord]:
         """
-        Structural validation: re-infer from the file header and compare the
-        fields this schema actually declares (a None on either side means
-        "unconstrained"). Reports missing channels and calibration/rate drift.
+        Tier 0 + tier 1 by default; `deep=True` adds tier 2 (see module docstring).
+
+        Tier 0 re-infers from the file header and compares the fields this schema
+        actually declares (a None on either side means "unconstrained"), reporting
+        missing channels and calibration/rate drift. Tiers 1 and 2 compare the
+        header against the signal file itself.
         """
         observed = type(self).infer(filepath, name=self.name, description="revalidation probe")
         errors: List[ValidationErrorRecord] = []
@@ -157,4 +195,92 @@ class SignalSchema(NonTabularSchema):
                         message=f"File has undeclared channel '{channel}'",
                         failed_keyword="additionalProperties", field=channel, path=channel,
                     ))
+
+        errors.extend(self._validate_signal_file(filepath, deep=deep))
+        return errors
+
+    def _validate_signal_file(self, filepath: str,
+                              deep: bool = False) -> List[ValidationErrorRecord]:
+        """Tier 1 (always) and tier 2 (`deep`): the header against the .dat itself."""
+        import wfdb
+
+        stem = _record_stem(filepath)
+        header = wfdb.rdheader(stem)
+        errors: List[ValidationErrorRecord] = []
+
+        # The channel set is identity, so this is always enforced; record length
+        # is not, and is only checked when the schema states it.
+        declared_channels = len(self.properties)
+        if declared_channels != header.n_sig:
+            errors.append(ValidationErrorRecord(
+                message=(f"Schema declares {declared_channels} channel(s), "
+                         f"header declares {header.n_sig}"),
+                failed_keyword="const", field="numberOfSignals",
+            ))
+
+        if not header.sig_len:
+            return errors
+
+        signal_files = ", ".join(sorted(set(header.file_name or ()))) or "<unnamed>"
+
+        # Tier 1 — decode only the final frame; wfdb raises if the file is short.
+        try:
+            wfdb.rdrecord(stem, sampfrom=header.sig_len - 1, physical=False)
+        except FileNotFoundError:
+            errors.append(ValidationErrorRecord(
+                message=f"Signal file is missing: {signal_files}",
+                failed_keyword="required", field="signalFile", path=signal_files,
+            ))
+            return errors
+        except ValueError:
+            errors.append(ValidationErrorRecord(
+                message=(f"Signal file {signal_files} is shorter than the header declares "
+                         f"({header.sig_len} samples x {header.n_sig} channel(s))"),
+                failed_keyword="fileLength", field="signalFile", path=signal_files,
+            ))
+            return errors
+
+        if not deep:
+            return errors
+
+        # Tier 2. smooth_frames=False because the smoothed view averages each
+        # frame down to one value and so cannot reproduce the stored checksum of
+        # a multi-frequency channel (MIMIC-I 03700001 MCL1 is 4x oversampled).
+        record = wfdb.rdrecord(stem, physical=False, smooth_frames=False)
+        channels = record.e_d_signal
+        observed_checksums = record.calc_checksum(expanded=True)
+        declared_checksums = header.checksum or ()
+
+        if len(channels) != header.n_sig:
+            errors.append(ValidationErrorRecord(
+                message=(f"Decoded {len(channels)} channel(s), header declares "
+                         f"{header.n_sig}"),
+                failed_keyword="const", field="shape",
+            ))
+
+        for i, samples in enumerate(channels):
+            channel = _channel_name(header.sig_name[i] if header.sig_name else None, i)
+
+            expected_length = header.sig_len * (header.samps_per_frame[i] or 1)
+            if len(samples) != expected_length:
+                errors.append(ValidationErrorRecord(
+                    message=(f"{channel}: decoded {len(samples)} samples, header "
+                             f"declares {expected_length}"),
+                    failed_keyword="const", field=f"{channel}.length", path=channel,
+                ))
+
+            declared_checksum = declared_checksums[i] if i < len(declared_checksums) else None
+            if declared_checksum is None:
+                continue  # optional field in a WFDB signal spec line
+            if header.skew and header.skew[i]:
+                # Stored time-shifted, read back aligned: these are not the samples
+                # that were summed (MIMIC-I 03700001 RESP is 'fmt 212:4').
+                continue
+            observed_checksum = observed_checksums[i]
+            if (observed_checksum - declared_checksum) % _CHECKSUM_MODULUS != 0:
+                errors.append(ValidationErrorRecord(
+                    message=(f"{channel}: samples do not match the header checksum "
+                             f"(header {declared_checksum}, data {observed_checksum})"),
+                    failed_keyword="checksum", field=f"{channel}.checksum", path=channel,
+                ))
         return errors

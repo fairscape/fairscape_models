@@ -164,11 +164,12 @@ class ImageSchema(NonTabularSchema):
             "required": list(props),
         })
 
-    def validate(self, filepath: str) -> List[ValidationErrorRecord]:
+    def validate(self, filepath: str, deep: bool = False) -> List[ValidationErrorRecord]:
         """
         Structural validation: re-infer from the DICOM header and compare the
         fields this schema declares. Reports missing axes and geometry/modality
-        drift (a None on either side means "unconstrained").
+        drift (a None on either side means "unconstrained"). No deep tier yet —
+        `deep` is accepted and ignored.
         """
         observed = type(self).infer(filepath, name=self.name, description="revalidation probe")
         errors: List[ValidationErrorRecord] = []
