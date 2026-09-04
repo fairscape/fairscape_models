@@ -22,7 +22,7 @@ IdentifierPattern = "^ark:[0-9]{5}\\/[a-zA-Z0-9_\\-]+.$"
 
 # Persistent identifiers accepted for digital objects: ARKs, DOIs (bare or
 # resolver-URL form), and http(s) URIs.
-PersistentIdentifierPattern = "^(ark:[0-9]{5}/.+|doi:.+|https?://.+)$"
+PersistentIdentifierPattern = "^(ark:[0-9]{5}/.+|doi:.+|https?://.+|file://.+)$"
 
 DATASET_TYPE = "Dataset"
 DATASET_CONTAINER_TYPE = "DatasetContainer"
