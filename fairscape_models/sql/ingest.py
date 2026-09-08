@@ -237,10 +237,15 @@ class ROCrateIngestRequest():
         provElements = []
 
         for metadataElem in self.model.metadataGraph:
-            elemSQLType = DetermineMetadataTypeSQL(metadataElem.metadataType)
-
             if isinstance(metadataElem, ROCrateMetadataFileElem):
                 continue
+
+            if metadataElem.metadataType:
+                elemSQLType = DetermineMetadataTypeSQL(metadataElem.metadataType)
+            else:
+                # TODO log no metadata type
+                continue
+
 
             match elemSQLType:
                 # TODO: Low Priority Types
