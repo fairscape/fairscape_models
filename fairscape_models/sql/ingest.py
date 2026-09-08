@@ -88,7 +88,7 @@ class EntityIngestRequest():
 class ROCrateIngestRequest():
     def __init__(
         self, 
-        model: Union[ROCrateV1_2],
+        model: ROCrateV1_2,
         session: Optional[Session] = None,
         writeLogger: Optional[Logger] = None
     ):

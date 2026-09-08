@@ -6,6 +6,7 @@ from fairscape_models.sql.models import (
     MetadataTypeEnumSQL
 )
 from fairscape_models.computation import Computation
+from fairscape_models.fairscape_base import IdentifierValue
 import datetime
 
 # Convert Pydantic Model to SQLAlchemy Class
@@ -15,10 +16,10 @@ entityKeys = [
     "description",
 ]
 
-ROCrateKeys = entityKeys + ["version"]
+ROCrateKeys = entityKeys + ["version", "datePublished"]
 DatasetKeys = entityKeys + ["version", "fileFormat", "datePublished"]
-SoftwareKeys = entityKeys + ["version"]
-ComputationKeys = entityKeys + []
+SoftwareKeys = entityKeys + ["version", "fileFormat", "datePublished"]
+ComputationKeys = entityKeys + ["dateCreated"]
 
 TypeMapping = {
     MetadataTypeEnumSQL.ROCRATE: ROCrateKeys,
@@ -42,4 +43,21 @@ ConvertElem = lambda inputElem, modelClass, modelKeys: modelClass(**stripModel(i
 ConvertROCrateToSQL = lambda inputElem: ROCrateMetadataElemSQL(**stripModel(setDatePublished(inputElem), ROCrateKeys))
 ConvertSoftwareToSQL = lambda inputElem: SoftwareSQL(**stripModel(setDatePublished(inputElem), SoftwareKeys))
 ConvertDatasetToSQL = lambda inputElem: DatasetSQL(**stripModel(setDatePublished(inputElem), DatasetKeys))
-ConvertComputationToSQL = lambda inputElem: ComputationSQL(**stripModel(setDatePublished(inputElem), ComputationKeys))
+#ConvertComputationToSQL = lambda inputElem: ComputationSQL(**stripModel(setDatePublished(inputElem), ComputationKeys))
+
+# computation
+def ConvertComputationToSQL(inputElem: Computation) -> ComputationSQL:
+    outputElem = ComputationSQL(**stripModel(setDatePublished(inputElem), ComputationKeys))
+
+    # get single software guid for ComputationSQL.usedSoftware
+    if inputElem.usedSoftware:
+        if isinstance(inputElem.usedSoftware, list):
+            # TODO deal with issue with list with multiple software specified in list
+            usedSoftware=inputElem.usedSoftware[0]
+            if isinstance(usedSoftware, IdentifierValue):
+                outputElem.usedSoftware = usedSoftware.guid
+            elif isinstance(usedSoftware, str):
+                outputElem.usedSoftware = usedSoftware
+        if isinstance(inputElem.usedSoftware, str):
+            outputElem.usedSoftware = inputElem.usedSoftware
+    return outputElem

@@ -114,8 +114,10 @@ class DatasetSQL(EntitySQL, HasContent, Versioned, Base):
 
 class SoftwareSQL(EntitySQL, HasContent, Versioned, Base):
 	__tablename__ = 'software'
+	fileFormat: Mapped[str]
 
 
 class ComputationSQL(EntitySQL, Base):
 	__tablename__ = 'computation'
 	usedSoftware: Mapped[Optional[str]]
+	dateCreated: Mapped[Optional[str]]
