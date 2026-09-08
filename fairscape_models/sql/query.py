@@ -111,7 +111,7 @@ class QueryResponse():
         self.keywordResults = keywordResults
         self.hasPartResults = hasPartResults
         self.isPartOfResults = isPartOfResults
-        self.metadata = None
+        self.metadata = {}
 
 
     def _transform_root_entity(self):	
@@ -123,14 +123,24 @@ class QueryResponse():
 
         self.metadata = metadata
 
+    def _convert_metadata_computation(self):
+        """ Convert Metadata Specifically for Computation
+        """
+        # TODO check that author results are not null
+        self.metadata["runBy"] = self.authorResults[0]
+        self.metadata["dateCreated"] = self.metadata["dateCreated"]
+
+        # usedSoftware must be converted to list
+        self.metadata["usedSoftware"] = [ {"@id": self.metadata['usedSoftware']}]
+
     def _convert_metadata(self):
+        """ Convert Metadata from SQL Results into Dictionary to be Serialized into Pydantic
+        """
 
         self._transform_root_entity()
 
         if isinstance(self.rootEntity, ComputationSQL):
-            # TODO check that author results are not null
-            self.metadata["runBy"] = self.authorResults[0]
-            self.metadata["dateCreated"] = self.metadata["datePublished"]
+            self._convert_metadata_computation()
 
         self.metadata = {
             **self.metadata,
