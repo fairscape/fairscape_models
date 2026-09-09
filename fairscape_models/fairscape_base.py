@@ -188,7 +188,7 @@ class Identifier(BaseModel):
     guid: str = Field(
         title="guid",
         alias="@id",
-        pattern=IdentifierPattern
+        pattern=PersistentIdentifierPattern
     )
     metadataType: Optional[Union[List[str], str]] = Field(
         title="metadataType",
