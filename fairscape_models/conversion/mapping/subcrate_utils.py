@@ -58,6 +58,7 @@ def build_composition_details(converter_instance, source_entity_model) -> Compos
     details = CompositionDetails()
     
     file_formats = []
+    model_formats = []
     software_formats = []
     file_access_types = []
     software_access_types = []
@@ -82,6 +83,10 @@ def build_composition_details(converter_instance, source_entity_model) -> Compos
                 details.datasets_with_provenance_count += 1
             _process_dataset(item, file_formats, file_access_types)
             
+        elif item_type == "MLModel":
+            details.models_count += 1
+            _process_dataset(item, model_formats, file_access_types)
+
         elif item_type == "Software":
             details.software_count += 1
             _process_software(item, software_formats, software_access_types)
@@ -114,6 +119,7 @@ def build_composition_details(converter_instance, source_entity_model) -> Compos
     
     # Drop blank/unknown formats so the Files card only lists real formats.
     details.file_formats = {fmt: count for fmt, count in Counter(file_formats).items() if fmt and fmt != "unknown"}
+    details.model_formats = {fmt: count for fmt, count in Counter(model_formats).items() if fmt and fmt != "unknown"}
     details.software_formats = {fmt: count for fmt, count in Counter(software_formats).items() if fmt and fmt != "unknown"}
     details.file_access = dict(Counter(file_access_types))
     details.software_access = dict(Counter(software_access_types))
@@ -160,7 +166,9 @@ def _normalize_type(item) -> str:
     else:
         type_str = str(type_field)
     
-    if "Dataset" in type_str or "EVI:Dataset" in type_str or "https://w3id.org/EVI#Dataset" in type_str:
+    if "MLModel" in type_str:
+        return "MLModel"
+    elif "Dataset" in type_str or "EVI:Dataset" in type_str or "https://w3id.org/EVI#Dataset" in type_str:
         return "Dataset"
     elif "Software" in type_str or "EVI:Software" in type_str or "https://w3id.org/EVI#Software" in type_str or "SoftwareSourceCode" in type_str:
         return "Software"

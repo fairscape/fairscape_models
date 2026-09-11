@@ -100,7 +100,9 @@ class CroissantDataset(BaseModel):
     type: str = Field(default="sc:Dataset", alias="@type")
     name: str
     description: str
-    conforms_to: Optional[str] = Field(default=None, alias="dct:conformsTo")
+    # a list: mlcroissant reads the Croissant version off dct:conformsTo, and
+    # the RAI extension declares itself there too, so both have to appear
+    conforms_to: Optional[Union[str, List[str]]] = Field(default=None, alias="dct:conformsTo")
     license: Optional[str] = None
     cite_as: Optional[str] = Field(default=None, alias="citeAs")
     url: Optional[str] = None

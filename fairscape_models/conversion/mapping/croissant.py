@@ -70,7 +70,13 @@ def map_format_to_mime_type(format_str: Optional[str]) -> str:
         return EncodingFormat.TEXT
     
     format_lower = format_str.lower()
-    
+
+    # a crate may already carry a MIME type rather than an extension (the
+    # workflow importers derive one per file); keep it instead of falling
+    # through to text/plain, which would tell a loader to parse a TSV as prose
+    if '/' in format_lower:
+        return format_lower
+
     if format_lower in ['csv', '.csv']:
         return EncodingFormat.CSV
     elif format_lower in ['json', '.json']:
@@ -271,7 +277,10 @@ def build_croissant_record_sets(
 CROISSANT_DATASET_MAPPING = {
     "context":        {"fixed_value": DEFAULT_CROISSANT_CONTEXT},
     "@type":          {"fixed_value": "sc:Dataset"},
-    "dct:conformsTo": {"fixed_value": "http://mlcommons.org/croissant/RAI/1.0"},
+    # the Croissant version first (mlcroissant refuses a document whose
+    # conformsTo names no known version), then the RAI extension
+    "dct:conformsTo": {"fixed_value": ["http://mlcommons.org/croissant/1.0",
+                                       "http://mlcommons.org/croissant/RAI/1.0"]},
     "name":           {"source_key": "name", "parser": conversion_utils.format_name},
     "description":    {"source_key": "description"},
     "license":        {"source_key": "license"},

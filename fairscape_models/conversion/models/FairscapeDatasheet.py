@@ -147,11 +147,13 @@ class CompositionDetails(BaseModel):
     experiments_count: int = 0
     computations_count: int = 0
     schemas_count: int = 0
+    models_count: int = 0
     other_count: int = 0
     datasets_with_provenance_count: int = 0
 
     # formats & access summaries
     file_formats: Dict[str, int] = {}
+    model_formats: Dict[str, int] = {}
     software_formats: Dict[str, int] = {}
     file_access: Dict[str, int] = {}
     software_access: Dict[str, int] = {}
