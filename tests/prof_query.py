@@ -39,7 +39,6 @@ keyword_query = sa.select(KeywordSQL.keywordValue).filter_by(guid=element_guid)
 
 # authors
 author_identifier_query = sa.select(AuthorSQL.name, AuthorSQL.orcid).join(AuthorIdentifierSQL, AuthorIdentifierSQL.author_id == AuthorSQL.id).where(AuthorIdentifierSQL.identifier_guid==element_guid)
-
 author_results = session.execute(author_identifier_query).all()
 
 # hasPart

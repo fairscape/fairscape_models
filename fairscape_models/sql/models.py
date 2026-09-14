@@ -1,6 +1,7 @@
 import enum
 from sqlalchemy.orm import declarative_base, Mapped, mapped_column
-from sqlalchemy import Column, Enum, String
+from sqlalchemy.ext.mutable import MutableList
+from sqlalchemy import Column, Enum, String, JSON
 from typing import Optional
 
 Base = declarative_base()
@@ -85,6 +86,8 @@ class EntitySQL():
 	name: Mapped[str] = Column('name', String)
 	description: Mapped[str] = Column('description', String)
 	datePublished: Mapped[Optional[str]] 
+	keywords: Mapped[list[str]] = mapped_column(MutableList.as_mutable(JSON))
+	author: Mapped[list[dict]] = mapped_column(MutableList.as_mutable(JSON))
 
 
 class HasContent():
@@ -97,7 +100,6 @@ class ROCrateMetadataElemSQL(EntitySQL, HasContent, Versioned, Base):
 	__tablename__ = 'rocrate'
 	__table_args__ = {"extend_existing": True}  
 	license: Mapped[Optional[str]]
-
 	# is part of add to membership table 
 	#isPartOf: Mapped[Optional[List["MembershipSQL"]]] = relationship(back_populates="parentGUID")
 	#datePublished: datetime

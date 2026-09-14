@@ -196,7 +196,8 @@ class ROCrateIngestRequest():
                     insert(AuthorIdentifierSQL),
                     self._get_linked_authors(metadataElem, AuthorIDs)
                 )
-                self.session.flush()
+
+        self.session.flush()
 
 
     def _digest_identifiers(self)-> set[tuple[str, MetadataTypeEnumSQL, str]]:
