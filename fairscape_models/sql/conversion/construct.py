@@ -1,4 +1,4 @@
-from fairscape_models.sql.conversion.author import ConvertAuthorsSQL
+from fairscape_models.sql.conversion.author import ConvertAuthorsSQL, TransformAuthors
 from fairscape_models.sql.models import (
     ROCrateMetadataElemSQL,
     SoftwareSQL,
@@ -62,6 +62,7 @@ ConvertDatasetToSQL = lambda inputElem: DatasetSQL(**stripModel(process(inputEle
 # computation
 def ConvertComputationToSQL(inputElem: Computation) -> ComputationSQL:
     outputElem = ComputationSQL(**stripModel(setDatePublished(inputElem), ComputationKeys))
+    outputElem.author = ConvertAuthorsSQL(inputElem)
 
     # get single software guid for ComputationSQL.usedSoftware
     if inputElem.usedSoftware:

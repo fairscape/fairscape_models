@@ -86,9 +86,11 @@ class EntitySQL():
 	name: Mapped[str] = Column('name', String)
 	description: Mapped[str] = Column('description', String)
 	datePublished: Mapped[Optional[str]] 
-	keywords: Mapped[list[str]] = mapped_column(MutableList.as_mutable(JSON))
 	author: Mapped[list[dict]] = mapped_column(MutableList.as_mutable(JSON))
 
+
+class HasKeywords():
+	keywords: Mapped[list[str]] = mapped_column(MutableList.as_mutable(JSON))
 
 class HasContent():
 	contentURL: Mapped[Optional[str]] = Column('contentURL', String, default=None)
@@ -96,7 +98,7 @@ class HasContent():
 class Versioned():
 	version: Mapped[str]
 
-class ROCrateMetadataElemSQL(EntitySQL, HasContent, Versioned, Base):
+class ROCrateMetadataElemSQL(EntitySQL, HasKeywords, HasContent, Versioned, Base):
 	__tablename__ = 'rocrate'
 	__table_args__ = {"extend_existing": True}  
 	license: Mapped[Optional[str]]
@@ -107,7 +109,7 @@ class ROCrateMetadataElemSQL(EntitySQL, HasContent, Versioned, Base):
 	#publisher: str
 
 
-class DatasetSQL(EntitySQL, HasContent, Versioned, Base):
+class DatasetSQL(EntitySQL, HasKeywords, HasContent, Versioned, Base):
 	__tablename__ = 'dataset'
 	fileFormat: Mapped[str]
 	generatedBy: Mapped[Optional[str]]

@@ -13,6 +13,7 @@ def extractAuthor(author: str | IdentifierValue) -> Tuple[str, str | None]:
 	if isinstance(author, IdentifierValue):
 		return (author.name, author.guid)	
 
+
 def TransformAuthors(inputModel) -> Set[Tuple[str, str | None]]:
 	""" Convert fairscape_models pydantic element authors into list of SQL authors
 	"""
@@ -37,7 +38,19 @@ def TransformAuthors(inputModel) -> Set[Tuple[str, str | None]]:
 
 
 def ConvertAuthorsSQL(inputModel) -> List[dict]:
+
+	if isinstance(inputModel, Computation):
+		author_property = inputModel.runBy
+	else:
+		author_property = inputModel.author
+
 	authorList = []
+
+	# if already processed
+	if isinstance(author_property, list):
+		if all([isinstance(author_elem, dict) for author_elem in author_property]):
+			return author_property
+
 	for elem in TransformAuthors(inputModel):
 		if elem[1]:
 			authorList.append({"@id": elem[1], "name": elem[0]})
