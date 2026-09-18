@@ -196,6 +196,11 @@ class TabularSchema(Schema):
         from frictionless import Resource, Dialect, formats
 
         frictionless_schema = build_frictionless_schema(self.properties)
+        # A schema converted from a Frictionless Data Package keeps the
+        # package's missing-value markers ("", "NA", ...); honour them.
+        missing = (self.model_extra or {}).get('missingValues')
+        if isinstance(missing, list) and missing:
+            frictionless_schema.missing_values = [str(m) for m in missing]
 
         # frictionless rejects absolute paths as "not safe"; anchor on the file's
         # directory as basepath and reference it by name to allow either form.

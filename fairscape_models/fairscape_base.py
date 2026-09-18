@@ -23,7 +23,7 @@ IdentifierPattern = "^ark:[0-9]{5}\\/[a-zA-Z0-9_\\-]+.$"
 # Persistent identifiers accepted for digital objects: ARKs, DOIs (bare or
 # resolver-URL form), and http(s) URIs.
 uuidIdentifierPattern="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
-PersistentIdentifierPattern = f"^(ark:[0-9]{5}/.+|doi:.+|https?://.+|file://.+|{uuidIdentifierPattern})$"
+PersistentIdentifierPattern = f"^(ark:[0-9]{{5}}/.+|doi:.+|https?://.+|file://.+|{uuidIdentifierPattern})$"
 
 DATASET_TYPE = "Dataset"
 DATASET_CONTAINER_TYPE = "DatasetContainer"
