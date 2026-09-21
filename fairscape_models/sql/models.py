@@ -1,8 +1,10 @@
 import enum
 from sqlalchemy.orm import declarative_base, Mapped, mapped_column
+from sqlalchemy.schema import Index
 from sqlalchemy.ext.mutable import MutableList
-from sqlalchemy import Column, Enum, String, JSON
+from sqlalchemy import Column, Enum, String, JSON, DateTime, func
 from typing import Optional
+import datetime
 
 Base = declarative_base()
 
@@ -27,16 +29,11 @@ class MetadataTypeEnumSQL(enum.Enum):
 class IdentifiersSQL(Base):
 	__tablename__ = 'identifier'
 	__table_args__ = {"extend_existing": True}  
-	guid: str = Column('guid', String, primary_key=True)
-	name: str = Column('name', String)
-	metadataType: Mapped[MetadataTypeEnumSQL] = mapped_column(Enum(MetadataTypeEnumSQL))
+	guid: Mapped[str] = mapped_column(primary_key=True)
+	name: Mapped[str] 
+	metadataType: Mapped[MetadataTypeEnumSQL]
 
-class KeywordSQL(Base):
-	__tablename__ = 'keyword_table'
-	__table_args__ = {"extend_existing": True}
-	id: Mapped[int] = mapped_column(primary_key=True)
-	guid: Mapped[str]
-	keywordValue: Mapped[str] 
+Index("idx_identifier_guid", IdentifiersSQL.guid)
 	
 class AuthorSQL(Base):
 	__tablename__ = 'author'
@@ -62,6 +59,7 @@ class MembershipSQL(Base):
 	childGUID: Mapped[str] 
 	childType: Mapped[MetadataTypeEnumSQL] = mapped_column(Enum(MetadataTypeEnumSQL))
 
+Index("idx_membership_parent_child", MembershipSQL.parentGUID, MembershipSQL.childGUID)
 
 class ComputationUsedDatasetSQL(Base):
 	__tablename__ = "used_dataset"
@@ -69,7 +67,6 @@ class ComputationUsedDatasetSQL(Base):
 	id: Mapped[int] = mapped_column(primary_key=True)
 	computationGUID: Mapped[str]
 	datasetGUID: Mapped[str]
-
 
 class ComputationGeneratedDatasetSQL(Base):
 	__tablename__ = "generated_dataset"
@@ -82,9 +79,9 @@ class ComputationGeneratedDatasetSQL(Base):
 class EntitySQL():
 	__table_args__ = {"extend_existing": True}  
 	id: Mapped[int] = mapped_column(primary_key=True)
-	guid: Mapped[str] = Column('guid', String)
-	name: Mapped[str] = Column('name', String)
-	description: Mapped[str] = Column('description', String)
+	guid: Mapped[str]
+	name: Mapped[str]
+	description: Mapped[str] 
 	datePublished: Mapped[Optional[str]] 
 	author: Mapped[list[dict]] = mapped_column(MutableList.as_mutable(JSON))
 
@@ -93,7 +90,7 @@ class HasKeywords():
 	keywords: Mapped[list[str]] = mapped_column(MutableList.as_mutable(JSON))
 
 class HasContent():
-	contentURL: Mapped[Optional[str]] = Column('contentURL', String, default=None)
+	contentURL: Mapped[Optional[str]] = mapped_column(default=None)
 
 class Versioned():
 	version: Mapped[str]
@@ -102,12 +99,11 @@ class ROCrateMetadataElemSQL(EntitySQL, HasKeywords, HasContent, Versioned, Base
 	__tablename__ = 'rocrate'
 	__table_args__ = {"extend_existing": True}  
 	license: Mapped[Optional[str]]
-	# is part of add to membership table 
-	#isPartOf: Mapped[Optional[List["MembershipSQL"]]] = relationship(back_populates="parentGUID")
 	#datePublished: datetime
 	#about: str
 	#publisher: str
 
+Index("idx_rocrate_guid", ROCrateMetadataElemSQL.guid)
 
 class DatasetSQL(EntitySQL, HasKeywords, HasContent, Versioned, Base):
 	__tablename__ = 'dataset'
@@ -115,13 +111,28 @@ class DatasetSQL(EntitySQL, HasKeywords, HasContent, Versioned, Base):
 	generatedBy: Mapped[Optional[str]]
 	derivedFrom: Mapped[Optional[str]]
 
+Index("idx_dataset_guid", DatasetSQL.guid)
 
 class SoftwareSQL(EntitySQL, HasContent, Versioned, Base):
 	__tablename__ = 'software'
 	fileFormat: Mapped[str]
 
+Index("idx_software_guid", SoftwareSQL.guid)
 
 class ComputationSQL(EntitySQL, Base):
 	__tablename__ = 'computation'
 	usedSoftware: Mapped[Optional[str]]
 	dateCreated: Mapped[Optional[str]]
+
+Index("idx_computation_guid", SoftwareSQL.guid)
+
+class ROCrateRegistration(Base):
+	__tablename__ = 'registration'
+	id: Mapped[int] = mapped_column(primary_key=True)
+	guid: Mapped[str] 
+	version: Mapped[int] = mapped_column(default=1)
+	filepath: Mapped[str] = mapped_column(unique=True)
+	time_registerd: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+	time_updated: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+Index("idx_registration_filepath", ROCrateRegistration.filepath)
