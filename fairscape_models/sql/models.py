@@ -132,7 +132,7 @@ class ROCrateRegistration(Base):
 	guid: Mapped[str] 
 	version: Mapped[int] = mapped_column(default=1)
 	filepath: Mapped[str] = mapped_column(unique=True)
-	time_registerd: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+	time_registered: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 	time_updated: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
 Index("idx_registration_filepath", ROCrateRegistration.filepath)
