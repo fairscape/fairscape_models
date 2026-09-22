@@ -17,10 +17,6 @@ classifiers = [
 ]
 dependencies = [
     "pydantic>=2.5",
-    "pymongo",
-    "typing",
-    "mongomock",
-    "pyyaml>=6.0.3",
     # importlib.resources.files() is stdlib on 3.9+; backport it for 3.8
     "importlib_resources; python_version < '3.9'",
 ]
