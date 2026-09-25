@@ -205,7 +205,6 @@ def collect_classes() -> List[Type[BaseModel]]:
     """Import and return every Pydantic model class in fairscape_models."""
     from fairscape_models.fairscape_base import (
         IdentifierValue, IdentifierPropertyValue, Identifier,
-        FairscapeBaseModel, FairscapeEVIBaseModel,
     )
     from fairscape_models.digital_object import DigitalObject
     from fairscape_models.activity import Activity
@@ -235,7 +234,6 @@ def collect_classes() -> List[Type[BaseModel]]:
     ordered: List[Type[BaseModel]] = [
         # infrastructure / base hierarchy
         IdentifierValue, IdentifierPropertyValue, Identifier,
-        FairscapeBaseModel, FairscapeEVIBaseModel,
         DigitalObject, Activity,
         # embedded / helper models
         Split, Property, CodeAnalysis, DatasetSummary,
