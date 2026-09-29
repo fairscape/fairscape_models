@@ -37,6 +37,8 @@ schema-infer = [
     "wfdb",
     "pydicom",
 ]
+# SHACL validation against the FAIRSCAPE profile shapes (fairscape_models.validation.shacl).
+shacl = ["pyshacl>=0.27"]
 
 [project.urls]
 "Homepage" = "https://github.com/fairscape/fairscape_models"
@@ -46,6 +48,7 @@ include-package-data = true
 
 [tool.setuptools.package-data]
 "fairscape_models.schema" = ["reference_tables/*.csv"]
+"fairscape_models.validation" = ["shapes/*.ttl"]
 
 [tool.coverage.run]
 omit = [

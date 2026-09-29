@@ -43,6 +43,19 @@ from fairscape_models import ROCrateV1_2
 crate = ROCrateV1_2.model_validate(json.load(open("ro-crate-metadata.json")))
 ```
 
+Check the crate's graph against the profile's SHACL shapes. These rules cover
+links between entities, e.g. `generatedBy` must point at a Computation. This
+needs the `shacl` extra (`pip install 'fairscape-models[shacl]'`):
+
+```python
+from fairscape_models.validation.shacl import validate_shacl
+
+report = validate_shacl("path/to/crate")  # crate dir, metadata file, dict or ROCrateV1_2
+report.passes    # True iff there are no Violations; Warnings are advisory
+for r in report.results:
+    print(r.severity, r.shape, r.focusNode, r.message)
+```
+
 ## Details
 
 - **Profile.** Crates built from these models conform to the FAIRSCAPE Release
@@ -50,6 +63,10 @@ crate = ROCrateV1_2.model_validate(json.load(open("ro-crate-metadata.json")))
   entity declares it with `dct:conformsTo`. The PROF manifest is
   [`profiles/profile.ttl`](profiles/profile.ttl) and the EVI vocabulary is
   [`profiles/evi-vocabulary.ttl`](profiles/evi-vocabulary.ttl).
+- **SHACL shapes.** [`fairscape_models/validation/shapes/fairscape-shapes.ttl`](fairscape_models/validation/shapes/fairscape-shapes.ttl)
+  is a copy of the profile v0.2 shapes. The source of truth is the
+  [profile repository](https://github.com/fairscape/profile), so refresh the copy
+  from there rather than editing it here.
 - **Generated files.** [`json-schemas/`](json-schemas),
   [`typescript-types/`](typescript-types) and the EVI vocabulary are all
   generated from the Python classes:
