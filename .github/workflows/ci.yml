@@ -45,6 +45,8 @@ jobs:
         # schema infer/validate tests actually run instead of importorskip-skipping,
         # which is what keeps coverage above the threshold below.
         pip install -e ".[schema-infer]"
+        # datasheet extra (jinja2) so tests/test_datasheet.py runs rather than skipping.
+        pip install -e ".[datasheet]"
 
     - name: Lint with flake8
       run: |
