@@ -1,0 +1,2377 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "EVI": "https://w3id.org/EVI#"
+  },
+  "@graph": [
+    {
+      "@id": "ro-crate-metadata.json",
+      "@type": "CreativeWork",
+      "conformsTo": {
+        "@id": "https://w3id.org/ro/crate/1.2"
+      },
+      "about": {
+        "@id": "https://doi.org/10.18130/V3/ATG0DP"
+      },
+      "fairscapeVersion": "1.2.6"
+    },
+    {
+      "@id": "https://doi.org/10.18130/V3/ATG0DP",
+      "@type": [
+        "https://w3id.org/EVI#Dataset",
+        "https://w3id.org/EVI#ROCrate"
+      ],
+      "conformsTo": {
+        "@id": "https://w3id.org/fairscape/profile/0.1"
+      },
+      "name": "CHoRUS Production Release V3",
+      "description": "The Collaborative Hospital Repository Uniting Standards (CHoRUS) for Clinical Care AI is a clinical data network developing a flagship multi-hospital, multimodal, high-resolution dataset under the NIH Bridge2AI program. CHoRUS harmonizes electronic health record (EHR) data, imaging, high-resolution physiologic signals (including telemetry data and EEG where available), and tokenized note and report text (via OHNLP toolkit) with raw text retained locally across participating institutions using standardized data models and governance frameworks.\nThe repository is designed to enable secure, auditable, and reproducible artificial intelligence (AI) research to improve recovery from acute illness. Data are curated within a NIST 800-53\u2013aligned secure enclave architecture with role-based access controls, audit logging, and controlled-access governance review. CHoRUS supports AI model development, validation, benchmarking, and translational research while maintaining compliance with HIPAA and NIH data-sharing policies.\n",
+      "keywords": [
+        "Bridge2AI",
+        "CHoRUS",
+        "Electronic health records",
+        "physiological data",
+        "medical images"
+      ],
+      "version": "3.0",
+      "datePublished": "10/29/2026",
+      "isPartOf": [],
+      "hasPart": [
+        {
+          "@id": "file:///chorusprod/images/ro-crate-metadata.json",
+          "@type": [
+            "https://w3id.org/EVI#Dataset",
+            "https://w3id.org/EVI#ROCrate"
+          ],
+          "name": "CHoRUS Production V3 Image Subcrate"
+        },
+        {
+          "@id": "file:///chorusprod/omop/ro-crate-metadata.json",
+          "@type": [
+            "https://w3id.org/EVI#Dataset",
+            "https://w3id.org/EVI#ROCrate"
+          ],
+          "name": "CHoRUS Production V3 EHR Subcrate"
+        },
+        {
+          "@id": "file:///chorusprod/waveforms/ro-crate-metadata.json",
+          "@type": [
+            "https://w3id.org/EVI#Dataset",
+            "https://w3id.org/EVI#ROCrate"
+          ],
+          "name": "CHoRUS Production V3 Waveform Subcrate"
+        }
+      ],
+      "author": [
+        {
+          "@id": "https://orcid.org/0000-0002-0930-9683",
+          "@type": "Person",
+          "name": "Rosenthal, Eric S.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03vek6s52",
+            "@type": "Organization",
+            "name": "Harvard University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-8366-4811",
+          "@type": "Person",
+          "name": "Kamaleswaran, Rishikesan",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/00py81415",
+            "@type": "Organization",
+            "name": "Duke University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-6060-1233",
+          "@type": "Person",
+          "name": "Strekalova, Yulia Levites",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/02y3ad647",
+            "@type": "Organization",
+            "name": "University of Florida",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0692-412X",
+          "@type": "Person",
+          "name": "Williams, Andrew E.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-2118-6612",
+          "@type": "Person",
+          "name": "Cordes, Ashley",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0293rh119",
+            "@type": "Organization",
+            "name": "University of Oregon",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-8329-9225",
+          "@type": "Person",
+          "name": "Williams, Ishan C.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-4530-2048",
+          "@type": "Person",
+          "name": "Rashidi, Parisa",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-8115-7971",
+          "@type": "Person",
+          "name": "Evans, Barbara J.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/02y3ad647",
+            "@type": "Organization",
+            "name": "University of Florida",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-5772-1648",
+          "@type": "Person",
+          "name": "Moorman, J. Randall",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-3688-7307",
+          "@type": "Person",
+          "name": "Park, Soojin",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/01esghr10",
+            "@type": "Organization",
+            "name": "Columbia University Irving Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-6972-5622",
+          "@type": "Person",
+          "name": "Amorim, Edilberto",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/043mz5j54",
+            "@type": "Organization",
+            "name": "University of California, San Francisco",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-0936-9501",
+          "@type": "Person",
+          "name": "Vespa, Paul M.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/046rm7j60",
+            "@type": "Organization",
+            "name": "University of California, Los Angeles",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-9933-2205",
+          "@type": "Person",
+          "name": "Jiang, Xiaoqian",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03gds6c39",
+            "@type": "Organization",
+            "name": "The University of Texas Health Science Center at Houston",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-2570-3741",
+          "@type": "Person",
+          "name": "Liu, Hongfang",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03gds6c39",
+            "@type": "Organization",
+            "name": "The University of Texas Health Science Center at Houston",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-5539-4674",
+          "@type": "Person",
+          "name": "Podgoreanu, Mihai V.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/00py81415",
+            "@type": "Organization",
+            "name": "Duke University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0214-0651",
+          "@type": "Person",
+          "name": "Herasevich, Vitaly",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/02qp3tb03",
+            "@type": "Organization",
+            "name": "Mayo Clinic",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-4736-7462",
+          "@type": "Person",
+          "name": "Wainwright, Mark",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/01njes783",
+            "@type": "Organization",
+            "name": "Seattle Children's Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-3523-0514",
+          "@type": "Person",
+          "name": "Barros, Andrew J.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-9580-4121",
+          "@type": "Person",
+          "name": "Sullivan,  Brynne A.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0009-0007-4427-6139",
+          "@type": "Person",
+          "name": "Young, Michael J.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002pd6e78",
+            "@type": "Organization",
+            "name": "Massachusetts General Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@type": "Person",
+          "name": "Alvarez, Marta",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-4147-1485",
+          "@type": "Person",
+          "name": "Talapova, Polina",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-3329-8048",
+          "@type": "Person",
+          "name": "Muszynski, Jennifer A.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/003rfsp33",
+            "@type": "Organization",
+            "name": "Nationwide Children's Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-7429-3828",
+          "@type": "Person",
+          "name": "Gent, Alasdair",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/00py81415",
+            "@type": "Organization",
+            "name": "Duke University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-2983-571X",
+          "@type": "Person",
+          "name": "Bold, Delgersuren",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03czfpz43",
+            "@type": "Organization",
+            "name": "Emory University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-3434-9062",
+          "@type": "Person",
+          "name": "Kwong, Manlik",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@type": "Person",
+          "name": "Gunda, Dileep",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03czfpz43",
+            "@type": "Organization",
+            "name": "Emory University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0009-0000-2152-0281",
+          "@type": "Person",
+          "name": "Le, Jackie",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002pd6e78",
+            "@type": "Organization",
+            "name": "Massachusetts General Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-4758-3050",
+          "@type": "Person",
+          "name": "Loar, India",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-7682-1943",
+          "@type": "Person",
+          "name": "Gow, Brian J.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/042nb2s44",
+            "@type": "Organization",
+            "name": "Massachusetts Institute of Technology",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0009-0004-6535-6988",
+          "@type": "Person",
+          "name": "Schmidt, Heidi",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002pd6e78",
+            "@type": "Organization",
+            "name": "Massachusetts General Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-1557-9716",
+          "@type": "Person",
+          "name": "Houghtaling, Jared",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-1787-2855",
+          "@type": "Person",
+          "name": "Miller, Robert T.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-4060-7360",
+          "@type": "Person",
+          "name": "Clark, Timothy",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0009-0004-2789-2253",
+          "@type": "Person",
+          "name": "Ashe, William B.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-7945-6534",
+          "@type": "Person",
+          "name": "Pan, Tony C.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03czfpz43",
+            "@type": "Organization",
+            "name": "Emory University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-5676-7898",
+          "@type": "Person",
+          "name": "Pollard, Tom J.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/042nb2s44",
+            "@type": "Organization",
+            "name": "Massachusetts Institute of Technology",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-6789-2002",
+          "@type": "Person",
+          "name": "McCrary, Ciera",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002pd6e78",
+            "@type": "Organization",
+            "name": "Massachusetts General Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-5745-2863",
+          "@type": "Person",
+          "name": "Bihorac, Azra",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/02y3ad647",
+            "@type": "Organization",
+            "name": "University of Florida",
+            "isPartOf": []
+          }
+        },
+        {
+          "@type": "Person",
+          "name": "Hu, Xiao",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03czfpz43",
+            "@type": "Organization",
+            "name": "Emory University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0163-1379",
+          "@type": "Person",
+          "name": "Clermont, Gilles",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        }
+      ],
+      "publisher": "B2AI CHoRUS",
+      "principalInvestigator": "Eric Rosenthal, EROSENTHAL@mgh.harvard.edu",
+      "funder": "NIH Common Fund\u00a0OT2OD032701",
+      "contactEmail": "Ciera McCrary,\u00a0cmccrary@mgh.harvard.edu",
+      "citation": "The CHoRUS for Clinical Care AI Network. The Bridge2AI CHoRUS for Clinical Care AI Dataset: A Multi-Center, Multi-Modal, High-Resolution Critical Care Dataset, version 3.0. Harvard Dataverse, Oct. 2026.",
+      "license": "Data Use Agreement available at 'https://chorus4ai.org/dataset/'",
+      "conditionsOfAccess": "https://chorus4ai.org/version-1-dataset/#data_access_agreement",
+      "copyrightNotice": "\u00a9 2026 THE GENERAL HOSPITAL CORPORATION D/B/A MASSACHUSETTS GENERAL HOSPITAL. Copyrights are owned by each subaward site for curation performed locally. Copyrights are jointly held for software jointly developed. All rights reserved",
+      "ethicalReview": "Eric S. Rosenthal, Michael J. Young, Ishan Williams,\u00a0Ashley\u00a0Cordes, and Barbara J. Evans in collaboration with the Mass General Brigham IRB with\u00a0local context review by IRBs, HIPAA Privacy Officers, and institutional counsels at contributing medical centers.",
+      "confidentialityLevel": "HL7:2V (very restricted)",
+      "irb": {
+        "@type": "Organization",
+        "name": "Mass General Brigham Institutional Review Board (MGB IRB)",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "IRB Reliance and Compliance",
+          "email": "irbreliance@mgb.org",
+          "telephone": "+1-857-282-1900"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "399 Revolution Drive, Suite 710",
+          "addressLocality": "Somerville",
+          "addressRegion": "MA",
+          "postalCode": "02145",
+          "addressCountry": "US"
+        }
+      },
+      "irbProtocolId": "#2022P000707",
+      "humanSubjectExemption": "HIPAA exemption 4 (45 CFR 46.104(d)(4))",
+      "fdaRegulated": true,
+      "deidentified": true,
+      "humanSubjectResearch": "Yes",
+      "dataGovernanceCommittee": "Eric Rosenthal, EROSENTHAL@mgh.harvard.edu",
+      "rai:dataLimitations": "\u2022\tObservational data; and not randomized; collected as real-world clinical data, not through prospective research interactions with patient.\n\u2022\tDocumentation quality dependent on routine clinical workflows and data elements being collected in clinical practice.\n\u2022\tVariable sampling rates across real-world data from hospital waveform systems and middleware\n\u2022\tInstitutional heterogeneity in coding and clinical data collection practices\n\u2022\tLimited generalizability beyond participating hospitals\n\u2022\tNot appropriate for re-identification, contact tracing, or patient-level intervention\n\u2022\tHold-out splits are available for testing; training and validation in development splits require internal mechanisms to avoid overfitting\n",
+      "rai:dataBiases": "\u2022\tReferral bias from tertiary/quaternary academic centers\n\u2022\tSocioeconomic and demographic distribution reflective of participating institutions\n\u2022\tDocumentation bias in clinical notes\n\u2022\tMissingness not at random (MNAR) in laboratory, waveform, and imaging acquisition\n\u2022\tDifferential care pathways affecting label assignment (e.g., ICU vs non-ICU populations)\n\u2022\tTemporal trends related to evolving clinical practice\nBias assessment is ongoing and documented in dataset release notes\n",
+      "rai:dataReleaseMaintenancePlan": "\n\u2022\tVersioned dataset releases e.g., CHoRUS vX.Y)\n\u2022\tRelease notes documenting schema changes, harmonization updates, and known issues\n\u2022\tGovernance committee oversight for structural modifications\n\u2022\tData upload\n\u2022\tDeprecation policy includes:\no\tAdvance notice of schema changes\no\tBackward compatibility window where feasible\no\tArchive of prior versions within enclave where possible or incremental change records\nPrimary maintainers: CHoRUS Data Pillar in collaboration with institutional data stewards.\n",
+      "rai:dataCollection": "Data are derived from routine clinical care at participating hospitals under IRB oversight. Collection includes:\n\u2022\tElectronic health record extraction and transformation to OMOP common data model\n\u2022\tImaging metadata de-identification using RSNA Clinical Trial Processor and pixel-level de-identification using IbisWorks EICON. \n\u2022\tHigh-resolution physiologic waveform capture extraction and transformation to the WFDB standard, \n\u2022\tStandardized harmonization to common data model\nEthical safeguards include:\n\u2022\tIRB approval or waiver as appropriate\n\u2022\tCompliance with CHoRUS governance\n\u2022\tLayered privacy protection including de-identification, data use agreement, controlled access data repository with adherence to NIST 800-53 principles, audit-level protection, registration, role-based access controls, protection against data exfiltration.\nData are not collected solely for research but repurposed from clinical workflows under ethical oversight.\n",
+      "rai:dataCollectionMissingData": "Variable sampling rates across real-world data from hospital waveform systems and middleware",
+      "rai:personalSensitiveInformation": [
+        "CHoRUS operates within a secure enclave environment aligned with NIST 800-53 controls.",
+        "De-identification consistent with HIPAA Safe Harbor",
+        "Removal or tokenization of direct identifiers",
+        "Date shifting or limited date fields when required",
+        "Role-based access control (RBAC)",
+        "Multi-factor authentication",
+        "Full audit logging of data access and queries",
+        "Prohibition of re-identification attempts",
+        "Data export restrictions and output review procedures to reduce risk of re-identification",
+        "Re-identification risk is periodically assessed and mitigation strategies updated as needed."
+      ],
+      "completeness": "Production release of data",
+      "contentUrl": "http://chorus4ai.org/dataset",
+      "project_name": "CHoRUS",
+      "rai:conditionsOfAccess": "Access to CHoRUS data is governed through a controlled-access framework and requires:\n\u2022\tProviding institutional affiliation and credentials\n\u2022\tApproved research proposal reviewed by CHoRUS governance committee\n\u2022\tData Use Agreement (DUA) executed between requestor institution and CHoRUS\n\u2022\tIRB approval or exemption documentation, as applicable\n\u2022\tCompliance with NIH Bridge2AI OT terms and applicable federal regulations\n\u2022\tAccess restricted to secure enclave environment; no raw data export permitted unless explicitly approved\nData use may not be used for commercial purposes unless specifically authorized through a separate agreement consistent with governing award and consortium terms.\n",
+      "rai:potentialBiases": "\u2022\tReferral bias from tertiary/quaternary academic centers\n\u2022\tSocioeconomic and demographic distribution reflective of participating institutions\n\u2022\tDocumentation bias in clinical notes\n\u2022\tMissingness not at random (MNAR) in laboratory, waveform, and imaging acquisition\n\u2022\tDifferential care pathways affecting label assignment (e.g., ICU vs non-ICU populations)\n\u2022\tTemporal trends related to evolving clinical practice\nBias assessment is ongoing and documented in dataset release notes\n",
+      "rai:intendedUseCases": "\n\u2022\tAI model training within enclave\n\u2022\tModel validation and benchmarking\n\u2022\tAlgorithm development and feature engineering\n\u2022\tRetrospective hypothesis testing\n\u2022\tFine-tuning of multimodal models\n\u2022\tComparative effectiveness research\n\u2022\tReinforcement learning and development of expert AI\n\u2022\tMethodological research in trustworthy AI\n\u2022\tTrial emulation or powering\nNot recommended\n\u2022\tDirect translation of trained algorithms to real-time clinical deployment without validation or regulatory clearance\n\u2022\tUse as sole evidence for clinical decision-making\n\u2022\tPopulation inference beyond participating institutions\nUsage must align with approved research scope and governance policies.\n",
+      "rai:maintenancePlan": "\n\u2022\tVersioned dataset releases e.g., CHoRUS vX.Y)\n\u2022\tRelease notes documenting schema changes, harmonization updates, and known issues\n\u2022\tGovernance committee oversight for structural modifications\n\u2022\tData upload\n\u2022\tDeprecation policy includes:\no\tAdvance notice of schema changes\no\tBackward compatibility window where feasible\no\tArchive of prior versions within enclave where possible or incremental change records\nPrimary maintainers: CHoRUS Data Pillar in collaboration with institutional data stewards.\n",
+      "releaseDate": "10/29/2026",
+      "ro-crate-metadata": "ro-crate-metadata.json"
+    },
+    {
+      "@id": "file:///chorusprod/images/ro-crate-metadata.json",
+      "@type": [
+        "https://w3id.org/EVI#Dataset",
+        "https://w3id.org/EVI#ROCrate"
+      ],
+      "conformsTo": {
+        "@id": "https://w3id.org/fairscape/profile/0.1"
+      },
+      "name": "CHoRUS Production V3 Image Subcrate",
+      "description": "Dataset containing all imaging modalities for the CHoRUS production v3 release.",
+      "keywords": [
+        "DICOM",
+        "https://edamontology.org/format_3548",
+        "X-Ray",
+        "https://id.nlm.nih.gov/mesh/D011859",
+        "https://id.nlm.nih.gov/mesh/D014965",
+        "Magnetic Resonance Imaging",
+        "MRI",
+        "https://id.nlm.nih.gov/mesh/D008279"
+      ],
+      "version": "3.0",
+      "datePublished": "10/29/2026",
+      "isPartOf": [
+        {
+          "@id": "https://doi.org/10.18130/V3/ATG0DP",
+          "name": "CHoRUS Production Release V3",
+          "@type": [
+            "https://w3id.org/EVI#Dataset",
+            "https://w3id.org/EVI#ROCrate"
+          ]
+        }
+      ],
+      "hasPart": [],
+      "author": [
+        {
+          "@id": "https://orcid.org/0000-0002-0930-9683",
+          "@type": "Person",
+          "name": "Rosenthal, Eric S.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03vek6s52",
+            "@type": "Organization",
+            "name": "Harvard University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-8366-4811",
+          "@type": "Person",
+          "name": "Kamaleswaran, Rishikesan",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/00py81415",
+            "@type": "Organization",
+            "name": "Duke University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-6060-1233",
+          "@type": "Person",
+          "name": "Strekalova, Yulia Levites",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/02y3ad647",
+            "@type": "Organization",
+            "name": "University of Florida",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0692-412X",
+          "@type": "Person",
+          "name": "Williams, Andrew E.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-2118-6612",
+          "@type": "Person",
+          "name": "Cordes, Ashley",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0293rh119",
+            "@type": "Organization",
+            "name": "University of Oregon",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-8329-9225",
+          "@type": "Person",
+          "name": "Williams, Ishan C.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-4530-2048",
+          "@type": "Person",
+          "name": "Rashidi, Parisa",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-8115-7971",
+          "@type": "Person",
+          "name": "Evans, Barbara J.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/02y3ad647",
+            "@type": "Organization",
+            "name": "University of Florida",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-5772-1648",
+          "@type": "Person",
+          "name": "Moorman, J. Randall",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-3688-7307",
+          "@type": "Person",
+          "name": "Park, Soojin",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/01esghr10",
+            "@type": "Organization",
+            "name": "Columbia University Irving Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-6972-5622",
+          "@type": "Person",
+          "name": "Amorim, Edilberto",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/043mz5j54",
+            "@type": "Organization",
+            "name": "University of California, San Francisco",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-0936-9501",
+          "@type": "Person",
+          "name": "Vespa, Paul M.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/046rm7j60",
+            "@type": "Organization",
+            "name": "University of California, Los Angeles",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-9933-2205",
+          "@type": "Person",
+          "name": "Jiang, Xiaoqian",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03gds6c39",
+            "@type": "Organization",
+            "name": "The University of Texas Health Science Center at Houston",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-2570-3741",
+          "@type": "Person",
+          "name": "Liu, Hongfang",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03gds6c39",
+            "@type": "Organization",
+            "name": "The University of Texas Health Science Center at Houston",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-5539-4674",
+          "@type": "Person",
+          "name": "Podgoreanu, Mihai V.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/00py81415",
+            "@type": "Organization",
+            "name": "Duke University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0214-0651",
+          "@type": "Person",
+          "name": "Herasevich, Vitaly",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/02qp3tb03",
+            "@type": "Organization",
+            "name": "Mayo Clinic",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-4736-7462",
+          "@type": "Person",
+          "name": "Wainwright, Mark",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/01njes783",
+            "@type": "Organization",
+            "name": "Seattle Children's Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-3523-0514",
+          "@type": "Person",
+          "name": "Barros, Andrew J.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-9580-4121",
+          "@type": "Person",
+          "name": "Sullivan,  Brynne A.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0009-0007-4427-6139",
+          "@type": "Person",
+          "name": "Young, Michael J.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002pd6e78",
+            "@type": "Organization",
+            "name": "Massachusetts General Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@type": "Person",
+          "name": "Alvarez, Marta",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-4147-1485",
+          "@type": "Person",
+          "name": "Talapova, Polina",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-3329-8048",
+          "@type": "Person",
+          "name": "Muszynski, Jennifer A.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/003rfsp33",
+            "@type": "Organization",
+            "name": "Nationwide Children's Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-7429-3828",
+          "@type": "Person",
+          "name": "Gent, Alasdair",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/00py81415",
+            "@type": "Organization",
+            "name": "Duke University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-2983-571X",
+          "@type": "Person",
+          "name": "Bold, Delgersuren",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03czfpz43",
+            "@type": "Organization",
+            "name": "Emory University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-3434-9062",
+          "@type": "Person",
+          "name": "Kwong, Manlik",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@type": "Person",
+          "name": "Gunda, Dileep",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03czfpz43",
+            "@type": "Organization",
+            "name": "Emory University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0009-0000-2152-0281",
+          "@type": "Person",
+          "name": "Le, Jackie",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002pd6e78",
+            "@type": "Organization",
+            "name": "Massachusetts General Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-4758-3050",
+          "@type": "Person",
+          "name": "Loar, India",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-7682-1943",
+          "@type": "Person",
+          "name": "Gow, Brian J.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/042nb2s44",
+            "@type": "Organization",
+            "name": "Massachusetts Institute of Technology",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0009-0004-6535-6988",
+          "@type": "Person",
+          "name": "Schmidt, Heidi",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002pd6e78",
+            "@type": "Organization",
+            "name": "Massachusetts General Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-1557-9716",
+          "@type": "Person",
+          "name": "Houghtaling, Jared",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-1787-2855",
+          "@type": "Person",
+          "name": "Miller, Robert T.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-4060-7360",
+          "@type": "Person",
+          "name": "Clark, Timothy",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0009-0004-2789-2253",
+          "@type": "Person",
+          "name": "Ashe, William B.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-7945-6534",
+          "@type": "Person",
+          "name": "Pan, Tony C.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03czfpz43",
+            "@type": "Organization",
+            "name": "Emory University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-5676-7898",
+          "@type": "Person",
+          "name": "Pollard, Tom J.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/042nb2s44",
+            "@type": "Organization",
+            "name": "Massachusetts Institute of Technology",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-6789-2002",
+          "@type": "Person",
+          "name": "McCrary, Ciera",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002pd6e78",
+            "@type": "Organization",
+            "name": "Massachusetts General Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-5745-2863",
+          "@type": "Person",
+          "name": "Bihorac, Azra",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/02y3ad647",
+            "@type": "Organization",
+            "name": "University of Florida",
+            "isPartOf": []
+          }
+        },
+        {
+          "@type": "Person",
+          "name": "Hu, Xiao",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03czfpz43",
+            "@type": "Organization",
+            "name": "Emory University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0163-1379",
+          "@type": "Person",
+          "name": "Clermont, Gilles",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        }
+      ],
+      "publisher": "B2AI CHoRUS",
+      "principalInvestigator": "Eric Rosenthal, EROSENTHAL@mgh.harvard.edu",
+      "funder": "NIH Common Fund\u00a0OT2OD032701",
+      "contactEmail": "Ciera McCrary,\u00a0cmccrary@mgh.harvard.edu",
+      "citation": "The CHoRUS for Clinical Care AI Network. The Bridge2AI CHoRUS for Clinical Care AI Dataset: A Multi-Center, Multi-Modal, High-Resolution Critical Care Dataset, version 3.0. Harvard Dataverse, Oct. 2026.",
+      "license": "Data Use Agreement available at 'https://chorus4ai.org/dataset/'",
+      "conditionsOfAccess": "https://chorus4ai.org/version-1-dataset/#data_access_agreement",
+      "copyrightNotice": "\u00a9 2026 THE GENERAL HOSPITAL CORPORATION D/B/A MASSACHUSETTS GENERAL HOSPITAL. Copyrights are owned by each subaward site for curation performed locally. Copyrights are jointly held for software jointly developed. All rights reserved",
+      "ethicalReview": "Eric S. Rosenthal, Michael J. Young, Ishan Williams,\u00a0Ashley\u00a0Cordes, and Barbara J. Evans in collaboration with the Mass General Brigham IRB with\u00a0local context review by IRBs, HIPAA Privacy Officers, and institutional counsels at contributing medical centers.",
+      "confidentialityLevel": "HL7:2V (very restricted)",
+      "irb": {
+        "@type": "Organization",
+        "name": "Mass General Brigham Institutional Review Board (MGB IRB)",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "IRB Reliance and Compliance",
+          "email": "irbreliance@mgb.org",
+          "telephone": "+1-857-282-1900"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "399 Revolution Drive, Suite 710",
+          "addressLocality": "Somerville",
+          "addressRegion": "MA",
+          "postalCode": "02145",
+          "addressCountry": "US"
+        }
+      },
+      "irbProtocolId": "#2022P000707",
+      "humanSubjectExemption": "HIPAA exemption 4 (45 CFR 46.104(d)(4))",
+      "fdaRegulated": true,
+      "deidentified": true,
+      "humanSubjectResearch": "Yes",
+      "dataGovernanceCommittee": "Eric Rosenthal, EROSENTHAL@mgh.harvard.edu",
+      "rai:dataLimitations": "\u2022\tObservational data; and not randomized; collected as real-world clinical data, not through prospective research interactions with patient.\n\u2022\tDocumentation quality dependent on routine clinical workflows and data elements being collected in clinical practice.\n\u2022\tVariable sampling rates across real-world data from hospital waveform systems and middleware\n\u2022\tInstitutional heterogeneity in coding and clinical data collection practices\n\u2022\tLimited generalizability beyond participating hospitals\n\u2022\tNot appropriate for re-identification, contact tracing, or patient-level intervention\n\u2022\tHold-out splits are available for testing; training and validation in development splits require internal mechanisms to avoid overfitting\n",
+      "rai:dataBiases": "\u2022\tReferral bias from tertiary/quaternary academic centers\n\u2022\tSocioeconomic and demographic distribution reflective of participating institutions\n\u2022\tDocumentation bias in clinical notes\n\u2022\tMissingness not at random (MNAR) in laboratory, waveform, and imaging acquisition\n\u2022\tDifferential care pathways affecting label assignment (e.g., ICU vs non-ICU populations)\n\u2022\tTemporal trends related to evolving clinical practice\nBias assessment is ongoing and documented in dataset release notes\n",
+      "rai:dataReleaseMaintenancePlan": "\n\u2022\tVersioned dataset releases e.g., CHoRUS vX.Y)\n\u2022\tRelease notes documenting schema changes, harmonization updates, and known issues\n\u2022\tGovernance committee oversight for structural modifications\n\u2022\tData upload\n\u2022\tDeprecation policy includes:\no\tAdvance notice of schema changes\no\tBackward compatibility window where feasible\no\tArchive of prior versions within enclave where possible or incremental change records\nPrimary maintainers: CHoRUS Data Pillar in collaboration with institutional data stewards.\n",
+      "rai:dataCollection": "Data are derived from routine clinical care at participating hospitals under IRB oversight. Collection includes:\n\u2022\tElectronic health record extraction and transformation to OMOP common data model\n\u2022\tImaging metadata de-identification using RSNA Clinical Trial Processor and pixel-level de-identification using IbisWorks EICON. \n\u2022\tHigh-resolution physiologic waveform capture extraction and transformation to the WFDB standard, \n\u2022\tStandardized harmonization to common data model\nEthical safeguards include:\n\u2022\tIRB approval or waiver as appropriate\n\u2022\tCompliance with CHoRUS governance\n\u2022\tLayered privacy protection including de-identification, data use agreement, controlled access data repository with adherence to NIST 800-53 principles, audit-level protection, registration, role-based access controls, protection against data exfiltration.\nData are not collected solely for research but repurposed from clinical workflows under ethical oversight.\n",
+      "rai:dataCollectionMissingData": "Variable sampling rates across real-world data from hospital waveform systems and middleware",
+      "rai:personalSensitiveInformation": [
+        "CHoRUS operates within a secure enclave environment aligned with NIST 800-53 controls.",
+        "De-identification consistent with HIPAA Safe Harbor",
+        "Removal or tokenization of direct identifiers",
+        "Date shifting or limited date fields when required",
+        "Role-based access control (RBAC)",
+        "Multi-factor authentication",
+        "Full audit logging of data access and queries",
+        "Prohibition of re-identification attempts",
+        "Data export restrictions and output review procedures to reduce risk of re-identification",
+        "Re-identification risk is periodically assessed and mitigation strategies updated as needed."
+      ],
+      "completeness": "Production release of data",
+      "project_name": "CHoRUS",
+      "rai:conditionsOfAccess": "Access to CHoRUS data is governed through a controlled-access framework and requires:\n\u2022\tProviding institutional affiliation and credentials\n\u2022\tApproved research proposal reviewed by CHoRUS governance committee\n\u2022\tData Use Agreement (DUA) executed between requestor institution and CHoRUS\n\u2022\tIRB approval or exemption documentation, as applicable\n\u2022\tCompliance with NIH Bridge2AI OT terms and applicable federal regulations\n\u2022\tAccess restricted to secure enclave environment; no raw data export permitted unless explicitly approved\nData use may not be used for commercial purposes unless specifically authorized through a separate agreement consistent with governing award and consortium terms.\n",
+      "rai:potentialBiases": "\u2022\tReferral bias from tertiary/quaternary academic centers\n\u2022\tSocioeconomic and demographic distribution reflective of participating institutions\n\u2022\tDocumentation bias in clinical notes\n\u2022\tMissingness not at random (MNAR) in laboratory, waveform, and imaging acquisition\n\u2022\tDifferential care pathways affecting label assignment (e.g., ICU vs non-ICU populations)\n\u2022\tTemporal trends related to evolving clinical practice\nBias assessment is ongoing and documented in dataset release notes\n",
+      "rai:intendedUseCases": "\n\u2022\tAI model training within enclave\n\u2022\tModel validation and benchmarking\n\u2022\tAlgorithm development and feature engineering\n\u2022\tRetrospective hypothesis testing\n\u2022\tFine-tuning of multimodal models\n\u2022\tComparative effectiveness research\n\u2022\tReinforcement learning and development of expert AI\n\u2022\tMethodological research in trustworthy AI\n\u2022\tTrial emulation or powering\nNot recommended\n\u2022\tDirect translation of trained algorithms to real-time clinical deployment without validation or regulatory clearance\n\u2022\tUse as sole evidence for clinical decision-making\n\u2022\tPopulation inference beyond participating institutions\nUsage must align with approved research scope and governance policies.\n",
+      "rai:maintenancePlan": "\n\u2022\tVersioned dataset releases e.g., CHoRUS vX.Y)\n\u2022\tRelease notes documenting schema changes, harmonization updates, and known issues\n\u2022\tGovernance committee oversight for structural modifications\n\u2022\tData upload\n\u2022\tDeprecation policy includes:\no\tAdvance notice of schema changes\no\tBackward compatibility window where feasible\no\tArchive of prior versions within enclave where possible or incremental change records\nPrimary maintainers: CHoRUS Data Pillar in collaboration with institutional data stewards.\n",
+      "releaseDate": "10/29/2026",
+      "contentUrl": "http://chorus4ai.org/dataset",
+      "ro-crate-metadata": "ro-crate-metadata.json"
+    },
+    {
+      "@id": "file:///chorusprod/omop/ro-crate-metadata.json",
+      "@type": [
+        "https://w3id.org/EVI#Dataset",
+        "https://w3id.org/EVI#ROCrate"
+      ],
+      "conformsTo": {
+        "@id": "https://w3id.org/fairscape/profile/0.1"
+      },
+      "name": "CHoRUS Production V3 EHR Subcrate",
+      "description": "Dataset containing all electronic health records modalities for the CHoRUS production v3 release.",
+      "keywords": [
+        "OMOP",
+        "EHR",
+        "Electronic Health Records",
+        "https://id.nlm.nih.gov/mesh/D057286"
+      ],
+      "version": "3.0",
+      "datePublished": "10/29/2026",
+      "isPartOf": [
+        {
+          "@id": "https://doi.org/10.18130/V3/ATG0DP",
+          "name": "CHoRUS Production Release V3",
+          "@type": [
+            "https://w3id.org/EVI#Dataset",
+            "https://w3id.org/EVI#ROCrate"
+          ]
+        }
+      ],
+      "hasPart": [],
+      "author": [
+        {
+          "@id": "https://orcid.org/0000-0002-0930-9683",
+          "@type": "Person",
+          "name": "Rosenthal, Eric S.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03vek6s52",
+            "@type": "Organization",
+            "name": "Harvard University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-8366-4811",
+          "@type": "Person",
+          "name": "Kamaleswaran, Rishikesan",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/00py81415",
+            "@type": "Organization",
+            "name": "Duke University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-6060-1233",
+          "@type": "Person",
+          "name": "Strekalova, Yulia Levites",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/02y3ad647",
+            "@type": "Organization",
+            "name": "University of Florida",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0692-412X",
+          "@type": "Person",
+          "name": "Williams, Andrew E.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-2118-6612",
+          "@type": "Person",
+          "name": "Cordes, Ashley",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0293rh119",
+            "@type": "Organization",
+            "name": "University of Oregon",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-8329-9225",
+          "@type": "Person",
+          "name": "Williams, Ishan C.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-4530-2048",
+          "@type": "Person",
+          "name": "Rashidi, Parisa",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-8115-7971",
+          "@type": "Person",
+          "name": "Evans, Barbara J.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/02y3ad647",
+            "@type": "Organization",
+            "name": "University of Florida",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-5772-1648",
+          "@type": "Person",
+          "name": "Moorman, J. Randall",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-3688-7307",
+          "@type": "Person",
+          "name": "Park, Soojin",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/01esghr10",
+            "@type": "Organization",
+            "name": "Columbia University Irving Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-6972-5622",
+          "@type": "Person",
+          "name": "Amorim, Edilberto",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/043mz5j54",
+            "@type": "Organization",
+            "name": "University of California, San Francisco",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-0936-9501",
+          "@type": "Person",
+          "name": "Vespa, Paul M.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/046rm7j60",
+            "@type": "Organization",
+            "name": "University of California, Los Angeles",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-9933-2205",
+          "@type": "Person",
+          "name": "Jiang, Xiaoqian",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03gds6c39",
+            "@type": "Organization",
+            "name": "The University of Texas Health Science Center at Houston",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-2570-3741",
+          "@type": "Person",
+          "name": "Liu, Hongfang",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03gds6c39",
+            "@type": "Organization",
+            "name": "The University of Texas Health Science Center at Houston",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-5539-4674",
+          "@type": "Person",
+          "name": "Podgoreanu, Mihai V.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/00py81415",
+            "@type": "Organization",
+            "name": "Duke University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0214-0651",
+          "@type": "Person",
+          "name": "Herasevich, Vitaly",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/02qp3tb03",
+            "@type": "Organization",
+            "name": "Mayo Clinic",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-4736-7462",
+          "@type": "Person",
+          "name": "Wainwright, Mark",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/01njes783",
+            "@type": "Organization",
+            "name": "Seattle Children's Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-3523-0514",
+          "@type": "Person",
+          "name": "Barros, Andrew J.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-9580-4121",
+          "@type": "Person",
+          "name": "Sullivan,  Brynne A.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0009-0007-4427-6139",
+          "@type": "Person",
+          "name": "Young, Michael J.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002pd6e78",
+            "@type": "Organization",
+            "name": "Massachusetts General Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@type": "Person",
+          "name": "Alvarez, Marta",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-4147-1485",
+          "@type": "Person",
+          "name": "Talapova, Polina",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-3329-8048",
+          "@type": "Person",
+          "name": "Muszynski, Jennifer A.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/003rfsp33",
+            "@type": "Organization",
+            "name": "Nationwide Children's Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-7429-3828",
+          "@type": "Person",
+          "name": "Gent, Alasdair",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/00py81415",
+            "@type": "Organization",
+            "name": "Duke University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-2983-571X",
+          "@type": "Person",
+          "name": "Bold, Delgersuren",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03czfpz43",
+            "@type": "Organization",
+            "name": "Emory University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-3434-9062",
+          "@type": "Person",
+          "name": "Kwong, Manlik",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@type": "Person",
+          "name": "Gunda, Dileep",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03czfpz43",
+            "@type": "Organization",
+            "name": "Emory University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0009-0000-2152-0281",
+          "@type": "Person",
+          "name": "Le, Jackie",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002pd6e78",
+            "@type": "Organization",
+            "name": "Massachusetts General Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-4758-3050",
+          "@type": "Person",
+          "name": "Loar, India",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-7682-1943",
+          "@type": "Person",
+          "name": "Gow, Brian J.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/042nb2s44",
+            "@type": "Organization",
+            "name": "Massachusetts Institute of Technology",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0009-0004-6535-6988",
+          "@type": "Person",
+          "name": "Schmidt, Heidi",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002pd6e78",
+            "@type": "Organization",
+            "name": "Massachusetts General Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-1557-9716",
+          "@type": "Person",
+          "name": "Houghtaling, Jared",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-1787-2855",
+          "@type": "Person",
+          "name": "Miller, Robert T.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-4060-7360",
+          "@type": "Person",
+          "name": "Clark, Timothy",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0009-0004-2789-2253",
+          "@type": "Person",
+          "name": "Ashe, William B.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-7945-6534",
+          "@type": "Person",
+          "name": "Pan, Tony C.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03czfpz43",
+            "@type": "Organization",
+            "name": "Emory University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-5676-7898",
+          "@type": "Person",
+          "name": "Pollard, Tom J.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/042nb2s44",
+            "@type": "Organization",
+            "name": "Massachusetts Institute of Technology",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-6789-2002",
+          "@type": "Person",
+          "name": "McCrary, Ciera",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002pd6e78",
+            "@type": "Organization",
+            "name": "Massachusetts General Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-5745-2863",
+          "@type": "Person",
+          "name": "Bihorac, Azra",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/02y3ad647",
+            "@type": "Organization",
+            "name": "University of Florida",
+            "isPartOf": []
+          }
+        },
+        {
+          "@type": "Person",
+          "name": "Hu, Xiao",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03czfpz43",
+            "@type": "Organization",
+            "name": "Emory University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0163-1379",
+          "@type": "Person",
+          "name": "Clermont, Gilles",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        }
+      ],
+      "publisher": "B2AI CHoRUS",
+      "principalInvestigator": "Eric Rosenthal, EROSENTHAL@mgh.harvard.edu",
+      "funder": "NIH Common Fund\u00a0OT2OD032701",
+      "contactEmail": "Ciera McCrary,\u00a0cmccrary@mgh.harvard.edu",
+      "citation": "The CHoRUS for Clinical Care AI Network. The Bridge2AI CHoRUS for Clinical Care AI Dataset: A Multi-Center, Multi-Modal, High-Resolution Critical Care Dataset, version 3.0. Harvard Dataverse, Oct. 2026.",
+      "license": "Data Use Agreement available at 'https://chorus4ai.org/dataset/'",
+      "conditionsOfAccess": "https://chorus4ai.org/version-1-dataset/#data_access_agreement",
+      "copyrightNotice": "\u00a9 2026 THE GENERAL HOSPITAL CORPORATION D/B/A MASSACHUSETTS GENERAL HOSPITAL. Copyrights are owned by each subaward site for curation performed locally. Copyrights are jointly held for software jointly developed. All rights reserved",
+      "ethicalReview": "Eric S. Rosenthal, Michael J. Young, Ishan Williams,\u00a0Ashley\u00a0Cordes, and Barbara J. Evans in collaboration with the Mass General Brigham IRB with\u00a0local context review by IRBs, HIPAA Privacy Officers, and institutional counsels at contributing medical centers.",
+      "confidentialityLevel": "HL7:2V (very restricted)",
+      "irb": {
+        "@type": "Organization",
+        "name": "Mass General Brigham Institutional Review Board (MGB IRB)",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "IRB Reliance and Compliance",
+          "email": "irbreliance@mgb.org",
+          "telephone": "+1-857-282-1900"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "399 Revolution Drive, Suite 710",
+          "addressLocality": "Somerville",
+          "addressRegion": "MA",
+          "postalCode": "02145",
+          "addressCountry": "US"
+        }
+      },
+      "irbProtocolId": "#2022P000707",
+      "humanSubjectExemption": "HIPAA exemption 4 (45 CFR 46.104(d)(4))",
+      "fdaRegulated": true,
+      "deidentified": true,
+      "humanSubjectResearch": "Yes",
+      "dataGovernanceCommittee": "Eric Rosenthal, EROSENTHAL@mgh.harvard.edu",
+      "rai:dataLimitations": "\u2022\tObservational data; and not randomized; collected as real-world clinical data, not through prospective research interactions with patient.\n\u2022\tDocumentation quality dependent on routine clinical workflows and data elements being collected in clinical practice.\n\u2022\tVariable sampling rates across real-world data from hospital waveform systems and middleware\n\u2022\tInstitutional heterogeneity in coding and clinical data collection practices\n\u2022\tLimited generalizability beyond participating hospitals\n\u2022\tNot appropriate for re-identification, contact tracing, or patient-level intervention\n\u2022\tHold-out splits are available for testing; training and validation in development splits require internal mechanisms to avoid overfitting\n",
+      "rai:dataBiases": "\u2022\tReferral bias from tertiary/quaternary academic centers\n\u2022\tSocioeconomic and demographic distribution reflective of participating institutions\n\u2022\tDocumentation bias in clinical notes\n\u2022\tMissingness not at random (MNAR) in laboratory, waveform, and imaging acquisition\n\u2022\tDifferential care pathways affecting label assignment (e.g., ICU vs non-ICU populations)\n\u2022\tTemporal trends related to evolving clinical practice\nBias assessment is ongoing and documented in dataset release notes\n",
+      "rai:dataReleaseMaintenancePlan": "\n\u2022\tVersioned dataset releases e.g., CHoRUS vX.Y)\n\u2022\tRelease notes documenting schema changes, harmonization updates, and known issues\n\u2022\tGovernance committee oversight for structural modifications\n\u2022\tData upload\n\u2022\tDeprecation policy includes:\no\tAdvance notice of schema changes\no\tBackward compatibility window where feasible\no\tArchive of prior versions within enclave where possible or incremental change records\nPrimary maintainers: CHoRUS Data Pillar in collaboration with institutional data stewards.\n",
+      "rai:dataCollection": "Data are derived from routine clinical care at participating hospitals under IRB oversight. Collection includes:\n\u2022\tElectronic health record extraction and transformation to OMOP common data model\n\u2022\tImaging metadata de-identification using RSNA Clinical Trial Processor and pixel-level de-identification using IbisWorks EICON. \n\u2022\tHigh-resolution physiologic waveform capture extraction and transformation to the WFDB standard, \n\u2022\tStandardized harmonization to common data model\nEthical safeguards include:\n\u2022\tIRB approval or waiver as appropriate\n\u2022\tCompliance with CHoRUS governance\n\u2022\tLayered privacy protection including de-identification, data use agreement, controlled access data repository with adherence to NIST 800-53 principles, audit-level protection, registration, role-based access controls, protection against data exfiltration.\nData are not collected solely for research but repurposed from clinical workflows under ethical oversight.\n",
+      "rai:dataCollectionMissingData": "Variable sampling rates across real-world data from hospital waveform systems and middleware",
+      "rai:personalSensitiveInformation": [
+        "CHoRUS operates within a secure enclave environment aligned with NIST 800-53 controls.",
+        "De-identification consistent with HIPAA Safe Harbor",
+        "Removal or tokenization of direct identifiers",
+        "Date shifting or limited date fields when required",
+        "Role-based access control (RBAC)",
+        "Multi-factor authentication",
+        "Full audit logging of data access and queries",
+        "Prohibition of re-identification attempts",
+        "Data export restrictions and output review procedures to reduce risk of re-identification",
+        "Re-identification risk is periodically assessed and mitigation strategies updated as needed."
+      ],
+      "completeness": "Production release of data",
+      "project_name": "CHoRUS",
+      "rai:conditionsOfAccess": "Access to CHoRUS data is governed through a controlled-access framework and requires:\n\u2022\tProviding institutional affiliation and credentials\n\u2022\tApproved research proposal reviewed by CHoRUS governance committee\n\u2022\tData Use Agreement (DUA) executed between requestor institution and CHoRUS\n\u2022\tIRB approval or exemption documentation, as applicable\n\u2022\tCompliance with NIH Bridge2AI OT terms and applicable federal regulations\n\u2022\tAccess restricted to secure enclave environment; no raw data export permitted unless explicitly approved\nData use may not be used for commercial purposes unless specifically authorized through a separate agreement consistent with governing award and consortium terms.\n",
+      "rai:potentialBiases": "\u2022\tReferral bias from tertiary/quaternary academic centers\n\u2022\tSocioeconomic and demographic distribution reflective of participating institutions\n\u2022\tDocumentation bias in clinical notes\n\u2022\tMissingness not at random (MNAR) in laboratory, waveform, and imaging acquisition\n\u2022\tDifferential care pathways affecting label assignment (e.g., ICU vs non-ICU populations)\n\u2022\tTemporal trends related to evolving clinical practice\nBias assessment is ongoing and documented in dataset release notes\n",
+      "rai:intendedUseCases": "\n\u2022\tAI model training within enclave\n\u2022\tModel validation and benchmarking\n\u2022\tAlgorithm development and feature engineering\n\u2022\tRetrospective hypothesis testing\n\u2022\tFine-tuning of multimodal models\n\u2022\tComparative effectiveness research\n\u2022\tReinforcement learning and development of expert AI\n\u2022\tMethodological research in trustworthy AI\n\u2022\tTrial emulation or powering\nNot recommended\n\u2022\tDirect translation of trained algorithms to real-time clinical deployment without validation or regulatory clearance\n\u2022\tUse as sole evidence for clinical decision-making\n\u2022\tPopulation inference beyond participating institutions\nUsage must align with approved research scope and governance policies.\n",
+      "rai:maintenancePlan": "\n\u2022\tVersioned dataset releases e.g., CHoRUS vX.Y)\n\u2022\tRelease notes documenting schema changes, harmonization updates, and known issues\n\u2022\tGovernance committee oversight for structural modifications\n\u2022\tData upload\n\u2022\tDeprecation policy includes:\no\tAdvance notice of schema changes\no\tBackward compatibility window where feasible\no\tArchive of prior versions within enclave where possible or incremental change records\nPrimary maintainers: CHoRUS Data Pillar in collaboration with institutional data stewards.\n",
+      "releaseDate": "10/29/2026",
+      "contentUrl": "http://chorus4ai.org/dataset",
+      "ro-crate-metadata": "ro-crate-metadata.json"
+    },
+    {
+      "@id": "file:///chorusprod/waveforms/ro-crate-metadata.json",
+      "@type": [
+        "https://w3id.org/EVI#Dataset",
+        "https://w3id.org/EVI#ROCrate"
+      ],
+      "conformsTo": {
+        "@id": "https://w3id.org/fairscape/profile/0.1"
+      },
+      "name": "CHoRUS Production V3 Waveform Subcrate",
+      "description": "Dataset containing all diagnostic waveform modalities for the CHoRUS production v3 release.",
+      "keywords": [
+        "Electrocardiography",
+        "https://id.nlm.nih.gov/mesh/D004562",
+        "http://snomed.info/29303009",
+        "PLETH",
+        "Photoplethysmogram",
+        "Pulse Oximeter",
+        "https://id.nlm.nih.gov/mesh/D017156",
+        "https://snomed.info/252465000",
+        "Arterial Pressure",
+        "https://id.nlm.nih.gov/mesh/D062186",
+        "https://id.nlm.nih.gov/mesh/D001795",
+        "wfdb",
+        "https://edamontology.org/format_3821"
+      ],
+      "version": "3.0",
+      "datePublished": "10/29/2026",
+      "isPartOf": [
+        {
+          "@id": "https://doi.org/10.18130/V3/ATG0DP",
+          "name": "CHoRUS Production Release V3",
+          "@type": [
+            "https://w3id.org/EVI#Dataset",
+            "https://w3id.org/EVI#ROCrate"
+          ]
+        }
+      ],
+      "hasPart": [],
+      "author": [
+        {
+          "@id": "https://orcid.org/0000-0002-0930-9683",
+          "@type": "Person",
+          "name": "Rosenthal, Eric S.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03vek6s52",
+            "@type": "Organization",
+            "name": "Harvard University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-8366-4811",
+          "@type": "Person",
+          "name": "Kamaleswaran, Rishikesan",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/00py81415",
+            "@type": "Organization",
+            "name": "Duke University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-6060-1233",
+          "@type": "Person",
+          "name": "Strekalova, Yulia Levites",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/02y3ad647",
+            "@type": "Organization",
+            "name": "University of Florida",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0692-412X",
+          "@type": "Person",
+          "name": "Williams, Andrew E.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-2118-6612",
+          "@type": "Person",
+          "name": "Cordes, Ashley",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0293rh119",
+            "@type": "Organization",
+            "name": "University of Oregon",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-8329-9225",
+          "@type": "Person",
+          "name": "Williams, Ishan C.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-4530-2048",
+          "@type": "Person",
+          "name": "Rashidi, Parisa",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-8115-7971",
+          "@type": "Person",
+          "name": "Evans, Barbara J.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/02y3ad647",
+            "@type": "Organization",
+            "name": "University of Florida",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-5772-1648",
+          "@type": "Person",
+          "name": "Moorman, J. Randall",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-3688-7307",
+          "@type": "Person",
+          "name": "Park, Soojin",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/01esghr10",
+            "@type": "Organization",
+            "name": "Columbia University Irving Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-6972-5622",
+          "@type": "Person",
+          "name": "Amorim, Edilberto",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/043mz5j54",
+            "@type": "Organization",
+            "name": "University of California, San Francisco",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-0936-9501",
+          "@type": "Person",
+          "name": "Vespa, Paul M.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/046rm7j60",
+            "@type": "Organization",
+            "name": "University of California, Los Angeles",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-9933-2205",
+          "@type": "Person",
+          "name": "Jiang, Xiaoqian",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03gds6c39",
+            "@type": "Organization",
+            "name": "The University of Texas Health Science Center at Houston",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-2570-3741",
+          "@type": "Person",
+          "name": "Liu, Hongfang",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03gds6c39",
+            "@type": "Organization",
+            "name": "The University of Texas Health Science Center at Houston",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-5539-4674",
+          "@type": "Person",
+          "name": "Podgoreanu, Mihai V.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/00py81415",
+            "@type": "Organization",
+            "name": "Duke University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0214-0651",
+          "@type": "Person",
+          "name": "Herasevich, Vitaly",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/02qp3tb03",
+            "@type": "Organization",
+            "name": "Mayo Clinic",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-4736-7462",
+          "@type": "Person",
+          "name": "Wainwright, Mark",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/01njes783",
+            "@type": "Organization",
+            "name": "Seattle Children's Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-3523-0514",
+          "@type": "Person",
+          "name": "Barros, Andrew J.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-9580-4121",
+          "@type": "Person",
+          "name": "Sullivan,  Brynne A.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0009-0007-4427-6139",
+          "@type": "Person",
+          "name": "Young, Michael J.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002pd6e78",
+            "@type": "Organization",
+            "name": "Massachusetts General Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@type": "Person",
+          "name": "Alvarez, Marta",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-4147-1485",
+          "@type": "Person",
+          "name": "Talapova, Polina",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-3329-8048",
+          "@type": "Person",
+          "name": "Muszynski, Jennifer A.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/003rfsp33",
+            "@type": "Organization",
+            "name": "Nationwide Children's Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-7429-3828",
+          "@type": "Person",
+          "name": "Gent, Alasdair",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/00py81415",
+            "@type": "Organization",
+            "name": "Duke University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-2983-571X",
+          "@type": "Person",
+          "name": "Bold, Delgersuren",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03czfpz43",
+            "@type": "Organization",
+            "name": "Emory University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-3434-9062",
+          "@type": "Person",
+          "name": "Kwong, Manlik",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@type": "Person",
+          "name": "Gunda, Dileep",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03czfpz43",
+            "@type": "Organization",
+            "name": "Emory University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0009-0000-2152-0281",
+          "@type": "Person",
+          "name": "Le, Jackie",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002pd6e78",
+            "@type": "Organization",
+            "name": "Massachusetts General Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-4758-3050",
+          "@type": "Person",
+          "name": "Loar, India",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-7682-1943",
+          "@type": "Person",
+          "name": "Gow, Brian J.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/042nb2s44",
+            "@type": "Organization",
+            "name": "Massachusetts Institute of Technology",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0009-0004-6535-6988",
+          "@type": "Person",
+          "name": "Schmidt, Heidi",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002pd6e78",
+            "@type": "Organization",
+            "name": "Massachusetts General Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-1557-9716",
+          "@type": "Person",
+          "name": "Houghtaling, Jared",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-1787-2855",
+          "@type": "Person",
+          "name": "Miller, Robert T.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002hsbm82",
+            "@type": "Organization",
+            "name": "Tufts Medical Center",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-4060-7360",
+          "@type": "Person",
+          "name": "Clark, Timothy",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0009-0004-2789-2253",
+          "@type": "Person",
+          "name": "Ashe, William B.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-7945-6534",
+          "@type": "Person",
+          "name": "Pan, Tony C.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03czfpz43",
+            "@type": "Organization",
+            "name": "Emory University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-5676-7898",
+          "@type": "Person",
+          "name": "Pollard, Tom J.",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/042nb2s44",
+            "@type": "Organization",
+            "name": "Massachusetts Institute of Technology",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-6789-2002",
+          "@type": "Person",
+          "name": "McCrary, Ciera",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/002pd6e78",
+            "@type": "Organization",
+            "name": "Massachusetts General Hospital",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-5745-2863",
+          "@type": "Person",
+          "name": "Bihorac, Azra",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/02y3ad647",
+            "@type": "Organization",
+            "name": "University of Florida",
+            "isPartOf": []
+          }
+        },
+        {
+          "@type": "Person",
+          "name": "Hu, Xiao",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/03czfpz43",
+            "@type": "Organization",
+            "name": "Emory University",
+            "isPartOf": []
+          }
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0163-1379",
+          "@type": "Person",
+          "name": "Clermont, Gilles",
+          "isPartOf": [],
+          "affiliation": {
+            "@id": "https://ror.org/0153tk833",
+            "@type": "Organization",
+            "name": "University of Virginia",
+            "isPartOf": []
+          }
+        }
+      ],
+      "publisher": "B2AI CHoRUS",
+      "principalInvestigator": "Eric Rosenthal, EROSENTHAL@mgh.harvard.edu",
+      "funder": "NIH Common Fund\u00a0OT2OD032701",
+      "contactEmail": "Ciera McCrary,\u00a0cmccrary@mgh.harvard.edu",
+      "citation": "The CHoRUS for Clinical Care AI Network. The Bridge2AI CHoRUS for Clinical Care AI Dataset: A Multi-Center, Multi-Modal, High-Resolution Critical Care Dataset, version 3.0. Harvard Dataverse, Oct. 2026.",
+      "license": "Data Use Agreement available at 'https://chorus4ai.org/dataset/'",
+      "conditionsOfAccess": "https://chorus4ai.org/version-1-dataset/#data_access_agreement",
+      "copyrightNotice": "\u00a9 2026 THE GENERAL HOSPITAL CORPORATION D/B/A MASSACHUSETTS GENERAL HOSPITAL. Copyrights are owned by each subaward site for curation performed locally. Copyrights are jointly held for software jointly developed. All rights reserved",
+      "ethicalReview": "Eric S. Rosenthal, Michael J. Young, Ishan Williams,\u00a0Ashley\u00a0Cordes, and Barbara J. Evans in collaboration with the Mass General Brigham IRB with\u00a0local context review by IRBs, HIPAA Privacy Officers, and institutional counsels at contributing medical centers.",
+      "confidentialityLevel": "HL7:2V (very restricted)",
+      "irb": {
+        "@type": "Organization",
+        "name": "Mass General Brigham Institutional Review Board (MGB IRB)",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "IRB Reliance and Compliance",
+          "email": "irbreliance@mgb.org",
+          "telephone": "+1-857-282-1900"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "399 Revolution Drive, Suite 710",
+          "addressLocality": "Somerville",
+          "addressRegion": "MA",
+          "postalCode": "02145",
+          "addressCountry": "US"
+        }
+      },
+      "irbProtocolId": "#2022P000707",
+      "humanSubjectExemption": "HIPAA exemption 4 (45 CFR 46.104(d)(4))",
+      "fdaRegulated": true,
+      "deidentified": true,
+      "humanSubjectResearch": "Yes",
+      "dataGovernanceCommittee": "Eric Rosenthal, EROSENTHAL@mgh.harvard.edu",
+      "rai:dataLimitations": "\u2022\tObservational data; and not randomized; collected as real-world clinical data, not through prospective research interactions with patient.\n\u2022\tDocumentation quality dependent on routine clinical workflows and data elements being collected in clinical practice.\n\u2022\tVariable sampling rates across real-world data from hospital waveform systems and middleware\n\u2022\tInstitutional heterogeneity in coding and clinical data collection practices\n\u2022\tLimited generalizability beyond participating hospitals\n\u2022\tNot appropriate for re-identification, contact tracing, or patient-level intervention\n\u2022\tHold-out splits are available for testing; training and validation in development splits require internal mechanisms to avoid overfitting\n",
+      "rai:dataBiases": "\u2022\tReferral bias from tertiary/quaternary academic centers\n\u2022\tSocioeconomic and demographic distribution reflective of participating institutions\n\u2022\tDocumentation bias in clinical notes\n\u2022\tMissingness not at random (MNAR) in laboratory, waveform, and imaging acquisition\n\u2022\tDifferential care pathways affecting label assignment (e.g., ICU vs non-ICU populations)\n\u2022\tTemporal trends related to evolving clinical practice\nBias assessment is ongoing and documented in dataset release notes\n",
+      "rai:dataReleaseMaintenancePlan": "\n\u2022\tVersioned dataset releases e.g., CHoRUS vX.Y)\n\u2022\tRelease notes documenting schema changes, harmonization updates, and known issues\n\u2022\tGovernance committee oversight for structural modifications\n\u2022\tData upload\n\u2022\tDeprecation policy includes:\no\tAdvance notice of schema changes\no\tBackward compatibility window where feasible\no\tArchive of prior versions within enclave where possible or incremental change records\nPrimary maintainers: CHoRUS Data Pillar in collaboration with institutional data stewards.\n",
+      "rai:dataCollection": "Data are derived from routine clinical care at participating hospitals under IRB oversight. Collection includes:\n\u2022\tElectronic health record extraction and transformation to OMOP common data model\n\u2022\tImaging metadata de-identification using RSNA Clinical Trial Processor and pixel-level de-identification using IbisWorks EICON. \n\u2022\tHigh-resolution physiologic waveform capture extraction and transformation to the WFDB standard, \n\u2022\tStandardized harmonization to common data model\nEthical safeguards include:\n\u2022\tIRB approval or waiver as appropriate\n\u2022\tCompliance with CHoRUS governance\n\u2022\tLayered privacy protection including de-identification, data use agreement, controlled access data repository with adherence to NIST 800-53 principles, audit-level protection, registration, role-based access controls, protection against data exfiltration.\nData are not collected solely for research but repurposed from clinical workflows under ethical oversight.\n",
+      "rai:dataCollectionMissingData": "Variable sampling rates across real-world data from hospital waveform systems and middleware",
+      "rai:personalSensitiveInformation": [
+        "CHoRUS operates within a secure enclave environment aligned with NIST 800-53 controls.",
+        "De-identification consistent with HIPAA Safe Harbor",
+        "Removal or tokenization of direct identifiers",
+        "Date shifting or limited date fields when required",
+        "Role-based access control (RBAC)",
+        "Multi-factor authentication",
+        "Full audit logging of data access and queries",
+        "Prohibition of re-identification attempts",
+        "Data export restrictions and output review procedures to reduce risk of re-identification",
+        "Re-identification risk is periodically assessed and mitigation strategies updated as needed."
+      ],
+      "completeness": "Production release of data",
+      "project_name": "CHoRUS",
+      "rai:conditionsOfAccess": "Access to CHoRUS data is governed through a controlled-access framework and requires:\n\u2022\tProviding institutional affiliation and credentials\n\u2022\tApproved research proposal reviewed by CHoRUS governance committee\n\u2022\tData Use Agreement (DUA) executed between requestor institution and CHoRUS\n\u2022\tIRB approval or exemption documentation, as applicable\n\u2022\tCompliance with NIH Bridge2AI OT terms and applicable federal regulations\n\u2022\tAccess restricted to secure enclave environment; no raw data export permitted unless explicitly approved\nData use may not be used for commercial purposes unless specifically authorized through a separate agreement consistent with governing award and consortium terms.\n",
+      "rai:potentialBiases": "\u2022\tReferral bias from tertiary/quaternary academic centers\n\u2022\tSocioeconomic and demographic distribution reflective of participating institutions\n\u2022\tDocumentation bias in clinical notes\n\u2022\tMissingness not at random (MNAR) in laboratory, waveform, and imaging acquisition\n\u2022\tDifferential care pathways affecting label assignment (e.g., ICU vs non-ICU populations)\n\u2022\tTemporal trends related to evolving clinical practice\nBias assessment is ongoing and documented in dataset release notes\n",
+      "rai:intendedUseCases": "\n\u2022\tAI model training within enclave\n\u2022\tModel validation and benchmarking\n\u2022\tAlgorithm development and feature engineering\n\u2022\tRetrospective hypothesis testing\n\u2022\tFine-tuning of multimodal models\n\u2022\tComparative effectiveness research\n\u2022\tReinforcement learning and development of expert AI\n\u2022\tMethodological research in trustworthy AI\n\u2022\tTrial emulation or powering\nNot recommended\n\u2022\tDirect translation of trained algorithms to real-time clinical deployment without validation or regulatory clearance\n\u2022\tUse as sole evidence for clinical decision-making\n\u2022\tPopulation inference beyond participating institutions\nUsage must align with approved research scope and governance policies.\n",
+      "rai:maintenancePlan": "\n\u2022\tVersioned dataset releases e.g., CHoRUS vX.Y)\n\u2022\tRelease notes documenting schema changes, harmonization updates, and known issues\n\u2022\tGovernance committee oversight for structural modifications\n\u2022\tData upload\n\u2022\tDeprecation policy includes:\no\tAdvance notice of schema changes\no\tBackward compatibility window where feasible\no\tArchive of prior versions within enclave where possible or incremental change records\nPrimary maintainers: CHoRUS Data Pillar in collaboration with institutional data stewards.\n",
+      "releaseDate": "10/29/2026",
+      "contentUrl": "http://chorus4ai.org/dataset",
+      "ro-crate-metadata": "ro-crate-metadata.json"
+    }
+  ]
+}
