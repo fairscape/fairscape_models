@@ -31,18 +31,18 @@ class GenerateDatasheet:
         self.subcrates = subcrates
         self.env = _environment()
 
-    def generateDatasheetObject(self)->DatasheetPage:
+    def format(self)->DatasheetPage:
         """ Use the rocrate metadata to generate the DatasheetPage object 
         """
         pass
 
-    def generateDatasheet(
+    def generate(
         self,
         outputPath: Optional[str]
         )-> str:
         """ Generate the datasheet output for the ROCrate
         """
-        datasheet_instance = self.generateDatasheetObject()
+        datasheet_instance = self.format()
         datasheet_template = self.env.get_template(DATASHEET_TEMPLATE_NAME)
 
         #with open(outputPath, "w") as datasheetFile:
