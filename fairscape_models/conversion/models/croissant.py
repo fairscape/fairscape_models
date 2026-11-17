@@ -1,5 +1,5 @@
 from typing import List, Optional, Union, Dict, Any
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 DEFAULT_CROISSANT_CONTEXT = {
     "@language": "en",
@@ -135,8 +135,9 @@ class CroissantDataset(BaseModel):
     annotator_demographics: Optional[List[str]] = Field(default=None, alias="rai:annotatorDemographics")
     machine_annotation_tools: Optional[List[str]] = Field(default=None, alias="rai:machineAnnotationTools")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(
+        populate_by_name = True,
         extra = 'allow'
+    )
 
 CroissantField.model_rebuild()
